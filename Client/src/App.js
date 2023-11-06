@@ -8,8 +8,6 @@ const AppContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  min-width: 100vw;
   background-color: #f5f5f5;
 `;
 

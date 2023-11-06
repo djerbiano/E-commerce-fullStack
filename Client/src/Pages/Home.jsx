@@ -1,19 +1,24 @@
 import styled from "styled-components";
 import Headers from "../Containers/Headers";
+import Main from "../Containers/Main";
+import Footer from "../Containers/Footer";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100px;
+  width: 90vw;
+  
 `;
 
 function Home() {
   return (
     <Container>
       <Headers />
+      <Main />
+      <Footer />
     </Container>
   );
 }

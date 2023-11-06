@@ -15,7 +15,7 @@ function Favo() {
     <Container>
       <MdFavorite />
     </Container>
-  )
+  );
 }
 
-export default Favo
+export default Favo;
