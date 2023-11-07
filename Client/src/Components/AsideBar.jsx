@@ -24,7 +24,28 @@ const Container = styled.div`
     &:hover {
       cursor: pointer;
       background-color: #f5f5f5;
+      font-weight: bold;
+      transition: 0.3s;
     }
+
+    @media (max-width: 930px) {
+    gap: 0px;
+    padding: 5px;
+  }
+  }
+
+  @media (max-width: 930px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5vw;
+    font-weight: bold;
+    padding: 0;
+    width:auto;
+  }
+
+  @media (max-width: 700px) {
+  display:none;
   }
 `;
 

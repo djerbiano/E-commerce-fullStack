@@ -19,6 +19,10 @@ const Container = styled.div`
     cursor: pointer;
     border-radius: 10px;
   }
+
+  @media (max-width: 930px) {
+    display: none;
+  }
 `;
 
 const Title = styled.div`
@@ -30,6 +34,14 @@ const Title = styled.div`
   & > :nth-child(3) {
     cursor: pointer;
     font-size: 2rem;
+    border: 1px solid;
+    border-radius: 10px;
+
+    &:hover {
+      color: #fff;
+      background-color: hsl(226.32deg 52.29% 21.37%);
+      transition: 0.5s;
+    }
   }
 `;
 

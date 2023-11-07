@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { RiMenu3Line } from "react-icons/ri";
+import AsideBar from "./AsideBar";
 
 const Container = styled.div`
   width: 100%;
@@ -9,41 +10,46 @@ const Container = styled.div`
 
 const MenuIcon = styled.div`
   position: relative;
+  color:white;
+  display: flex;
 `;
 
 const MenuContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
   position: absolute;
   top: 10vh;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 90vh;
-  background: linear-gradient(0deg, #fa5, #7d9fffe3);
-  list-style: none;
-  transform: ${({ open }) => (open ? "translateX(0)" : "translateX(-100%)")};
-  transition: transform 0.5s ease-in-out;
-  padding: 20px;
+  background: linear-gradient(5deg, #fa5, hsl(226.32deg 52.29% 21.37%));
 
-  li {
-    display: ${({ open }) => (open ? "block" : "none")};
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: 0.3s ease;
-    padding: 20px;
-    border-radius: 10px;
+  & > * {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    position: absolute;
+    top: 0;
+    left: 30%;
+    width: 100%;
+    height: 100%;
+    background: transparent;
 
-    &:hover {
-      transition: 0.3s ease;
-      transform: scale(1.1);
-      border-bottom: 2px solid;
+    & > * {
+      min-width: 200px;
+      padding: 10px;
+      margin: 10px;
+      font-size: 1.5rem;
+      display: flex;  
+      align-items: center;
+      & > * {
+        margin: 10px;
+      }
     }
 
-    @media (max-width: 500px) {
-      font-size: 8vw;
-      transition: 0.3s ease;
+    @media (max-width: 400px) {
+      position: absolute;
+    top: 0;
+    left: 0;
     }
   }
 `;
@@ -56,14 +62,11 @@ function MenuHamb() {
       <MenuIcon>
         <RiMenu3Line onClick={() => setOpen(!open)} />
       </MenuIcon>
-
-      <MenuContent open={open}>
-        <li>Search</li>
-        <li>Compte</li>
-        <li>Favoris</li>
-        <li>Panier</li>
-        <li>Contact</li>
-      </MenuContent>
+      {open && (
+        <MenuContent>
+          <AsideBar />
+        </MenuContent>
+      )}
     </Container>
   );
 }

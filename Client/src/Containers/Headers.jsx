@@ -11,12 +11,10 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 98vw;
+  width: 100vw;
   height: 10vh;
-  background-color: #7d9fffe3;
+  background-color: hsl(226.32deg 52.29% 21.37%);
   padding: 0 20px;
-  border-radius: 0 0 10px 10px;
-  
 
   & > :nth-child(2) {
     display: none;
@@ -30,10 +28,7 @@ const Container = styled.div`
   }
 
   @media (max-width: 700px) {
-    display: flex;
-    align-items: center;
     justify-content: space-around;
-    background-color: #7d9fffe3;
     & > :nth-child(2) {
       display: block;
       height: 100%;
@@ -71,6 +66,7 @@ const IconContainer = styled.div`
   & > :nth-child(2),
   & > :nth-child(3),
   & > :nth-child(4) {
+    color: white;
     &:hover {
       cursor: pointer;
       color: #fa5;
