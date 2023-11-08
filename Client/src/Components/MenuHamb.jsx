@@ -19,7 +19,7 @@ const MenuContent = styled.div`
   top: 10vh;
   left: 0;
   width: 100vw;
-  height: 90vh;
+  height: 100%;
   background: linear-gradient(5deg, #fa5, hsl(226.32deg 52.29% 21.37%));
 
   & > * {

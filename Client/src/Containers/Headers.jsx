@@ -15,6 +15,7 @@ const Container = styled.div`
   height: 10vh;
   background-color: hsl(226.32deg 52.29% 21.37%);
   padding: 0 20px;
+  z-index: 1000;
 
   & > :nth-child(2) {
     display: none;
