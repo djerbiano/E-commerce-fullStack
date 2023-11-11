@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Product from "./Product";
+import TopVente from "./TopVente";
 
 const Container = styled.div`
-  width: 100%;
   display: flex;
-  flex-direction: column;
   background-color: #fff;
   border-radius: 10px;
 `;
@@ -38,28 +37,66 @@ const ProductNavigation = styled.div`
 
 const ProductsContainer = styled.div`
   display: flex;
-  width: 100%;
 
   @media (max-width: 500px) {
     flex-direction: column;
   }
 `;
 
+const ContainerNouvelleCollection = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ContainerTopVente = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #ffaa55, #fbd2c7);
+  border-radius: 10px;
+  & > :nth-child(1) {
+    & > :nth-child(2) {
+      & > * {
+        &:hover {
+          background-color: transparent;
+          color: black;
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+  @media (max-width: 930px) {
+    display: none;
+  }
+`;
 function NouvelleCollection() {
   return (
     <Container>
-      <Title>
-        <h2>Nouvelle Collection</h2>
-        <ProductNavigation>
-          <MdKeyboardArrowLeft />
-          <MdKeyboardArrowRight />
-        </ProductNavigation>
-      </Title>
-      <ProductsContainer>
-        <Product />
-        <Product />
-        <Product />
-      </ProductsContainer>
+      <ContainerTopVente>
+        <Title>
+          <h2>Top Vente</h2>
+          <ProductNavigation>
+            <MdKeyboardArrowLeft />
+            <MdKeyboardArrowRight />
+          </ProductNavigation>
+        </Title>
+        <TopVente />
+      </ContainerTopVente>
+      <ContainerNouvelleCollection>
+        <Title>
+          <h2>Nouvelle Collection</h2>
+          <ProductNavigation>
+            <MdKeyboardArrowLeft />
+            <MdKeyboardArrowRight />
+          </ProductNavigation>
+        </Title>
+        <ProductsContainer>
+          <Product />
+          <Product />
+          <Product />
+        </ProductsContainer>
+      </ContainerNouvelleCollection>
     </Container>
   );
 }

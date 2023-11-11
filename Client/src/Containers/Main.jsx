@@ -3,6 +3,9 @@ import AsideBar from "../Components/AsideBar";
 import TopPub from "../Components/TopPub";
 import TopPubElle from "../Components/TopPubElle";
 import Nouveautés from "./Nouveautés";
+import Soldes from "../Components/Soldes";
+import EditionLimitée from "../Components/EditionLimitée";
+import PubSoldes from "../Components/PubSoldes";
 
 const Container = styled.div`
   display: flex;
@@ -86,13 +89,30 @@ const ContainerAfterMain = styled.div`
 
 const ContentAfterMain = styled.div`
   display: flex;
- justify-content: space-between;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const ProductContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-top: 20px;
+
   & > :nth-child(1) {
-    width: 20%;
-    height: 100vh;
+    width: 100%;
+
+    @media (max-width: 660px) {
+      width: 100%;
+    }
   }
-  & > :nth-child(2) {
-    width: 70%;
+  & > :nth-child(3) {
+    flex-direction: row;
+    width: 100%;
+
+    @media (max-width: 500px) {
+      flex-direction: column;
+    }
   }
 `;
 
@@ -109,7 +129,11 @@ function Main() {
       <ContainerAfterMain>
         <ContentAfterMain>
           <TopPubElle />
-          <TopPubElle />
+          <ProductContainer>
+            <EditionLimitée />
+            <PubSoldes />
+            <Soldes />
+          </ProductContainer>
         </ContentAfterMain>
       </ContainerAfterMain>
     </Container>
