@@ -1,7 +1,5 @@
 import styled from "styled-components";
-import Headers from "../Containers/Headers";
-import Main from "../Containers/Main";
-import Footer from "../Containers/Footer";
+import Filter from "../Components/Filter";
 
 const Container = styled.div`
   display: flex;
@@ -10,19 +8,15 @@ const Container = styled.div`
   align-items: center;
   min-height: 100px;
   width: 90vw;
-
- 
-  
 `;
 
-function Home() {
+function FilterProducts() {
+ 
   return (
     <Container>
-      <Headers />
-      <Main />
-      <Footer />
+      <Filter />
     </Container>
   );
 }
 
-export default Home;
+export default FilterProducts;

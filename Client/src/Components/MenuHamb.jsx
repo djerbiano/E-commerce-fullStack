@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import { RiMenu3Line } from "react-icons/ri";
 import AsideBar from "./AsideBar";
+import { MenuHambContext } from "../Context/MenuHambContext";
 
 const Container = styled.div`
   width: 100%;
@@ -10,7 +11,7 @@ const Container = styled.div`
 
 const MenuIcon = styled.div`
   position: relative;
-  color:white;
+  color: white;
   display: flex;
 `;
 
@@ -39,7 +40,7 @@ const MenuContent = styled.div`
       padding: 10px;
       margin: 10px;
       font-size: 1.5rem;
-      display: flex;  
+      display: flex;
       align-items: center;
       & > * {
         margin: 10px;
@@ -48,14 +49,14 @@ const MenuContent = styled.div`
 
     @media (max-width: 400px) {
       position: absolute;
-    top: 0;
-    left: 0;
+      top: 0;
+      left: 0;
     }
   }
 `;
 
 function MenuHamb() {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen } = useContext(MenuHambContext);
 
   return (
     <Container>

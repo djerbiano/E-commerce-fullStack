@@ -1,65 +1,73 @@
 import styled from "styled-components";
+import ArrowUpPage from "../Components/ArrowUpPage";
 
 const FooterContainer = styled.footer`
-  background: linear-gradient(to right, #1a2753, #f5515f);
+  background: linear-gradient(to right, #1a2753f5, #ffaa55c9, #f05769a8);
   color: #fff;
   padding: 100px;
   width: 100vw;
+  min-height: 50vh;
   margin-top: 100px;
-  border-top-right-radius: 100px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+
+  * {
+    color: black;
+    font-family: "Raleway", sans-serif;
+  }
+
+  & > :nth-child(1) {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    right: 50%;
+    font-size: 1.5rem;
+  }
 `;
 
 const FooterContent = styled.div`
+  width: 100%;
   display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-
-  & > :nth-child(1),
-  & > :nth-child(2) {
-    width: 30%;
-  }
-
-  & > :nth-child(3) {
-    width: 50%;
-  }
+  justify-content: space-between;
 `;
 
 const FooterSection = styled.div`
-  padding: 0 20px;
+  width: 30%;
 `;
 
-const SectionTitle = styled.h3`
-  color: #fff;
-  font-size: 18px;
-`;
+const SectionTitle = styled.h3``;
 
 const SectionList = styled.ul`
   list-style: none;
-  padding: 0;
 `;
 
 const SectionListItem = styled.li`
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 `;
 
 const SectionLink = styled.a`
-  color: #fff;
   text-decoration: none;
-  font-size: 14px;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;
 
 const AboutSection = styled.div`
-  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
 `;
 const AboutTitle = styled.h3`
-  color: #fff;
-  font-size: 18px;
+  margin-bottom: 20px;
 `;
 
 const AboutText = styled.p`
-  color: #fff;
-  font-size: 14px;
+  text-align: center;
+  line-height: 2;
 `;
 const FooterBottom = styled.div`
   text-align: center;
@@ -70,14 +78,12 @@ const FooterBottom = styled.div`
   width: 100vw;
 `;
 
-const CopyrightText = styled.p`
-  margin: 0;
-  font-size: 12px;
-`;
+const CopyrightText = styled.p``;
 
 const Footer = () => {
   return (
     <FooterContainer>
+      <ArrowUpPage />
       <FooterContent>
         <FooterSection>
           <SectionTitle>Nos Produits</SectionTitle>

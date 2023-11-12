@@ -1,7 +1,12 @@
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import styled from 'styled-components';
-import Home from './Pages/Home';
+import { useState } from "react";
+import styled from "styled-components";
+import Headers from "./Containers/Headers";
+import Footer from "./Containers/Footer";
+import Main from "./Containers/Main";
+import FilterProducts from "./Containers/FilterProducts";
+import { MenuHambContext } from "./Context/MenuHambContext";
 
 const AppContainer = styled.div`
   display: flex;
@@ -12,16 +17,21 @@ const AppContainer = styled.div`
 `;
 
 function App() {
+  const [open, setOpen] = useState(false);
   return (
     <BrowserRouter>
-      <AppContainer>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-        <Analytics />
-      </AppContainer>
+      <MenuHambContext.Provider value={{ open, setOpen }}>
+        <AppContainer>
+          <Headers />
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/produits" element={<FilterProducts />} />
+          </Routes>
+          <Footer />
+          <Analytics />
+        </AppContainer>
+      </MenuHambContext.Provider>
     </BrowserRouter>
-   
   );
 }
 

@@ -6,7 +6,14 @@ import Nouveautés from "./Nouveautés";
 import Soldes from "../Components/Soldes";
 import EditionLimitée from "../Components/EditionLimitée";
 import PubSoldes from "../Components/PubSoldes";
-
+const Container1 = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 100px;
+  width: 90vw;
+`;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -118,25 +125,27 @@ const ProductContainer = styled.div`
 
 function Main() {
   return (
-    <Container>
-      <ContainerAsideBar>
-        <AsideBar />
-        <TopPub />
-      </ContainerAsideBar>
-      <ContainerMain>
-        <Nouveautés />
-      </ContainerMain>
-      <ContainerAfterMain>
-        <ContentAfterMain>
-          <TopPubElle />
-          <ProductContainer>
-            <EditionLimitée />
-            <PubSoldes />
-            <Soldes />
-          </ProductContainer>
-        </ContentAfterMain>
-      </ContainerAfterMain>
-    </Container>
+    <Container1>
+      <Container>
+        <ContainerAsideBar>
+          <AsideBar />
+          <TopPub />
+        </ContainerAsideBar>
+        <ContainerMain>
+          <Nouveautés />
+        </ContainerMain>
+        <ContainerAfterMain>
+          <ContentAfterMain>
+            <TopPubElle />
+            <ProductContainer>
+              <EditionLimitée />
+              <PubSoldes />
+              <Soldes />
+            </ProductContainer>
+          </ContentAfterMain>
+        </ContainerAfterMain>
+      </Container>
+    </Container1>
   );
 }
 
