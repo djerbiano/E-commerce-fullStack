@@ -22,7 +22,7 @@ const SingleProduct = styled.div`
 
 function Product() {
   return (
-    <SingleProduct>
+    <SingleProduct onClick={() => window.location.href = "/singleProduct"}>
       <img src={Logo} alt="" />
       <h2>CHEMISE AJUSTEE</h2>
       <h4>200 $</h4>

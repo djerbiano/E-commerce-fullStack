@@ -6,6 +6,7 @@ import Headers from "./Containers/Headers";
 import Footer from "./Containers/Footer";
 import Main from "./Containers/Main";
 import FilterProducts from "./Containers/FilterProducts";
+import SingleProduct from "./Containers/SingleProduct";
 import { MenuHambContext } from "./Context/MenuHambContext";
 
 const AppContainer = styled.div`
@@ -26,6 +27,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Main />} />
             <Route path="/produits" element={<FilterProducts />} />
+            <Route path="/singleProduct" element={<SingleProduct />} />
           </Routes>
           <Footer />
           <Analytics />
