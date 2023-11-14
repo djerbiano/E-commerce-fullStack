@@ -30,10 +30,20 @@ const FooterContent = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 800px) {
+    flex-wrap: wrap;
+    width: 50vw;
+  }
 `;
 
 const FooterSection = styled.div`
   width: 30%;
+
+  @media (max-width: 800px) {
+    width: auto;
+    margin: 10px;
+  }
 `;
 
 const SectionTitle = styled.h3``;
@@ -60,6 +70,11 @@ const AboutSection = styled.div`
   flex-direction: column;
   align-items: center;
   width: 50%;
+
+  @media (max-width: 800px) {
+    margin-top: 50px;
+    width: 100%;
+  }
 `;
 const AboutTitle = styled.h3`
   margin-bottom: 20px;

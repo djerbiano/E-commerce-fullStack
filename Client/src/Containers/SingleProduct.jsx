@@ -13,8 +13,12 @@ const Container = styled.div`
   width: 90vw;
 
   * > img {
-    border-radius: 5px;
     cursor: pointer;
+    border-radius: 10px;
+
+    @media (max-width: 300px) {
+      width: 80vw !important;
+    }
   }
 `;
 
@@ -23,39 +27,72 @@ const ProductContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: flex-start;
-
   margin-top: 20px;
   padding: 10px;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
 `;
 
 const ContainerPhoto = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: flex-start;
-  width: 40%;
+  width: 60%;
+
+  @media (max-width: 800px) {
+    width: 100%;
+    justify-content: space-evenly;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    flex-direction: column-reverse;
+    align-items: center;
+
+    & > :nth-child(1) {
+      display: flex;
+      flex-direction: row;
+      margin: 20px;
+
+      & > img {
+        margin-right: 5px;
+      }
+    }
+  }
 `;
 const AllPicture = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  width: 10%;
 
   & img {
-    width: 50px;
-   aspect-ratio: 1;
+    width: 100px;
+    aspect-ratio: 1;
     margin-bottom: 10px;
-    object-fit : contain;
+    object-fit: contain;
     &:hover {
       border: 1px solid black;
+    }
+
+    @media (max-width: 300px) {
+      width: 25vw !important;
+      margin-right: 10px;
     }
   }
 `;
 const SinglePicture = styled.div`
   & img {
-    width: 300px;
-    height: 300px;
-    object-fit: contain;
+    width: 400px;
+    height: 600px;
+    object-fit: cover;
+
+    @media (max-width: 980px) {
+      width: 300px;
+      height: 300px;
+    }
   }
 `;
 const ContainerByProduct = styled.div`
@@ -63,14 +100,99 @@ const ContainerByProduct = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  width: 50%;
-  min-height: 300px;
+  width: 30%;
+  min-height: 400px;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+
+  & > :nth-child(4),
+  & > :nth-child(6) {
+    padding: 5px;
+    border-radius: 10px;
+  }
+  & > :nth-child(7) {
+    & > :nth-child(2) {
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      padding: 5px;
+      border-radius: 5px;
+    }
+  }
+
+  @media (max-width: 800px) {
+    font-size: 1rem;
+    width: 100%;
+    align-items: center;
+
+    & > * {
+      display: flex;
+      & > * {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  @media (max-width: 360px) {
+    & > :nth-child(1) {
+      font-size: 8vw;
+    }
+  }
+  @media (max-width: 200px) {
+    & > :nth-child(4),
+    & > :nth-child(6) {
+      width: 100%;
+    }
+
+    & > :nth-child(7) {
+      & > :nth-child(2) {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+  & > :last-child {
+    padding: 10px;
+    border-radius: 10px;
+    &:hover {
+      cursor: pointer;
+      background-color: black;
+      color: white;
+      font-weight: bold;
+    }
+  }
 `;
 
 const ProductDescription = styled.div`
   width: 100%;
-  min-height: 50vh;
   display: flex;
+  justify-content: space-evenly;
+  margin-top: 40px;
+  padding: 10px;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+  }
+`;
+
+const DetailsProduct = styled.div`
+  padding: 10px;
+  * {
+    margin-bottom: 10px;
+  }
+
+  & h3 {
+    margin-left: -20px;
+  }
+`;
+const EntretienProduct = styled.div`
+  padding: 10px;
+  * {
+    margin-bottom: 10px;
+  }
+  & h3 {
+    margin-left: -20px;
+  }
 `;
 function SingleProduct() {
   const [pictureView, setPictureView] = useState("");
@@ -93,8 +215,8 @@ function SingleProduct() {
         </ContainerPhoto>
 
         <ContainerByProduct>
-          <h2>CHEMISE AJUSTEE</h2>
-          <h4>200 $</h4>
+          <h1>CHEMISE AJUSTEE</h1>
+          <h2>200 $</h2>
           <label htmlFor="color-select">Couleur :</label>
           <select name="couleur" id="color-select">
             <option value="">--Sélectionnez la couleur--</option>
@@ -121,7 +243,27 @@ function SingleProduct() {
         </ContainerByProduct>
       </ProductContainer>
 
-      <ProductDescription>desc</ProductDescription>
+      <ProductDescription>
+        <DetailsProduct>
+          <h3>Détail du produit</h3>
+          <ul>
+            <li>Col: Col requin</li>
+            <li>Fermeture: Boutons</li>
+            <li>Niveau de transparence: Légère</li>
+            <li>Motif / Couleur: Couleur unie</li>
+          </ul>
+        </DetailsProduct>
+        <EntretienProduct>
+          <h3>Matière et entretien</h3>
+          <ul>
+            <li>100% coton</li>
+            <li>
+              Conseils d'entretien: Lavage en machine à 40 °C Ne pas mettre au
+              sèche-linge Blanchiment interdit
+            </li>
+          </ul>
+        </EntretienProduct>
+      </ProductDescription>
     </Container>
   );
 }

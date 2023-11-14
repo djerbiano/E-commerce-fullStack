@@ -5,6 +5,12 @@ const Title = styled.h1`
   & span {
     color: #fa5;
   }
+
+  @media (max-width: 300px) {
+    font-size:8vw;
+    margin-right: 10px;
+    
+  }
 `;
 const ListItem = styled(Link)`
   text-decoration: none;
