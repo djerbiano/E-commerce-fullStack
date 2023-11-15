@@ -112,8 +112,8 @@ const ContainerByProduct = styled.div`
   }
   & > :nth-child(7) {
     & > :nth-child(2) {
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
       text-align: center;
       padding: 5px;
       border-radius: 5px;

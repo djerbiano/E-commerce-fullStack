@@ -51,6 +51,11 @@ const SearchButton = styled.button`
   padding: 10px 15px;
   border: none;
   cursor: pointer;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: #45a010;
+  }
 `;
 const MainContent = styled.div`
   min-width: 80%;

@@ -8,6 +8,9 @@ import Main from "./Containers/Main";
 import FilterProducts from "./Containers/FilterProducts";
 import SingleProduct from "./Containers/SingleProduct";
 import { MenuHambContext } from "./Context/MenuHambContext";
+import MyProfile from "./Containers/MyProfile";
+import MesCommandes from "./Containers/MesCommandes";
+import Reclamations from "./Containers/Reclamations";
 
 const AppContainer = styled.div`
   display: flex;
@@ -16,6 +19,7 @@ const AppContainer = styled.div`
   justify-content: center;
   background-color: #f5f5f5;
 `;
+
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -28,6 +32,9 @@ function App() {
             <Route path="/" element={<Main />} />
             <Route path="/produits" element={<FilterProducts />} />
             <Route path="/singleProduct" element={<SingleProduct />} />
+            <Route path="/monProfile" element={<MyProfile />} />
+            <Route path="/mesCommandes" element={<MesCommandes />} />
+            <Route path="/réclamations" element={<Reclamations />} />
           </Routes>
           <Footer />
           <Analytics />

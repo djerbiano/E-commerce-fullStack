@@ -1,3 +1,4 @@
+
 import styled from "styled-components";
 import Logo from "../Components/Logo";
 import InputSearch from "../Components/InputSearch";
@@ -76,6 +77,8 @@ const IconContainer = styled.div`
     }
   }
 `;
+
+
 
 function Headers() {
   return (
