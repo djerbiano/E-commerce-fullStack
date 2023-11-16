@@ -28,7 +28,7 @@ const Content = styled.div`
   margin-left: 50px;
 `;
 
-function MyProfile() {
+function MesCommandes() {
   return (
     <Container>
       <Aside>
@@ -41,4 +41,4 @@ function MyProfile() {
   );
 }
 
-export default MyProfile;
+export default MesCommandes;

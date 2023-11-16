@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  width: 100%;
+  width: 80%;
   min-height: 80vh;
   display: flex;
   flex-direction: column;
@@ -11,6 +11,7 @@ const Container = styled.div`
   border-radius: 5px;
   font-size: 1.2rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
 `;
 
 const Form = styled.form`
@@ -25,11 +26,13 @@ const Form = styled.form`
   }
 
   & > :nth-child(2),
-  & > :nth-child(4),
-  & > :nth-child(6) {
+  & > :nth-child(4) {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    @media (max-width: 360px) {
+      width: 100%;
+    }
 
     &:hover {
       border: 1px solid #000;
@@ -37,17 +40,21 @@ const Form = styled.form`
       transition: all 0.3s ease-in-out;
     }
   }
-  & > :nth-child(8) {
+  & > :nth-child(6) {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    width: 100%;
-    height: 100px;
+    width: 70%;
+    height: 200px;
     resize: none;
     &:hover {
       border: 1px solid #000;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
       transition: all 0.3s ease-in-out;
+    }
+
+    @media (max-width: 1500px) {
+      width: 100%;
     }
   }
 
@@ -68,17 +75,14 @@ const Form = styled.form`
   }
 `;
 
-function SetReclamation() {
+function NousContacter() {
   return (
     <Container>
-      <h3>Réclamation</h3>
+      <h3>Nous contacter</h3>
 
       <Form>
         <label htmlFor="nom">Nom:</label>
         <input type="text" id="nom" required />
-
-        <label htmlFor="commande">Numéro de commande:</label>
-        <input type="text" id="commande" required />
 
         <label htmlFor="email">Email:</label>
         <input type="email" id="email" required />
@@ -92,4 +96,4 @@ function SetReclamation() {
   );
 }
 
-export default SetReclamation;
+export default NousContacter;

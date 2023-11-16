@@ -182,12 +182,14 @@ const FilterComponent = () => {
               type="number"
               placeholder="Start"
               value={priceRange.start}
+              min={0}
               onChange={(e) => handlePriceChange(e, "start")}
             />
             <input
               type="number"
               placeholder="End"
               value={priceRange.end}
+              min={1}
               onChange={(e) => handlePriceChange(e, "end")}
             />
           </label>

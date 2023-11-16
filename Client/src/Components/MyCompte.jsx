@@ -13,18 +13,18 @@ const ListItem = styled(Link)`
   text-decoration: none;
   list-style: none;
   color: white;
-    &:hover {
-      cursor: pointer;
-      color: #fa5;
-      font-size: 2rem;
-      transition: 0.4s;
-    }
+  &:hover {
+    cursor: pointer;
+    color: #fa5;
+    font-size: 2rem;
+    transition: 0.4s;
+  }
 `;
 function MyCompte() {
   return (
     <Container>
-    <ListItem to="/monProfile">
-      <FaUserAlt />
+      <ListItem to="/monProfile">
+        <FaUserAlt />
       </ListItem>
     </Container>
   );

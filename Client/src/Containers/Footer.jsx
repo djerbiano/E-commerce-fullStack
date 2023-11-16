@@ -146,7 +146,8 @@ const Footer = () => {
 
       <FooterBottom>
         <CopyrightText>
-          Copyright © 2023 ShopingDigital. Tous droits réservés.
+          Copyright &copy; {new Date().getFullYear()} ShopingDigital. Tous
+          droits réservés.
         </CopyrightText>
       </FooterBottom>
     </FooterContainer>

@@ -31,9 +31,6 @@ const Container = styled.div`
 `;
 
 const Bienvenue = styled.div``;
-const MonProfile = styled.div``;
-const MesCommandes = styled.div``;
-const Réclamations = styled.div``;
 
 const LinkItems = styled(Link)`
   text-decoration: none;
@@ -46,15 +43,9 @@ function AsideMyProfile() {
       <Bienvenue>
         <h3>Bienvenue Client</h3>
       </Bienvenue>
-      <MonProfile>
-        <LinkItems to="/monProfile">Mon Profile </LinkItems>
-      </MonProfile>
-      <MesCommandes>
-        <LinkItems to="/mesCommandes">Mes Commandes</LinkItems>
-      </MesCommandes>
-      <Réclamations>
-        <LinkItems to="/réclamations">Reclamations</LinkItems>
-      </Réclamations>
+      <LinkItems to="/monProfile">Mon Profile </LinkItems>
+      <LinkItems to="/mesCommandes">Mes Commandes</LinkItems>
+      <LinkItems to="/réclamations">Reclamations</LinkItems>
     </Container>
   );
 }

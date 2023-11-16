@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { BsFillCartCheckFill } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -36,13 +37,26 @@ const Notification = styled.div`
   font-weight: bold;
 `;
 
+const ListItem = styled(Link)`
+  text-decoration: none;
+  list-style: none;
+  color: white;
+  &:hover {
+    cursor: pointer;
+    color: #fa5;
+    font-size: 2rem;
+    transition: 0.4s;
+  }
+`;
 function Panier() {
   return (
     <Container>
-      <Dd>
-        <BsFillCartCheckFill />
-        <Notification>0</Notification>
-      </Dd>
+      <ListItem to="/">
+        <Dd>
+          <BsFillCartCheckFill />
+          <Notification>0</Notification>
+        </Dd>
+      </ListItem>
     </Container>
   );
 }

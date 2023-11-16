@@ -69,11 +69,13 @@ const IconContainer = styled.div`
   & > :nth-child(3),
   & > :nth-child(4) {
     color: white;
-    &:hover {
-      cursor: pointer;
+    &>* {
+      &:hover {
+        cursor: pointer;
       color: #fa5;
       font-size: 2rem;
       transition: 0.4s;
+      }
     }
   }
 `;

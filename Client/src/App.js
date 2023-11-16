@@ -11,6 +11,7 @@ import { MenuHambContext } from "./Context/MenuHambContext";
 import MyProfile from "./Containers/MyProfile";
 import MesCommandes from "./Containers/MesCommandes";
 import Reclamations from "./Containers/Reclamations";
+import NousContacter from "./Components/NousContacter";
 
 const AppContainer = styled.div`
   display: flex;
@@ -35,6 +36,7 @@ function App() {
             <Route path="/monProfile" element={<MyProfile />} />
             <Route path="/mesCommandes" element={<MesCommandes />} />
             <Route path="/réclamations" element={<Reclamations />} />
+            <Route path="/nousContacter" element={<NousContacter />} />
           </Routes>
           <Footer />
           <Analytics />
