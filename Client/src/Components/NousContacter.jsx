@@ -5,13 +5,17 @@ const Container = styled.div`
   min-height: 80vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content:flex-start;
   background-color: #f5f5f5;
   padding: 20px;
   border-radius: 5px;
   font-size: 1.2rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   margin-top: 20px;
+
+  & > h3 {
+    margin-bottom: 20px;
+  }
 `;
 
 const Form = styled.form`
@@ -19,9 +23,8 @@ const Form = styled.form`
   flex-direction: column;
   align-items: flex-start;
   position: relative;
-  margin-top: 20px;
   & > * {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     font-size: 1.2rem;
   }
 

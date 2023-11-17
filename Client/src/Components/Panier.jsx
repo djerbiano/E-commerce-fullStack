@@ -51,7 +51,7 @@ const ListItem = styled(Link)`
 function Panier() {
   return (
     <Container>
-      <ListItem to="/">
+      <ListItem to="/panier">
         <Dd>
           <BsFillCartCheckFill />
           <Notification>0</Notification>

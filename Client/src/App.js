@@ -12,6 +12,7 @@ import MyProfile from "./Containers/MyProfile";
 import MesCommandes from "./Containers/MesCommandes";
 import Reclamations from "./Containers/Reclamations";
 import NousContacter from "./Components/NousContacter";
+import PanierContent from "./Containers/PanierContent";
 
 const AppContainer = styled.div`
   display: flex;
@@ -37,6 +38,7 @@ function App() {
             <Route path="/mesCommandes" element={<MesCommandes />} />
             <Route path="/réclamations" element={<Reclamations />} />
             <Route path="/nousContacter" element={<NousContacter />} />
+            <Route path="/panier" element={<PanierContent /> } />
           </Routes>
           <Footer />
           <Analytics />
