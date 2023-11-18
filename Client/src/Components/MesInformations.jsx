@@ -6,6 +6,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+
   background-color: #f5f5f5;
   padding: 20px;
   border-radius: 5px;
@@ -17,6 +18,17 @@ const Container = styled.div`
   }
   & > p {
     margin-bottom: 20px;
+  }
+
+  & > * {
+    word-break: break-all;
+  }
+
+  @media (max-width: 850px) {
+    font-size: 1rem;
+    width: auto;
+    height: auto;
+
   }
 `;
 

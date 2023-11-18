@@ -8,6 +8,24 @@ const Container = styled.div`
   padding: 20px;
   border-bottom: 1px solid;
   position: relative;
+
+  * {
+    transition: all 0.5s ease;
+  }
+
+  @media (min-width: 278px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 250px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    & > * {
+      margin: 10px 0;
+    }
+  }
 `;
 
 const ContainerPhoto = styled.div`
@@ -27,8 +45,6 @@ const DetailsProduct = styled.div`
   flex-direction: column;
   justify-content: flex-start;
 
-
-
   & > :last-child {
     color: #000;
     font-size: 12px;
@@ -37,6 +53,12 @@ const DetailsProduct = styled.div`
     color: #6e6e6e;
     text-decoration: underline;
     cursor: pointer;
+
+    @media (max-width: 400px) {
+      position: absolute;
+      bottom: 2px;
+      left: 0px;
+    }
   }
 `;
 
@@ -49,14 +71,23 @@ const Quantité = styled.div`
     padding: 5px;
     border-radius: 5px;
     cursor: pointer;
+
+    @media (max-width: 250px) {
+      margin-bottom: 20px;
+    }
   }
 `;
 
 const Total = styled.div`
- margin: 10px 0;
- position: absolute;
- bottom: 20px;
- right: 20px;
+  margin: 10px 0;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+
+  @media (max-width: 400px) {
+    bottom: 10px;
+    left: 0px;
+  }
 `;
 
 function ProductPanier() {

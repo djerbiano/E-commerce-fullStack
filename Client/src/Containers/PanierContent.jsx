@@ -11,11 +11,22 @@ const Container = styled.div`
   h4 {
     margin-bottom: 20px;
   }
+
+  @media (max-width: 730px) {
+    flex-direction: column;
+  }
 `;
 
 const Articles = styled.div`
   width: 60%;
   height: 100%;
+
+  @media (max-width: 730px) {
+    width: 100%;
+  
+}
+
+
 `;
 
 const Products = styled.div`
@@ -34,7 +45,11 @@ const Paiement = styled.div`
   border-radius: 10px;
 
   h1 {
-    margin-bottom: 50px;
+    margin: 30px 0px;
+
+    @media (max-width: 188px) {
+      font-size: 7vw;
+    }
   }
 
   div {
@@ -73,6 +88,13 @@ const Paiement = styled.div`
   & > :last-child {
     margin-bottom: 100px;
   }
+
+  @media (max-width: 730px) {
+    width: 100%;
+    margin-top: 20px;
+    font-size: 0.8rem;
+  
+}
 `;
 
 function PanierContent() {

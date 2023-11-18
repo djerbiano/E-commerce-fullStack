@@ -20,6 +20,8 @@ const Container = styled.div`
       width: 80vw !important;
     }
   }
+
+  
 `;
 
 const ProductContainer = styled.div`

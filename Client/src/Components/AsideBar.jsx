@@ -51,6 +51,10 @@ const ListItem = styled(Link)`
     gap: 0px;
     padding: 5px;
   }
+
+  @media (max-width: 260px) {
+    font-size: 1rem !important;
+  }
 `;
 
 function AsideBar() {
@@ -66,7 +70,7 @@ function AsideBar() {
     <Container>
       <ListItem to="/produits" onClick={CloseMenu}>
         <BiCategory />
-        Filtrer
+        Bienvenue
       </ListItem>
       <ListItem to="/produits" onClick={CloseMenu}>
         <GiClothes />

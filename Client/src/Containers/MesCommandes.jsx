@@ -6,6 +6,9 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   padding: 20px;
+  @media (max-width: 850px) {
+    flex-direction: column;
+  }
 `;
 
 const Aside = styled.div`
@@ -21,11 +24,35 @@ const Aside = styled.div`
       }
     }
   }
+  @media (max-width: 850px) {
+    width: 100%;
+    margin-bottom: 20px;
+
+    & > :nth-child(1) {
+      display: flex;
+      flex-direction: row ;
+      justify-content: space-around;
+      flex-wrap: wrap;
+
+      height: auto;
+      font-size:1rem;
+
+      & > * {
+        border-bottom: none;
+      }
+    }
+  }
 `;
 const Content = styled.div`
   min-width: 500px;
   height: 100%;
   margin-left: 50px;
+
+  @media (max-width: 850px) {
+    width: 100%;
+    min-width: auto;
+    margin-left: 0;
+  }
 `;
 
 function MesCommandes() {

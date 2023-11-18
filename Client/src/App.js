@@ -13,6 +13,8 @@ import MesCommandes from "./Containers/MesCommandes";
 import Reclamations from "./Containers/Reclamations";
 import NousContacter from "./Components/NousContacter";
 import PanierContent from "./Containers/PanierContent";
+import NotFound404 from "./Components/NotFound404";
+import FavoContent from "./Components/FavoContent";
 
 const AppContainer = styled.div`
   display: flex;
@@ -39,6 +41,8 @@ function App() {
             <Route path="/réclamations" element={<Reclamations />} />
             <Route path="/nousContacter" element={<NousContacter />} />
             <Route path="/panier" element={<PanierContent /> } />
+            <Route path="/favoris" element={<FavoContent /> } />
+            <Route path="*" element={<NotFound404 />} />
           </Routes>
           <Footer />
           <Analytics />

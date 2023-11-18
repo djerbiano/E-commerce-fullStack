@@ -25,7 +25,7 @@ const ListItem = styled(Link)`
 function Favo() {
   return (
     <Container>
-    <ListItem to="/">
+    <ListItem to="/favoris">
       <MdFavorite />
     </ListItem>
     </Container>

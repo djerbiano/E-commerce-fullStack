@@ -11,6 +11,10 @@ const Container = styled.div`
   border-radius: 5px;
   font-size: 1.2rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+  @media (max-width:850px){
+    font-size: 1rem;
+  }
 `;
 
 const Form = styled.form`
@@ -65,6 +69,15 @@ const Form = styled.form`
       transition: all 0.1s ease-in-out;
       border-radius: 0px;
     }
+  }
+
+  @media (max-width: 348px) {
+
+    input {
+      width: 100%;
+    }
+
+    
   }
 `;
 

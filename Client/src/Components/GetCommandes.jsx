@@ -13,6 +13,9 @@ const Container = styled.div`
   border-radius: 5px;
   font-size: 1.2rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  @media (max-width:850px){
+    font-size: 1rem;
+  }
 `;
 
 const ContainerCommandes = styled.div`
@@ -39,6 +42,11 @@ const TitleCommande = styled.div`
   & > * {
     padding: 20px;
     margin: 10px;
+  }
+
+  @media (max-width: 480px) {
+    flex-wrap: wrap;
+    padding: 0;
   }
 `;
 
@@ -100,7 +108,6 @@ function MesInformations() {
             </Product>
           </Details>
         </Commande>
-        
       </ContainerCommandes>
     </Container>
   );
