@@ -5,15 +5,18 @@ const mult = require("../middlewares/multer");
 const route = express.Router();
 
 //Get all products
-route.get("/:currentUser", virifyToken, productsController.getAllProducts);
-
-//Get one product
 route.get("/", virifyToken, productsController.getAllProducts);
 
+//Get one product
+route.get("/:oneProduct", virifyToken, productsController.getAllProducts);
+
 //Add product
-route.post("/", virifyToken, mult, productsController.getAllProducts);
+route.post("/addProduct", virifyToken, mult, productsController.getAllProducts);
+
+//Update product
+route.patch("/updateProduct/:product", virifyToken, productsController.getAllProducts);
 
 //Delete product
-route.delete("/", virifyToken, productsController.getAllProducts);
+route.delete("/deleteProduct/:productDelete", virifyToken, productsController.getAllProducts);
 
 module.exports = route;

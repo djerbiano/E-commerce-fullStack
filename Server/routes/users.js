@@ -5,18 +5,18 @@ const mult = require("../middlewares/multer");
 const route = express.Router();
 
 //Get all users
-route.get("/", virifyToken, controller.getAll);
+route.get("/allUsers", virifyToken, controller.getAll);
 
 //Search user
-route.get("/", virifyToken, controller.searchUser);
+route.get("/:searchUser", virifyToken, controller.searchUser);
 
 //Get one user
-route.get("/:id", virifyToken, controller.getOne);
+route.get("/:oneUser", virifyToken, controller.getOne);
 
 //Update user
-route.patch("/:id", virifyToken, mult, controller.updateUser);
+route.patch("/:updateUser", virifyToken, mult, controller.updateUser);
 
 //Delete user
-route.delete("/:id", virifyToken, controller.deleteUser);
+route.delete("/:deleteUser", virifyToken, controller.deleteUser);
 
 module.exports = route;

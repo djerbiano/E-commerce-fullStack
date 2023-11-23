@@ -9,7 +9,7 @@ const errMiddleware = require("./middlewares/errMiddleware");
 const connectToDb = require("./config/db");
 const verifSessionStorage = require("./routes/privateRoute");
 const userRoute = require("./routes/users");
-const postsRoute = require("./routes/products");
+const productsRoute = require("./routes/products");
 const authRoute = require("./routes/auth");
 
 const server = express();
@@ -40,14 +40,13 @@ server.get("/", async (req, res) => {
 server.use("/api/auth", authRoute);
 server.use("/api", verifSessionStorage);
 server.use("/api/users", userRoute);
-server.use("/api/posts", postsRoute);
+server.use("/api/products", productsRoute);
 server.all("*", (req, res) => {
   res.status(404).send("<h1>Page not found</h1>");
 });
 
 // Middleware pour gérer les erreurs
 server.use(errMiddleware);
-
 
 // Démarrer le serveur
 server.listen(port, () => console.log(`Server listening on port ${port}`));

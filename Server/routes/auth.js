@@ -21,6 +21,8 @@ route.get(
   "/setResetPassword/:id/:token",
   passwordController.showResetPasswordForm
 );
+
+//Save reset password
 route.post(
   "/setResetPassword/:id/:token",
   passwordController.saveResetPassword
