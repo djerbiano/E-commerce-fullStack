@@ -14,8 +14,7 @@ const ProductContainer = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 `;
 
 const ProductCard = styled.div`
@@ -29,7 +28,6 @@ const ProductCard = styled.div`
 
   img {
     max-width: 100%;
-    height: auto;
     border-radius: 8px;
     margin-bottom: 10px;
   }

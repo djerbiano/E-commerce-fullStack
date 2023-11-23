@@ -113,9 +113,12 @@ const ContainerByProduct = styled.div`
     border-radius: 10px;
   }
   & > :nth-child(7) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     & > :nth-child(2) {
-      width: 40px;
-      height: 40px;
+      margin-top: 10px;
       text-align: center;
       padding: 5px;
       border-radius: 5px;
