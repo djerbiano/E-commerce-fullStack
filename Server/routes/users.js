@@ -5,7 +5,7 @@ const mult = require("../middlewares/multer");
 const route = express.Router();
 
 //Get all users
-route.get("/allUsers", virifyToken, controller.getAll);
+route.get("/allUsers", controller.getAll);
 
 //Search user
 route.get("/:searchUser", virifyToken, controller.searchUser);

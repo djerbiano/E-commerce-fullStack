@@ -24,19 +24,19 @@ const controller = {
       } else {
         const secret = process.env.JWT_SECRET_KEY + user.password;
         const token = jwt.sign(
-          { id: user._id, username: user.userName },
+          { id: user._id, email: user.email },
           secret,
           { expiresIn: "10m" }
         );
 
-        const resetLink = `http://localhost:3000/api/auth/setResetPassword/${user._id}/${token}`;
+        const resetLink = `${process.env.BACKEND_URL}/api/auth/setResetPassword/${user._id}/${token}`;
         let errorMessage =
           "Veuillez consulter votre boîte mail pour changer votre mot de passe";
         ///////send mail//////////
         const likeMail = ` 
         <h2>Changement de mot de passe</h2>
         <br/>
-        <p>Bonjour ${user.userName},</p>
+        <p>Bonjour ${user.email},</p>
         <br/>
         <p>Suite à votre demande, vous pouvez changer votre mot de passe en cliquant sur le lien suivant :</p>
         <p>Vous avez 10 minutes pour effectuer le changement</p>
@@ -62,7 +62,7 @@ const controller = {
             from: '"ShopingDigital 👻" <admin@ShopingDigital.com>',
             to: userMail,
             subject: "ShopingDigital ✔",
-            text: "réinitialisation de mot de passe",
+            text: "Réinitialisation de mot de passe",
             html: likeMail,
           });
           console.log("Message sent: %s", info.messageId);

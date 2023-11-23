@@ -3,7 +3,12 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
-const { User, validateRegisterUser } = require("../models/Users");
+const {
+  User,
+  validateRegisterUser,
+  validateNewPassword,
+  validateLoginUser,
+} = require("../models/Users");
 
 const controller = {
   // Get all users
@@ -119,7 +124,9 @@ const controller = {
           });
         }
       }
-      return res.status(400).json({ message: "Email already exist" });
+      return res
+        .status(400)
+        .json({ message: "Merci de saisir une autre adresse e-mail" });
     }
 
     // Hacher le mot de passe avant de l'enregistrer
@@ -155,7 +162,7 @@ const controller = {
     res
       .status(201)
       .json([
-        { message: `${result.email} has been registered successfully!  ` },
+        { message: `${result.email} votre compte a bien être créé` },
         { ...other },
         { token },
       ]);
@@ -182,7 +189,7 @@ const controller = {
         if (user && isPasswordMatch) {
           // Générer un token JWT pour l'utilisateur
           const token = jwt.sign(
-            { id: user._id, username: user.userName },
+            { id: user._id, email: user.email },
             process.env.JWT_SECRET_KEY,
             { expiresIn: "5h" }
           );
@@ -190,23 +197,24 @@ const controller = {
           return res
             .status(200)
             .json([
-              { message: ` ${user.userName} welcom !` },
+              { message: ` ${user.email} vous êtes bien connecté` },
               { ...other },
               { token },
             ]);
         } else {
           return res.status(401).json({
-            message: "Sorry, the email or password you entered is incorrect",
+            message: "Vous avez saisi un email ou mot de passe incorrect",
           });
         }
       } else {
         return res.status(401).json({
-          message: "Sorry, the provided email is not registered",
+          message: "Un problème est survenu, veuillez réessayer",
         });
       }
     } catch (error) {
       return res.status(400).json({
-        message: "Sorry, the email or password you entered is incorrect",
+        message: "Un problème est survenu, veuillez réessayer",
+        error: error.message,
       });
     }
   },
