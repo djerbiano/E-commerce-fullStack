@@ -24,7 +24,7 @@ const controller = {
       } else {
         const secret = process.env.JWT_SECRET_KEY + user.password;
         const token = jwt.sign(
-          { id: user._id, email: user.email },
+          { id: user._id },
           secret,
           { expiresIn: "10m" }
         );

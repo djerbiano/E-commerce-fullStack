@@ -9,70 +9,83 @@ const {
   validateNewPassword,
   validateLoginUser,
 } = require("../models/Users");
+const { deleteImage, handleErrors } = require("../utils/helpers");
 
 const controller = {
   // Get all users
   getAll: async (req, res) => {
-    //Vérification du token
-    if (req.headers.token !== process.env.TOKEN_ALL_USERS) {
-      return res.status(403).json({
-        message: "invalidToken",
-      });
-    }
-    const users = await User.find({});
+    try {
+      //Vérification du token
+      if (req.user.isAdmin === false) {
+        return handleErrors(res, 403, {
+          message:
+            "Vous devez être un administrateur pour effectuer cette requête",
+        });
+      }
+      const users = await User.find({});
 
-    if (users.length > 0) {
-      let transformedUsers = users.map((user) => {
-        // Exclure certaines propriétés du document utilisateur
-        let { password, updatedAt, __v, ...other } = user._doc;
-        return other;
-      });
+      if (users.length > 0) {
+        let transformedUsers = users.map((user) => {
+          // Exclure certaines propriétés du document utilisateur
+          let { password, updatedAt, __v, ...other } = user._doc;
+          return other;
+        });
 
-      return res.status(200).send(transformedUsers);
-    } else {
-      return res.status(404).json({ message: "Empty DB" });
+        return res.status(200).send(transformedUsers);
+      } else {
+        return handleErrors(res, 404, {
+          message: "Empty DB",
+        });
+      }
+    } catch (error) {
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
     }
   },
 
   // Get one user
   getOne: async (req, res) => {
     try {
-      // Verification du token
-      const userInDB = await User.findOne({ _id: req.user.id });
-      if (!userInDB) {
-        return res.status(403).json({
-          message: "you are not allowed to access this resource",
+      //Vérification du token
+      if (req.user.isAdmin === false) {
+        return handleErrors(res, 403, {
+          message:
+            "Vous devez être un administrateur pour effectuer cette requête",
         });
       }
-      const users = await User.findOne({ _id: req.params.id });
-      if (users) {
+
+      const userInDB = await User.findOne({ email: req.params.email });
+      if (!userInDB) {
+        return handleErrors(res, 404, {
+          message: `${req.params.email} n'existe pas dans la DB`,
+        });
+      } else {
         // Exclure certaines propriétés du document utilisateur
-        let { password, updatedAt, __v, ...other } = users._doc;
+        let { password, updatedAt, __v, ...other } = userInDB._doc;
 
         return res.status(200).send(other);
-      } else {
-        return res
-          .status(404)
-          .json({ message: `User : ${req.params.id} not found` });
       }
     } catch (error) {
-      return res
-        .status(400)
-        .json({ message: `User : ${req.params.id} not found` });
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
     }
   },
 
   //search user
   searchUser: async (req, res) => {
     try {
-      // Verification du token
-      if (req.user.id !== req.params.id) {
-        return res.status(403).json({
-          message: "you are not allowed, you only can update your profile",
+      console.log(req.params.searchUser);
+      //Vérification du token
+      if (req.user.isAdmin === false) {
+        return handleErrors(res, 403, {
+          message:
+            "Vous devez être un administrateur pour effectuer cette requête",
         });
       }
       const users = await User.find({
-        userName: { $regex: new RegExp(req.params.userName, "i") },
+        email: { $regex: new RegExp(req.params.searchUser, "i") },
       });
 
       if (users.length > 0) {
@@ -83,89 +96,89 @@ const controller = {
 
         return res.status(200).json(filteredUsers);
       } else {
-        return res
-          .status(404)
-          .json({ message: `User : ${req.params.userName} not found` });
+        return handleErrors(res, 404, {
+          message: `${req.params.searchUser} non trouvé`,
+        });
       }
     } catch (error) {
-      return res
-        .status(400)
-        .json({ message: `User : ${req.params.userName} not found` });
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
     }
   },
 
   // Register user
   registerUser: async (req, res) => {
-    const { error } = validateRegisterUser(req.body);
+    try {
+      const { error } = validateRegisterUser(req.body);
 
-    if (error) {
-      if (req.file) {
-        let pictureError = req.file.filename;
-        console.log(pictureError);
-        if (pictureError) {
-          const picture = path.resolve(__dirname, "../images", pictureError);
-          fs.unlink(picture, (err) => {
-            if (err) console.log(err);
-          });
+      if (error) {
+        if (req.file) {
+          deleteImage(req.file.filename);
         }
+        return handleErrors(res, 400, {
+          message: error.details[0].message,
+        });
       }
-      return res.status(400).json({ message: error.details[0].message });
-    }
 
-    // Vérifier si l'e-mail existe déjà
-    let user = await User.findOne({ email: req.body.email });
-    if (user) {
-      if (req.file) {
-        let pictureError = req.file.filename;
-        if (pictureError) {
-          const picture = path.resolve(__dirname, "../images", pictureError);
-          fs.unlink(picture, (err) => {
-            if (err) console.log(err);
-          });
+      // Vérifier si l'e-mail existe déjà
+      let user = await User.findOne({ email: req.body.email });
+      if (user) {
+        if (req.file) {
+          deleteImage(req.file.filename);
         }
+        return handleErrors(res, 400, {
+          message: "Merci de saisir une autre adresse e-mail",
+        });
       }
-      return res
-        .status(400)
-        .json({ message: "Merci de saisir une autre adresse e-mail" });
-    }
 
-    // Hacher le mot de passe avant de l'enregistrer
-    const salt = await bcrypt.genSalt(10);
-    req.body.password = await bcrypt.hash(req.body.password.trim(), salt);
+      // Hacher le mot de passe avant de l'enregistrer
+      const salt = await bcrypt.genSalt(10);
+      req.body.password = await bcrypt.hash(req.body.password.trim(), salt);
 
-    if (req.file === undefined) {
-      user = new User({
-        email: req.body.email,
-        password: req.body.password,
+      if (req.file === undefined) {
+        user = new User({
+          email: req.body.email,
+          password: req.body.password,
+        });
+      } else {
+        user = new User({
+          email: req.body.email,
+          password: req.body.password,
+          avatar: req.file.filename,
+        });
+      }
+
+      // Enregistrer l'utilisateur dans la base de données
+      const result = await user.save();
+
+      // Générer un token JWT pour l'utilisateur
+      const token = jwt.sign(
+        { id: user._id, isAdmin: user.isAdmin },
+        process.env.JWT_SECRET_KEY,
+        {
+          expiresIn: "5h",
+        }
+      );
+
+      // Exclure certaines propriétés du document résultant
+      const { password, updatedAt, __v, ...other } = result._doc;
+
+      res
+        .status(201)
+        .json([
+          { message: `${result.email} votre compte a bien être créé` },
+          { ...other },
+          { token },
+        ]);
+    } catch (error) {
+      if (req.file) {
+        deleteImage(req.file.filename);
+      }
+      return handleErrors(res, 400, {
+        message: error.message,
       });
-    } else {
-      user = new User({
-        email: req.body.email,
-        password: req.body.password,
-        avatar: req.file.filename,
-      });
     }
-
-    // Enregistrer l'utilisateur dans la base de données
-    const result = await user.save();
-
-    // Générer un token JWT pour l'utilisateur
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET_KEY,
-      { expiresIn: "5h" }
-    );
-
-    // Exclure certaines propriétés du document résultant
-    const { password, updatedAt, __v, ...other } = result._doc;
-
-    res
-      .status(201)
-      .json([
-        { message: `${result.email} votre compte a bien être créé` },
-        { ...other },
-        { token },
-      ]);
   },
 
   // login user
@@ -174,7 +187,9 @@ const controller = {
       const { error } = validateLoginUser(req.body);
 
       if (error) {
-        return res.status(400).json({ message: error.details[0].message });
+        return handleErrors(res, 400, {
+          message: error.details[0].message,
+        });
       }
 
       // Vérifier si l'utilisateur existe
@@ -189,9 +204,11 @@ const controller = {
         if (user && isPasswordMatch) {
           // Générer un token JWT pour l'utilisateur
           const token = jwt.sign(
-            { id: user._id, email: user.email },
+            { id: user._id, isAdmin: user.isAdmin },
             process.env.JWT_SECRET_KEY,
-            { expiresIn: "5h" }
+            {
+              expiresIn: "5h",
+            }
           );
           const { password, updatedAt, __v, ...other } = user._doc;
           return res
@@ -202,19 +219,18 @@ const controller = {
               { token },
             ]);
         } else {
-          return res.status(401).json({
+          return handleErrors(res, 401, {
             message: "Vous avez saisi un email ou mot de passe incorrect",
           });
         }
       } else {
-        return res.status(401).json({
+        return handleErrors(res, 401, {
           message: "Un problème est survenu, veuillez réessayer",
         });
       }
     } catch (error) {
-      return res.status(400).json({
-        message: "Un problème est survenu, veuillez réessayer",
-        error: error.message,
+      return handleErrors(res, 400, {
+        message: error.message,
       });
     }
   },
@@ -223,10 +239,11 @@ const controller = {
 
   updateUser: async (req, res) => {
     try {
-      //L'utilisateur ne peut mettre à jour que son propre profil
-      if (req.user.id !== req.params.id) {
-        return res.status(403).json({
-          message: "you are not allowed, you only can update your profile",
+      //Vérification du token
+      if (req.user.isAdmin === false) {
+        return handleErrors(res, 403, {
+          message:
+            "Vous devez être un administrateur pour effectuer cette requête",
         });
       }
 
@@ -252,10 +269,7 @@ const controller = {
 
           // supprimer l'ancien avatar
           if (avatar !== "avatarDefault.jpg") {
-            const picture = path.resolve(__dirname, "../images", avatar);
-            fs.unlink(picture, (err) => {
-              if (err) console.log(err);
-            });
+            deleteImage(avatar);
           }
           data = {
             email: req.body.email || user.email,
@@ -270,49 +284,55 @@ const controller = {
           },
           data
         );
-
-        return res.status(200).json({ message: "User updated !" });
+        return handleErrors(res, 200, {
+          message: "Le profile a bien été mis à jour",
+        });
       } else {
-        return res.status(404).json({ message: "User not found !" });
+        return handleErrors(res, 404, {
+          message: "Profile non trouvé",
+        });
       }
     } catch (error) {
-      console.log(error);
-      return res.status(400).json({ message: "invalid user" });
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
     }
   },
 
   // Supprimer un utilisateur
   deleteUser: async (req, res) => {
     try {
-      //L'utilisateur ne peut mettre à jour que son propre profil
-      if (req.user.id !== req.params.id) {
-        return res.status(403).json({
-          message: "you are not allowed, you only can delete your profile",
+      //Vérification du token
+      if (req.user.isAdmin === false) {
+        return handleErrors(res, 403, {
+          message:
+            "Vous devez être un administrateur pour effectuer cette requête",
         });
       }
 
-      const userPicture = await User.findOne({ _id: req.params.id });
+      const userPicture = await User.findOne({ email: req.params.deleteUser });
 
       // supprimer la photo de user
 
       const photo = userPicture.avatar;
 
       if (photo !== "avatarDefault.jpg") {
-        const picture = path.resolve(__dirname, "../images", photo);
-        fs.unlink(picture, (err) => {
-          if (err) console.log(err);
-        });
+        deleteImage(photo);
       }
 
       // Supprimer l'utilisateur
       setTimeout(async () => {
         await User.findOneAndDelete({
-          _id: req.params.id,
+          email: req.params.deleteUser,
         });
-        return res.status(200).json({ message: "User deleted!" });
+        return handleErrors(res, 200, {
+          message: "Le compte a bien été supprimé",
+        });
       }, 2000);
     } catch (error) {
-      return res.status(400).json({ message: "invalid user", error });
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
     }
   },
 };
