@@ -47,13 +47,21 @@ function validateRegisterUser(obj) {
   });
   return schema.validate(obj);
 }
-// validate new password
-function validateNewPassword(obj) {
+// validate new email
+function validateNewMail(obj) {
   const schema = joi.object({
-    password: joi.string().trim().min(6).required(),
+    email: joi.string().trim().min(5).max(100).email(),
   });
   return schema.validate(obj);
 }
+// validate new password
+function validateNewPassword(obj) {
+  const schema = joi.object({
+    password: joi.string().trim().min(6),
+  });
+  return schema.validate(obj);
+}
+
 // validate login user
 function validateLoginUser(obj) {
   const schema = joi.object({
@@ -67,5 +75,6 @@ module.exports = {
   User,
   validateRegisterUser,
   validateNewPassword,
+  validateNewMail,
   validateLoginUser,
 };

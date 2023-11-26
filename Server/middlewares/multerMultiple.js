@@ -5,6 +5,7 @@ const mimeTypes = {
   "image/png": ".png",
   "image/gif": ".gif",
   "image/bmp": ".bmp",
+  "image/png": ".png",
 };
 
 const storage = multer.diskStorage({
@@ -23,6 +24,6 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage }).single("image");
+const upload = multer({ storage: storage }).array("images", 3);
 
 module.exports = upload;

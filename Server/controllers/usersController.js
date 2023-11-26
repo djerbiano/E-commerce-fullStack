@@ -7,6 +7,7 @@ const {
   User,
   validateRegisterUser,
   validateNewPassword,
+  validateNewMail,
   validateLoginUser,
 } = require("../models/Users");
 const { deleteImage, handleErrors } = require("../utils/helpers");
@@ -15,8 +16,9 @@ const controller = {
   // Get all users
   getAll: async (req, res) => {
     try {
+      let compteExiste = await User.findOne({ _id: req.user.id });
       //Vérification du token
-      if (req.user.isAdmin === false) {
+      if (compteExiste === null || compteExiste.isAdmin === false) {
         return handleErrors(res, 403, {
           message:
             "Vous devez être un administrateur pour effectuer cette requête",
@@ -47,8 +49,9 @@ const controller = {
   // Get one user
   getOne: async (req, res) => {
     try {
+      let compteExiste = await User.findOne({ _id: req.user.id });
       //Vérification du token
-      if (req.user.isAdmin === false) {
+      if (compteExiste === null || compteExiste.isAdmin === false) {
         return handleErrors(res, 403, {
           message:
             "Vous devez être un administrateur pour effectuer cette requête",
@@ -76,9 +79,9 @@ const controller = {
   //search user
   searchUser: async (req, res) => {
     try {
-      console.log(req.params.searchUser);
+      let compteExiste = await User.findOne({ _id: req.user.id });
       //Vérification du token
-      if (req.user.isAdmin === false) {
+      if (compteExiste === null || compteExiste.isAdmin === false) {
         return handleErrors(res, 403, {
           message:
             "Vous devez être un administrateur pour effectuer cette requête",
@@ -236,74 +239,97 @@ const controller = {
   },
 
   // Update user
-
   updateUser: async (req, res) => {
     try {
-      //Vérification du token
-      if (req.user.isAdmin === false) {
+      let compteExiste = await User.findOne({ _id: req.user.id });
+
+      // Vérification du token
+      if (compteExiste === null || compteExiste.isAdmin === false) {
         return handleErrors(res, 403, {
           message:
             "Vous devez être un administrateur pour effectuer cette requête",
         });
       }
 
-      // Vérifier si l'utilisateur existe
-      let user = await User.find({ _id: req.params.id });
+      let user = await User.findOne({ email: req.params.updateUser });
 
-      if (user.length > 0) {
-        // Hacher le mot de passe avant de l'enregistrer
-        if (req.body.password) {
-          const salt = await bcrypt.genSalt(10);
-          req.body.password = await bcrypt.hash(req.body.password.trim(), salt);
-        }
-        let data;
-        let avatar;
-
-        if (req.file === undefined) {
-          data = {
-            email: req.body.email || user.email,
-            password: req.body.password || user.password,
-          };
-        } else {
-          avatar = user[0].avatar;
-
-          // supprimer l'ancien avatar
-          if (avatar !== "avatarDefault.jpg") {
-            deleteImage(avatar);
-          }
-          data = {
-            email: req.body.email || user.email,
-            password: req.body.password || user.password,
-            avatar: req.file.filename || user.avatar,
-          };
+      if (!user) {
+        if (req.file) {
+          deleteImage(req.file.filename);
         }
 
-        await User.findOneAndUpdate(
-          {
-            _id: req.params.id,
-          },
-          data
-        );
-        return handleErrors(res, 200, {
-          message: "Le profile a bien été mis à jour",
-        });
-      } else {
         return handleErrors(res, 404, {
           message: "Profile non trouvé",
         });
       }
+
+      let updateFields = {};
+
+      if (req.body.password) {
+        const { error: passwordError } = validateNewPassword({
+          password: req.body.password,
+        });
+
+        if (passwordError) {
+          return handleErrors(res, 400, {
+            message: passwordError.details[0].message,
+          });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(
+          req.body.password.trim(),
+          salt
+        );
+        updateFields.password = hashedPassword;
+      }
+
+      if (req.body.email) {
+        const { error: emailError } = validateNewMail({
+          email: req.body.email,
+        });
+
+        if (emailError) {
+          return handleErrors(res, 400, {
+            message: emailError.details[0].message,
+          });
+        }
+
+        updateFields.email = req.body.email;
+      }
+
+      if (req.file) {
+        // Supprimer l'ancien avatar
+        if (user.avatar !== "avatarDefault.jpg") {
+          deleteImage(user.avatar);
+        }
+
+        updateFields.avatar = req.file.filename;
+      }
+
+      if (Object.keys(updateFields).length === 0) {
+        return handleErrors(res, 400, {
+          message: "Veuillez renseigner au moins un champ",
+        });
+      }
+
+      await User.updateOne({ email: req.params.updateUser }, updateFields);
+
+      return handleErrors(res, 200, {
+        message: "Le profil a bien été mis à jour",
+      });
     } catch (error) {
       return handleErrors(res, 400, {
         message: error.message,
       });
     }
   },
-
   // Supprimer un utilisateur
   deleteUser: async (req, res) => {
     try {
+      let compteExiste = await User.findOne({ _id: req.user.id });
       //Vérification du token
-      if (req.user.isAdmin === false) {
+      if (compteExiste === null || compteExiste.isAdmin === false) {
         return handleErrors(res, 403, {
           message:
             "Vous devez être un administrateur pour effectuer cette requête",
