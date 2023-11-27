@@ -19,4 +19,7 @@ route.patch("/:updateUser", virifyToken, mult, controller.updateUser);
 //Delete user
 route.delete("/:deleteUser", virifyToken, controller.deleteUser);
 
+//favoritesProducts
+route.get("/favoritesProducts", virifyToken, controller.getFavoritesProducts);
+
 module.exports = route;

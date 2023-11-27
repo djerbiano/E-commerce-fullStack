@@ -21,6 +21,10 @@ route.patch("/updateProduct/:product",virifyToken,productsController.updateProdu
 route.delete("/deleteProduct/:productDelete",virifyToken,productsController.deleteProduct
 );
 
+//Add FavoritesProducts
+route.post("/addFavoritesProducts/:favo",virifyToken,productsController.addFavorite);
+
+
 module.exports = route;
 
 

@@ -46,7 +46,6 @@ const controller = {
   //Add product
   addProduct: async (req, res) => {
     try {
-      // vérification du token
       let compteExiste = await User.findOne({ _id: req.user.id });
       //Vérification du token
       if (compteExiste === null || compteExiste.isAdmin === false) {
@@ -56,21 +55,7 @@ const controller = {
         });
       }
 
-      const newProduct = new Product({
-        title: req.body.title,
-        regularPrice: req.body.regularPrice,
-        salePrice: req.body.salePrice,
-        description: {
-          desc1: req.body.desc1 || "Aucune description",
-          desc2: req.body.desc2 || "Aucune description",
-          desc3: req.body.desc3 || "Aucune description",
-        },
-        pictures: {
-          pic1: req.files[0]?.filename || "avatarDefault.jpg",
-          pic2: req.files[1]?.filename || "avatarDefault.jpg",
-          pic3: req.files[2]?.filename || "avatarDefault.jpg",
-        },
-      });
+      const newProduct = new Product(req.body);
 
       const savedProduct = await newProduct.save();
 
@@ -89,10 +74,136 @@ const controller = {
   },
 
   //Update product
-  updateProduct: async (req, res) => {},
+  updateProduct: async (req, res) => {
+    try {
+      //Vérification du token
+      let compteExiste = await User.findOne({ _id: req.user.id });
+      if (compteExiste === null || compteExiste.isAdmin === false) {
+        return handleErrors(res, 403, {
+          message:
+            "Vous devez être un administrateur pour effectuer cette requête",
+        });
+      }
+
+      const updateProd = await Product.findOne({
+        _id: req.params.product,
+      });
+
+      if (!updateProd) {
+        return handleErrors(res, 404, {
+          message: ` Le produit n'existe pas`,
+        });
+      } else {
+        if (Object.keys(req.body).length === 0) {
+          return handleErrors(res, 400, {
+            message: "Vous n'avez rempli aucun champ",
+          });
+        }
+
+        if (req.body.title) {
+          updateProd.title = req.body.title;
+        }
+        if (req.body.regularPrice) {
+          updateProd.regularPrice = req.body.regularPrice;
+        }
+        if (req.body.salePrice) {
+          updateProd.salePrice = req.body.salePrice;
+        }
+      }
+      const savedProduct = await updateProd.save();
+
+      return res.status(200).json(savedProduct);
+    } catch (error) {
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
+    }
+  },
 
   //Delete product
-  deleteProduct: async (req, res) => {},
+  deleteProduct: async (req, res) => {
+    try {
+      //Vérification du token
+      let compteExiste = await User.findOne({ _id: req.user.id });
+      if (compteExiste === null || compteExiste.isAdmin === false) {
+        return handleErrors(res, 403, {
+          message:
+            "Vous devez être un administrateur pour effectuer cette requête",
+        });
+      }
+
+      const deleteProd = await Product.findOne({
+        _id: req.params.productDelete,
+      });
+
+      if (!deleteProd) {
+        return handleErrors(res, 404, {
+          message: ` Le produit n'existe pas`,
+        });
+      } else {
+        // supprimer les photos du produit
+        const deletePhoto = Object.values(await deleteProd.pictures);
+        for (const photo of deletePhoto) {
+          if (photo !== "avatarDefault.jpg") {
+            deleteImage(photo);
+          }
+        }
+
+        // Supprimer le produit
+        await Product.findOneAndDelete({
+          _id: req.params.productDelete,
+        });
+
+        return handleErrors(res, 200, {
+          message: "Le produit a bien été supprimé",
+        });
+      }
+    } catch (error) {
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
+    }
+  },
+
+  //Ajouter un article dans la liste de favoris
+  addFavorite: async (req, res) => {
+    try {
+      //Vérification du token
+      const user = await User.findOne({ _id: req.user.id });
+
+      if (!user) {
+        return handleErrors(res, 200, {
+          message: ` Veuillez vous inscrire pour pouvoir ajouter des produits dans votre liste`,
+        });
+      }
+
+      const product = await Product.findOne({ _id: req.params.favo });
+
+      if (!product) {
+        return handleErrors(res, 404, {
+          message: ` Le produit n'existe pas`,
+        });
+      }
+      const favoriteList = await user.favoritesProduct;
+      const productInList = req.params.favo;
+      if (favoriteList.includes(productInList)) {
+        return handleErrors(res, 400, {
+          message: ` L'article est déjà dans votre liste`,
+        });
+      }
+
+      favoriteList.push(product._id);
+      await user.save();
+
+      return handleErrors(res, 200, {
+        message: "Le produit a bien éte ajouté",
+      });
+    } catch (error) {
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
+    }
+  },
 };
 
 module.exports = controller;

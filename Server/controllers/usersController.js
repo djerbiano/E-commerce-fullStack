@@ -11,6 +11,7 @@ const {
   validateLoginUser,
 } = require("../models/Users");
 const { deleteImage, handleErrors } = require("../utils/helpers");
+const sendMailCreateCompte = require("../mails/register");
 
 const controller = {
   // Get all users
@@ -166,6 +167,9 @@ const controller = {
 
       // Exclure certaines propriétés du document résultant
       const { password, updatedAt, __v, ...other } = result._doc;
+
+      // envoyer un mail de Bienvenue
+      sendMailCreateCompte(req.body.email);
 
       res
         .status(201)
@@ -355,6 +359,37 @@ const controller = {
           message: "Le compte a bien été supprimé",
         });
       }, 2000);
+    } catch (error) {
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
+    }
+  },
+
+  //Get favoritesProductes
+  getFavoritesProducts: async (req, res) => {
+    try {
+      //Vérification du token
+      const user = await User.findOne({ _id: req.user.id }).populate(
+        "favoritesProduct"
+      );
+
+      if (!user) {
+        return handleErrors(res, 200, {
+          message:
+            "Veuillez vous inscrire pour pouvoir ajouter des produits dans votre liste",
+        });
+      }
+
+      const favorites = await user.favoritesProduct;
+
+      if (favorites.length > 0) {
+        return res.status(200).send(favorites);
+      } else {
+        return handleErrors(res, 200, {
+          message: "Vous n'avez aucun article dans votre liste",
+        });
+      }
     } catch (error) {
       return handleErrors(res, 400, {
         message: error.message,

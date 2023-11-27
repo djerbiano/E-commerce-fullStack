@@ -1,3 +1,4 @@
+const { boolean } = require("joi");
 const mongoose = require("mongoose");
 
 const ProductsSchema = mongoose.Schema(
@@ -38,33 +39,40 @@ const ProductsSchema = mongoose.Schema(
         default: "avatarDefault.jpg",
       },
     },
-
+    category: {
+      type: String,
+      required: true,
+      enum: [
+        "Homme",
+        "Femme",
+        "Informatique",
+        "Tv - Son",
+        "Téléphonie",
+        "Objets connectés",
+      ],
+    },
+    stock: {
+      type: Boolean,
+      default: true,
+    },
     colors: [
-      {
-        type: String,
-        enum: ["Blanc", "Noir", "Bleu"],
-      },
-    ],
-    sizes: [
-      {
-        type: String,
-        enum: ["S", "M", "L", "XL", "XXL"],
-      },
-    ],
-    stock: [
       {
         color: {
           type: String,
-          enum: ["Blanc", "Noir", "Bleu"],
+          required: true,
         },
-        size: {
-          type: String,
-          enum: ["S", "M", "L", "XL", "XXL"],
-        },
-        quantity: {
-          type: Number,
-          default: 10,
-        },
+        sizes: [
+          {
+            size: {
+              type: String,
+              required: true,
+            },
+            quantity: {
+              type: Number,
+              default: 0,
+            },
+          },
+        ],
       },
     ],
   },

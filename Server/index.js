@@ -42,7 +42,7 @@ server.use("/api", verifSessionStorage);
 server.use("/api/users", userRoute);
 server.use("/api/products", productsRoute);
 server.all("*", (req, res) => {
-  res.status(404).send("<h1>Page not found</h1>");
+  res.status(404).send("<h1>Endpoint inexistant</h1>");
 });
 
 // Middleware pour gérer les erreurs

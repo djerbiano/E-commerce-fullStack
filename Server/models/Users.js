@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const joi = require("joi");
+const Product = require("../models/Product");
 
 const UsersSchema = mongoose.Schema(
   {
@@ -33,6 +34,12 @@ const UsersSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    favoritesProduct: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
   { timestamps: true }
 );
