@@ -24,6 +24,9 @@ route.delete("/deleteProduct/:productDelete",virifyToken,productsController.dele
 //Add FavoritesProducts
 route.post("/addFavoritesProducts/:favo",virifyToken,productsController.addFavorite);
 
+//Delete FavoritesProducts
+route.delete("/deleteFavoritesProducts/:delFavo",virifyToken,productsController.deleteFavorite);
+
 
 module.exports = route;
 

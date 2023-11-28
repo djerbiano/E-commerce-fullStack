@@ -204,6 +204,51 @@ const controller = {
       });
     }
   },
+
+  //Supprimer un article de la liste de favoris
+  deleteFavorite: async (req, res) => {
+    try {
+      //Vérification du token
+      const user = await User.findOne({ _id: req.user.id });
+
+      if (!user) {
+        return handleErrors(res, 200, {
+          message: ` Veuillez vous inscrire pour pouvoir supprimmer des produits de votre liste`,
+        });
+      }
+
+      const product = await Product.findOne({ _id: req.params.delFavo });
+
+      if (!product) {
+        return handleErrors(res, 404, {
+          message: ` Le produit n'existe pas`,
+        });
+      }
+
+      const favoriteList = await user.favoritesProduct;
+      const deleteProductInList = req.params.delFavo;
+
+      if (!favoriteList.includes(deleteProductInList)) {
+        return handleErrors(res, 400, {
+          message: ` L'article n'est pas dans votre liste`,
+        });
+      }
+
+      const indexProductToDelete = favoriteList.indexOf(deleteProductInList);
+
+      favoriteList.splice(indexProductToDelete, 1);
+
+      await user.save();
+
+      return handleErrors(res, 200, {
+        message: "Le produit a bien éte supprimé",
+      });
+    } catch (error) {
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
+    }
+  },
 };
 
 module.exports = controller;

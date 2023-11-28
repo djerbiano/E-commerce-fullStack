@@ -11,6 +11,7 @@ const verifSessionStorage = require("./routes/privateRoute");
 const userRoute = require("./routes/users");
 const productsRoute = require("./routes/products");
 const authRoute = require("./routes/auth");
+const orderRoute = require("./routes/order");
 
 const server = express();
 server.use(cors());
@@ -41,6 +42,7 @@ server.use("/api/auth", authRoute);
 server.use("/api", verifSessionStorage);
 server.use("/api/users", userRoute);
 server.use("/api/products", productsRoute);
+server.use("/api/orders", orderRoute);
 server.all("*", (req, res) => {
   res.status(404).send("<h1>Endpoint inexistant</h1>");
 });
