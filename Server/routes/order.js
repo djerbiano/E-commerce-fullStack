@@ -10,7 +10,7 @@ route.get("/", virifyToken, orderController.getAllOrder);
 route.get("/:oneOrder", virifyToken, orderController.getOneOrder);
 
 //Add order
-route.post("/addOrder", virifyToken, orderController.addOrder);
+route.post("/addOrder/:userId", virifyToken, orderController.addOrder);
 
 //Update order
 route.patch("/updateOrder/:order", virifyToken, orderController.updateOrder);
