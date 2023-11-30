@@ -4,7 +4,12 @@ const User = require("../models/Users");
 
 const orderSchema = new mongoose.Schema(
   {
-    orderId: { type: String, required: true },
+    trackingNumber: {
+      type: String,
+      default: () => new mongoose.Types.ObjectId().toString(),
+      unique: true,
+      required: true,
+    },
     products: [
       {
         product: {
@@ -12,6 +17,8 @@ const orderSchema = new mongoose.Schema(
           ref: "Product",
           required: true,
         },
+        color: { type: String, required: true },
+        size: { type: String, required: true },
         quantity: { type: Number, required: true },
         price: { type: Number, required: true },
       },
@@ -28,12 +35,12 @@ const orderSchema = new mongoose.Schema(
     },
     statusHistory: [
       {
+        _id: false,
         status: {
           type: String,
           enum: ["payée", "expédiée", "reçue"],
-          default: "payée",
         },
-        startDate: { type: Date, default: Date.now },
+        startDate: { type: Date, default: new Date() },
       },
     ],
     total: { type: Number, required: true },

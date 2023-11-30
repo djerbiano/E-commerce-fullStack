@@ -7,17 +7,17 @@ const route = express.Router();
 route.get("/", virifyToken, orderController.getAllOrder);
 
 //Get one order
-route.get("/:oneOrder", virifyToken, orderController.getOneOrder);
+route.get("/:trackingNumber", virifyToken, orderController.getOneOrder);
 
 //Add order
 route.post("/addOrder/:userId", virifyToken, orderController.addOrder);
 
 //Update order
-route.patch("/updateOrder/:order", virifyToken, orderController.updateOrder);
+route.patch("/updateOrder/:orderTrackingNumber", virifyToken, orderController.updateOrder);
 
 //Delete order
 route.delete(
-  "/deleteOrder/:orderDelete",
+  "/deleteOrder/:orderDeleteTrackingNumber",
   virifyToken,
   orderController.deleteOrder
 );
