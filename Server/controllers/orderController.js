@@ -3,6 +3,9 @@ const { User } = require("../models/Users");
 const Product = require("../models/Product");
 const Order = require("../models/Order");
 const { handleErrors } = require("../utils/helpers");
+const sendMailOrderConfirmation = require("../mails/order");
+const sendMailOrderStatusUpdate = require("../mails/sendMailOrderStatusUpdate");
+const sendMailOrderCancellation = require("../mails/sendMailOrderCancellation");
 const controller = {
   //Get all order
   getAllOrder: async (req, res) => {
@@ -24,6 +27,32 @@ const controller = {
       } else {
         return handleErrors(res, 404, {
           message: "Aucune commande n'existe dans la base de données",
+        });
+      }
+    } catch (error) {
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
+    }
+  },
+
+  //Get all order by user
+  getAllOrderByUser: async (req, res) => {
+    try {
+      //Vérification du token
+      if (req.user.id !== req.params.userrId) {
+        return res.status(403).json({
+          message: "Token non valide, veuillez vous reconnecter",
+        });
+      }
+
+      const orders = await Order.find({ user: req.params.userrId });
+
+      if (orders.length > 0) {
+        return res.status(200).json(orders);
+      } else {
+        return handleErrors(res, 404, {
+          message: "Vous n'avez pas encore de commande",
         });
       }
     } catch (error) {
@@ -153,6 +182,18 @@ const controller = {
           }
         }
 
+        ///////// send mail   //////////
+
+        const orderDetails = {
+          products: req.body.products,
+          total: req.body.total,
+          billingAddress: req.body.billingAddress || req.body.shippingAddress,
+          shippingAddress: req.body.shippingAddress,
+        };
+        sendMailOrderConfirmation(user.email, orderDetails);
+
+        ///////////////////////////////
+
         return res.status(200).json(savedOrder);
       } else {
         return handleErrors(res, 404, {
@@ -190,6 +231,15 @@ const controller = {
         }
 
         const updatedOrder = await order.save();
+
+        ///////// send mail   //////////
+
+        const user = await User.findById(updatedOrder.user);
+        const newStatus = req.body.status;
+        sendMailOrderStatusUpdate(user.email, newStatus);
+
+        ///////////////////////////////
+
         return res.status(200).json(updatedOrder);
       } else {
         return handleErrors(res, 404, {
@@ -222,6 +272,14 @@ const controller = {
 
       if (order) {
         await Order.findByIdAndDelete(order._id);
+
+        ///////// send mail   //////////
+
+        const user = await User.findById(order.user);
+        sendMailOrderCancellation(user.email);
+
+        ///////////////////////////////
+
         return handleErrors(res, 200, {
           message: "La commande a bien été supprimée",
         });

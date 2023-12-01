@@ -1,4 +1,3 @@
-// envoyer un mail lors de la création d'un compte
 const nodemailer = require("nodemailer");
 
 const sendMailCreateCompte = function (Mail) {

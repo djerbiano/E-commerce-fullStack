@@ -6,6 +6,9 @@ const route = express.Router();
 //Get all order
 route.get("/", virifyToken, orderController.getAllOrder);
 
+//Get all order by user
+route.get("/user/:userrId", virifyToken, orderController.getAllOrderByUser);
+
 //Get one order
 route.get("/:trackingNumber", virifyToken, orderController.getOneOrder);
 
