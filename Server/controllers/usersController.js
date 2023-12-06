@@ -140,7 +140,21 @@ const controller = {
       const salt = await bcrypt.genSalt(10);
       req.body.password = await bcrypt.hash(req.body.password.trim(), salt);
 
-      if (req.file === undefined) {
+
+
+
+  if (req.file === undefined) {
+        user = new User(req.body);
+      } else {
+        user = new User(req.body);
+      }
+
+
+
+
+      
+
+     /* if (req.file === undefined) {
         user = new User({
           email: req.body.email,
           password: req.body.password,
@@ -151,7 +165,7 @@ const controller = {
           password: req.body.password,
           avatar: req.file.filename,
         });
-      }
+      }*/
 
       // Enregistrer l'utilisateur dans la base de données
       const result = await user.save();
@@ -233,7 +247,7 @@ const controller = {
       } else {
         return handleErrors(res, 401, {
           message: "Un problème est survenu, veuillez réessayer",
-        });
+        }); 
       }
     } catch (error) {
       return handleErrors(res, 400, {

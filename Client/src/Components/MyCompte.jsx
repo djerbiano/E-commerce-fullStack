@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FaUserAlt } from "react-icons/fa";
 
@@ -9,7 +8,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
 `;
-const ListItem = styled(Link)`
+const ListItem = styled.a`
   text-decoration: none;
   list-style: none;
   color: white;
@@ -23,7 +22,7 @@ const ListItem = styled(Link)`
 function MyCompte() {
   return (
     <Container>
-      <ListItem to="/monProfile">
+      <ListItem href={`${process.env.REACT_APP_URL_client}/monProfile`}>
         <FaUserAlt />
       </ListItem>
     </Container>

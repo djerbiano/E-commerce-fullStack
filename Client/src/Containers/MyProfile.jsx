@@ -1,6 +1,10 @@
+import { AuthContext } from "../Context/AuthContext";
+import { useContext } from "react";
 import styled from "styled-components";
 import AsideMyProfile from "../Components/AsideMyProfile";
 import MesInformations from "../Components/MesInformations";
+import NotUserResponse from "../Components/NotUserResponse";
+
 
 const Container = styled.div`
   width: 100%;
@@ -32,12 +36,12 @@ const Aside = styled.div`
 
     & > :nth-child(1) {
       display: flex;
-      flex-direction: row ;
+      flex-direction: row;
       justify-content: space-around;
       flex-wrap: wrap;
 
       height: auto;
-      font-size:1rem;
+      font-size: 1rem;
 
       & > * {
         border-bottom: none;
@@ -58,15 +62,22 @@ const Content = styled.div`
 `;
 
 function MyProfile() {
+  const { isAuthenticated } = useContext(AuthContext);
   return (
-    <Container>
-      <Aside>
-        <AsideMyProfile />
-      </Aside>
-      <Content>
-        <MesInformations />
-      </Content>
-    </Container>
+    <>
+      {isAuthenticated === "true" ? (
+        <Container>
+          <Aside>
+            <AsideMyProfile />
+          </Aside>
+          <Content>
+            <MesInformations />
+          </Content>
+        </Container>
+      ) : (
+        <NotUserResponse />
+      )}
+    </>
   );
 }
 

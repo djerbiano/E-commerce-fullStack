@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useState } from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -28,25 +29,32 @@ const Container = styled.div`
     font-size: 1rem;
     width: auto;
     height: auto;
-
   }
 `;
 
 function MesInformations() {
+  const [info] = useState({
+    name: localStorage.getItem("name") || "",
+    lastName: localStorage.getItem("lastName") || "",
+    email: localStorage.getItem("email") || "",
+    phone: localStorage.getItem("phone") || "",
+    adresse: localStorage.getItem("address") || "",
+  });
+
   return (
     <Container>
       <h3>Mes coordonnées</h3>
       <br />
       <h5>Nom:</h5>
-      <p>GHOUDI</p>
+      <p>{info.lastName}</p>
       <h5>Prenom:</h5>
-      <p>Saber</p>
+      <p>{info.name}</p>
       <h5>Email:</h5>
-      <p>oVZpD@example.com</p>
+      <p>{info.email}</p>
       <h5>Telephone:</h5>
-      <p>0606060606</p>
+      <p>{info.phone}</p>
       <h5>Adresse:</h5>
-      <p>14 route de brest 75000 Paris</p>
+      <p>{info.adresse}</p>
     </Container>
   );
 }

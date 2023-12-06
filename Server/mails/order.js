@@ -15,7 +15,6 @@ const sendMailOrderConfirmation = async (userMail, orderDetails) => {
       </tr>
     `;
   }
-
   const orderMail = `
     <h2 style="text-align: center; color: #333;">Confirmation de commande sur Shoping-digital</h2>
     <br/>
@@ -39,8 +38,8 @@ const sendMailOrderConfirmation = async (userMail, orderDetails) => {
     <p>Adresse de livraison: ${orderDetails.shippingAddress}</p>
     <p>Adresse de facturation: ${orderDetails.billingAddress}</p>
     <br/>
-    <p style=" color: #333;">Nous vous remercions pour votre confiance !</p>
-    <h3 style=" color: #333;">L'équipe Shoping-digital</h3>
+    <p>Nous vous remercions pour votre confiance !</p>
+    <h3>L'équipe Shoping-digital</h3>
   `;
 
   const transporter = nodemailer.createTransport({

@@ -13,11 +13,11 @@ const controller = {
         // Ajouter les informations décodées à l'objet de requête pour une utilisation ultérieure
         req.user = decode;
       } else {
-        return res.status(403).json({ message: "false" });
+        return res.status(200).json({ message: "false" });
       }
       //Vérification du token
       if (req.user.id !== userId) {
-        return res.status(403).json({
+        return res.status(200).json({
           message: "false",
         });
       }
@@ -25,7 +25,7 @@ const controller = {
         message: "true",
       });
     } catch (error) {
-      return res.status(400).json({ message: "false" });
+      return res.status(200).json({ message: "false" });
     }
   },
 };

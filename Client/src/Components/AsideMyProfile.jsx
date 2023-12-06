@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useState } from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -38,10 +39,12 @@ const LinkItems = styled(Link)`
 `;
 
 function AsideMyProfile() {
+  const [name] = useState(localStorage.getItem("name") || "");
+
   return (
     <Container>
       <Bienvenue>
-        <h3>Bienvenue Client</h3>
+        <h3>Bienvenue {name}</h3>
       </Bienvenue>
       <LinkItems to="/monProfile">Mon Profile </LinkItems>
       <LinkItems to="/mesCommandes">Mes Commandes</LinkItems>

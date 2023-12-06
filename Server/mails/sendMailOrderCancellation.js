@@ -8,8 +8,8 @@ const sendMailOrderCancellation = async (userMail) => {
     <br/>
     <p>Votre commande a été annulée avec succès.</p>
     <br/>
-    <p style=" color: #333;">Nous vous remercions pour votre confiance !</p>
-    <h3 style=" color: #333;">L'équipe Shoping-digital</h3>
+    <p>Nous vous remercions pour votre confiance !</p>
+    <h3>L'équipe Shoping-digital</h3>
   `;
 
   const transporter = nodemailer.createTransport({

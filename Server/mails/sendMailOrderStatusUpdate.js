@@ -10,8 +10,8 @@ const sendMailOrderStatusUpdate = async (userMail, newStatus) => {
     <br/>
     <p>Nouveau statut : ${newStatus}</p>
     <br/>
-    <p style=" color: #333;">Nous vous remercions pour votre confiance !</p>
-    <h3 style=" color: #333;">L'équipe Shoping-digital</h3>
+    <p>Nous vous remercions pour votre confiance !</p>
+    <h3>L'équipe Shoping-digital</h3>
   `;
 
   const transporter = nodemailer.createTransport({

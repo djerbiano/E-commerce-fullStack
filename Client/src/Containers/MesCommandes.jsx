@@ -30,12 +30,12 @@ const Aside = styled.div`
 
     & > :nth-child(1) {
       display: flex;
-      flex-direction: row ;
+      flex-direction: row;
       justify-content: space-around;
       flex-wrap: wrap;
 
       height: auto;
-      font-size:1rem;
+      font-size: 1rem;
 
       & > * {
         border-bottom: none;

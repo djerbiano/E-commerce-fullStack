@@ -18,6 +18,9 @@ route.post("/addOrder/:userId", virifyToken, orderController.addOrder);
 //Update order
 route.patch("/updateOrder/:orderTrackingNumber", virifyToken, orderController.updateOrder);
 
+//Confirme reception by client
+route.patch("/confirmReception/user/:orderId", virifyToken, orderController.confirmReception);
+
 //Delete order
 route.delete(
   "/deleteOrder/:orderDeleteTrackingNumber",

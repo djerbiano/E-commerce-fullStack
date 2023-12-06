@@ -10,8 +10,25 @@ const ProductsSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    isOnSale: {
+      type: Boolean,
+      default: false,
+    },
     salePrice: {
       type: Number,
+      default: 0,
+    },
+    isTopSeller: {
+      type: Boolean,
+      default: false,
+    },
+    isNewCollection: {
+      type: Boolean,
+      default: true,
+    },
+    isLimitedEdition: {
+      type: Boolean,
+      default: false,
     },
     description: {
       desc1: {

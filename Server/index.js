@@ -17,7 +17,7 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 server.use("/images", express.static("images"));
-
+server.use("/images", express.static("images"));
 // Middleware pour analyser les données URL encodées des formulaires
 server.use(express.urlencoded({ extended: true }));
 

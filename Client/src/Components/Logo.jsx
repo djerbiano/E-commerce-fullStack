@@ -20,7 +20,7 @@ function Logo() {
   return (
     <ListItem to="/">
       <Title>
-        Shoping<span>Digital</span>
+        Shoping<span onClick={() => localStorage.clear()}>Digital</span>
       </Title>
     </ListItem>
   );

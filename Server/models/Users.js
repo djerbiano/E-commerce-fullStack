@@ -12,6 +12,22 @@ const UsersSchema = mongoose.Schema(
       maxlength: 100,
       unique: true,
     },
+    name: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
     validateEmail: {
       type: Boolean,
       default: false,
@@ -51,6 +67,10 @@ function validateRegisterUser(obj) {
   const schema = joi.object({
     email: joi.string().trim().min(5).max(100).required().email(),
     password: joi.string().trim().min(6).required(),
+    name: joi.string().trim().min(4).max(100),
+    lastName: joi.string().trim().min(4).max(100),
+    phone: joi.string().trim().min(5).max(100),
+    address: joi.string().trim().min(5).max(100),
   });
   return schema.validate(obj);
 }

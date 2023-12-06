@@ -100,7 +100,7 @@ const controller = {
           });
         }
 
-        if (req.body.title) {
+        /*if (req.body.title) {
           updateProd.title = req.body.title;
         }
         if (req.body.regularPrice) {
@@ -108,8 +108,28 @@ const controller = {
         }
         if (req.body.salePrice) {
           updateProd.salePrice = req.body.salePrice;
+        }*/
+
+        const allowedFields = [
+          "title",
+          "regularPrice",
+          "isOnSale",
+          "salePrice",
+          "isTopSeller",
+          "isNewCollection",
+          "isLimitedEdition",
+          "category",
+          "stock",
+          "colors",
+        ];
+
+        for (const field of allowedFields) {
+          if (req.body[field] !== undefined) {
+            updateProd[field] = req.body[field];
+          }
         }
       }
+
       const savedProduct = await updateProd.save();
 
       return res.status(200).json(savedProduct);

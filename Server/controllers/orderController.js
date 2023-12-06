@@ -6,6 +6,7 @@ const { handleErrors } = require("../utils/helpers");
 const sendMailOrderConfirmation = require("../mails/order");
 const sendMailOrderStatusUpdate = require("../mails/sendMailOrderStatusUpdate");
 const sendMailOrderCancellation = require("../mails/sendMailOrderCancellation");
+const sendMailOrderConfirmationByClient = require("../mails/sendMailConfirmeReceptionByClient");
 const controller = {
   //Get all order
   getAllOrder: async (req, res) => {
@@ -46,12 +47,14 @@ const controller = {
         });
       }
 
-      const orders = await Order.find({ user: req.params.userrId });
-
+      const orders = await Order.find({ user: req.params.userrId }).populate({
+        path: "products.product",
+        select: "title pictures",
+      });
       if (orders.length > 0) {
         return res.status(200).json(orders);
       } else {
-        return handleErrors(res, 404, {
+        return handleErrors(res, 200, {
           message: "Vous n'avez pas encore de commande",
         });
       }
@@ -151,6 +154,7 @@ const controller = {
 
       const order = new Order({
         products: req.body.products,
+        title: req.body,
         user: req.user.id,
         total: req.body.total,
         billingAddress: req.body.billingAddress || req.body.shippingAddress,
@@ -246,6 +250,59 @@ const controller = {
           message: "Aucune commande n'existe dans la base de données",
         });
       }
+    } catch (error) {
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
+    }
+  },
+
+  //Confirme réception commande by client
+  confirmReception: async (req, res) => {
+    try {
+      //Vérification du token
+      let user = await User.findOne({ _id: req.user.id });
+      let orderId = await Order.findOne({ _id: req.params.orderId });
+
+      if (user === null || orderId === null) {
+        return handleErrors(res, 403, {
+          message: "Commande inconnue",
+        });
+      }
+
+      if (user._id.toString() !== orderId.user.toString()) {
+        return handleErrors(res, 403, {
+          message: "Vous devez étre connecté pour effectuer cette demande",
+        });
+      }
+
+      if (orderId.status === "reçue") {
+        return handleErrors(res, 200, {
+          message: "La commande est déjà reçue",
+        });
+      }
+
+      if (orderId.status === "payée") {
+        return handleErrors(res, 200, {
+          message: "La commande n'est pas encore livrée",
+        });
+      }
+
+      orderId.status = "reçue";
+      orderId.statusHistory.push({
+        status: "reçue",
+        startDate: new Date(),
+      });
+
+      let savedOrder = await orderId.save();
+
+      ///////// send mail   //////////
+      sendMailOrderConfirmationByClient(user.email);
+      /////////////////////////////////////
+
+      return res.status(200).json({
+        message: "Merci d'avoir confirmer votre commande",
+      });
     } catch (error) {
       return handleErrors(res, 400, {
         message: error.message,
