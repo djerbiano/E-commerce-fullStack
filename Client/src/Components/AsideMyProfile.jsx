@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useState } from "react";
+import { AiOutlineLogout } from "react-icons/ai";
 
 const Container = styled.div`
   width: 100%;
@@ -29,6 +30,22 @@ const Container = styled.div`
     padding: 10px;
     border-bottom: 1px solid #e5e5e5;
   }
+
+  & > :last-child {
+    background-color: #000;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 1.1rem;
+
+    &:hover {
+      background-color: red;
+      cursor: pointer;
+    }
+  }
 `;
 
 const Bienvenue = styled.div``;
@@ -41,6 +58,18 @@ const LinkItems = styled(Link)`
 function AsideMyProfile() {
   const [name] = useState(localStorage.getItem("name") || "");
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("email");
+    localStorage.removeItem("name");
+    localStorage.removeItem("lastName");
+    localStorage.removeItem("phone");
+    localStorage.removeItem("address");
+
+    window.location.href = "/";
+  };
+
   return (
     <Container>
       <Bienvenue>
@@ -49,6 +78,10 @@ function AsideMyProfile() {
       <LinkItems to="/monProfile">Mon Profile </LinkItems>
       <LinkItems to="/mesCommandes">Mes Commandes</LinkItems>
       <LinkItems to="/réclamations">Reclamations</LinkItems>
+      <LinkItems to="/" onClick={handleLogout}>
+        <AiOutlineLogout />
+        Se déconnecter
+      </LinkItems>
     </Container>
   );
 }

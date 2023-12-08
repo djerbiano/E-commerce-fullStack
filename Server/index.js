@@ -12,11 +12,11 @@ const userRoute = require("./routes/users");
 const productsRoute = require("./routes/products");
 const authRoute = require("./routes/auth");
 const orderRoute = require("./routes/order");
+const reclamationRoute = require("./routes/contact");
 
 const server = express();
 server.use(cors());
 server.use(express.json());
-server.use("/images", express.static("images"));
 server.use("/images", express.static("images"));
 // Middleware pour analyser les données URL encodées des formulaires
 server.use(express.urlencoded({ extended: true }));
@@ -43,6 +43,7 @@ server.use("/api", verifSessionStorage);
 server.use("/api/users", userRoute);
 server.use("/api/products", productsRoute);
 server.use("/api/orders", orderRoute);
+server.use("/api/contact", reclamationRoute);
 server.all("*", (req, res) => {
   res.status(404).send("<h1>Endpoint inexistant</h1>");
 });

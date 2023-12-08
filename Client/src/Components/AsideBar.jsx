@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { BiCategory } from "react-icons/bi";
+import { FaUserAlt } from "react-icons/fa";
 import { GiClothes } from "react-icons/gi";
 import { FaComputer } from "react-icons/fa6";
 import { MdOutlinePersonalVideo } from "react-icons/md";
@@ -29,6 +29,7 @@ const Container = styled.div`
   @media (max-width: 700px) {
     display: none;
   }
+
 `;
 
 const ListItem = styled(Link)`
@@ -68,8 +69,8 @@ function AsideBar() {
 
   return (
     <Container>
-      <ListItem to="/produits" onClick={CloseMenu}>
-        <BiCategory />
+      <ListItem to="/monProfile" onClick={CloseMenu}>
+        <FaUserAlt />
         Bienvenue
       </ListItem>
       <ListItem to="/produits" onClick={CloseMenu}>

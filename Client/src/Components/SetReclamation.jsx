@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useState, useEffect } from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -12,7 +13,7 @@ const Container = styled.div`
   font-size: 1.2rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 
-  @media (max-width:850px){
+  @media (max-width: 850px) {
     font-size: 1rem;
   }
 `;
@@ -72,34 +73,117 @@ const Form = styled.form`
   }
 
   @media (max-width: 348px) {
-
     input {
       width: 100%;
     }
-
-    
   }
 `;
 
 function SetReclamation() {
+  const [userId] = useState(localStorage.getItem("userId"));
+  const [commande, setCommande] = useState([]);
+  const [data, setData] = useState(true);
+
+  // Récuperation des numéros de commande
+  useEffect(() => {
+    const getAllOrders = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_URL_SERVER}/api/orders/user/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              token: localStorage.getItem("token"),
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (data.length > 0) {
+          setCommande(data);
+        } else {
+          setData(false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getAllOrders();
+    //eslint-disable-next-line
+  }, [userId]);
+
+  // Envoi de la récclamation
+  const sendReclamation = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+
+    const nom = form.nom.value;
+    const email = form.email.value;
+    const message = form.message.value;
+    const commande = form.commande.value;
+
+    const response = await fetch(
+      `${process.env.REACT_APP_URL_SERVER}/api/contact/reclamation`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({ nom, email, message, commande }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (data) {
+      alert(data.message);
+    } else {
+      alert(data.message);
+    }
+  };
+
   return (
     <Container>
       <h3>Réclamation</h3>
 
-      <Form>
+      <Form onSubmit={sendReclamation}>
         <label htmlFor="nom">Nom:</label>
-        <input type="text" id="nom" required />
+        <input
+          type="text"
+          id="nom"
+          defaultValue={localStorage.getItem("name")}
+          disabled
+        />
 
         <label htmlFor="commande">Numéro de commande:</label>
-        <input type="text" id="commande" required />
+        <select id="commande" required>
+          {data ? (
+            commande.map((numero) => (
+              <option key={numero.trackingNumber} value={numero.trackingNumber}>
+                {numero.trackingNumber}
+              </option>
+            ))
+          ) : (
+            <option disabled>Aucune commande</option>
+          )}
+          <option value="Autre">Autre</option>
+        </select>
 
         <label htmlFor="email">Email:</label>
-        <input type="email" id="email" required />
+        <input
+          type="email"
+          id="email"
+          defaultValue={localStorage.getItem("email")}
+          disabled
+        />
 
         <label htmlFor="message">Message:</label>
         <textarea id="message" rows="5" cols="30" required />
 
-        <button type="submit">Envoyer</button>
+        <button type="submit"> Envoyer</button>
       </Form>
     </Container>
   );

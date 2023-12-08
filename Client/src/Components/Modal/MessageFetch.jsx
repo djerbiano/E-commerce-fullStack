@@ -21,7 +21,7 @@ const Content = styled.div`
   background-color: white;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   font-size: 2rem;
   position: fixed;
@@ -33,14 +33,14 @@ const Content = styled.div`
 
   z-index: 1;
 
-  h3 {
-    margin-bottom: 2rem !important;
+  p {
+    margin-bottom: 1rem !important;
     text-align: center !important;
   }
 
   button {
     padding: 1rem 2rem;
-    font-size: 1.5rem;
+    font-size: 1rem;
     border: none;
     border-radius: 0.5rem;
     background-color: #fa5;
@@ -52,16 +52,28 @@ const Content = styled.div`
       transition: 0.5s;
     }
   }
+
+  @media (max-width: 760px) {
+    width: 80vw;
+  }
+
+  @media (max-width: 490px) {
+    width: 100vw;
+  }
+
+  @media (max-width: 375px) {
+    font-size: 1.5rem;
+  }
 `;
 
 function MessageFetch({ message, setOpModal }) {
   const closeModal = () => {
     setOpModal(false);
-  }
+  };
   return (
     <Container>
       <Content>
-        <h3> {message} </h3>
+        <p> {message} </p>
         <button onClick={closeModal}> Fermer </button>
       </Content>
     </Container>

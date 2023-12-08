@@ -5,7 +5,6 @@ import AsideMyProfile from "../Components/AsideMyProfile";
 import MesInformations from "../Components/MesInformations";
 import NotUserResponse from "../Components/NotUserResponse";
 
-
 const Container = styled.div`
   width: 100%;
   display: flex;
@@ -63,6 +62,7 @@ const Content = styled.div`
 
 function MyProfile() {
   const { isAuthenticated } = useContext(AuthContext);
+
   return (
     <>
       {isAuthenticated === "true" ? (

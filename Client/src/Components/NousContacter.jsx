@@ -79,11 +79,39 @@ const Form = styled.form`
 `;
 
 function NousContacter() {
+    // Envoi su message de la page contact
+    const sendMessage = async (event) => {
+      event.preventDefault();
+      const form = event.target;
+  
+      const nom = form.nom.value;
+      const email = form.email.value;
+      const message = form.message.value;
+  
+      const response = await fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/contact`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ nom, email, message }),
+        }
+      );
+  
+      const data = await response.json();
+  
+      if (data) {
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
+    };
   return (
     <Container>
       <h3>Nous contacter</h3>
 
-      <Form>
+      <Form onSubmit={sendMessage}>
         <label htmlFor="nom">Nom:</label>
         <input type="text" id="nom" required />
 

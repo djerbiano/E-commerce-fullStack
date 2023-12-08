@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 
     checkTokenValidity();
 
-    window.addEventListener("click", checkTokenValidity());
+    window.addEventListener("storage", checkTokenValidity());
 
     // eslint-disable-next-line
   }, [isAuthenticated]);

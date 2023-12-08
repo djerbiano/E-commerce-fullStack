@@ -35,7 +35,7 @@ function App() {
     localStorage.removeItem("lastName");
     localStorage.removeItem("phone");
     localStorage.removeItem("address");
-    window.location.reload();
+    window.location.href = "/";
   };
   useEffect(() => {
     window.addEventListener("storage", handleStorageChange);
@@ -49,7 +49,6 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        
         <MenuHambContext.Provider value={{ open, setOpen }}>
           <AppContainer>
             <Headers />
@@ -69,7 +68,6 @@ function App() {
             <Analytics />
           </AppContainer>
         </MenuHambContext.Provider>
-      
       </AuthProvider>
     </BrowserRouter>
   );

@@ -1,6 +1,9 @@
+import { AuthContext } from "../Context/AuthContext";
+import { useContext } from "react";
 import styled from "styled-components";
 import AsideMyProfile from "../Components/AsideMyProfile";
 import GetCommandes from "../Components/GetCommandes";
+import NotUserResponse from "../Components/NotUserResponse";
 
 const Container = styled.div`
   width: 100%;
@@ -56,15 +59,22 @@ const Content = styled.div`
 `;
 
 function MesCommandes() {
+  const { isAuthenticated } = useContext(AuthContext);
   return (
-    <Container>
-      <Aside>
-        <AsideMyProfile />
-      </Aside>
-      <Content>
-        <GetCommandes />
-      </Content>
-    </Container>
+    <>
+      {isAuthenticated === "true" ? (
+        <Container>
+          <Aside>
+            <AsideMyProfile />
+          </Aside>
+          <Content>
+            <GetCommandes />
+          </Content>
+        </Container>
+      ) : (
+        <NotUserResponse />
+      )}
+    </>
   );
 }
 
