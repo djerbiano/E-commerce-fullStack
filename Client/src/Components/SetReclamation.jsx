@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-
+import Modal from "../Components/Modal/MessageFetch";
 const Container = styled.div`
   width: 100%;
   min-height: 80vh;
@@ -83,6 +83,8 @@ function SetReclamation() {
   const [userId] = useState(localStorage.getItem("userId"));
   const [commande, setCommande] = useState([]);
   const [data, setData] = useState(true);
+  const [opModal, setOpModal] = useState(false);
+  const [contentModal, setContentModal] = useState("");
 
   // Récuperation des numéros de commande
   useEffect(() => {
@@ -114,7 +116,7 @@ function SetReclamation() {
     //eslint-disable-next-line
   }, [userId]);
 
-  // Envoi de la récclamation
+  // Envoi de la réclamation
   const sendReclamation = async (event) => {
     event.preventDefault();
     const form = event.target;
@@ -138,11 +140,8 @@ function SetReclamation() {
 
     const data = await response.json();
 
-    if (data) {
-      alert(data.message);
-    } else {
-      alert(data.message);
-    }
+    setOpModal(true);
+    setContentModal(data.message);
   };
 
   return (
@@ -185,6 +184,7 @@ function SetReclamation() {
 
         <button type="submit"> Envoyer</button>
       </Form>
+      {opModal && <Modal message={contentModal} setOpModal={setOpModal} />}
     </Container>
   );
 }

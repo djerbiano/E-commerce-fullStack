@@ -1,11 +1,12 @@
+import { useState } from "react";
 import styled from "styled-components";
-
+import Modal from "../Components/Modal/MessageFetch";
 const Container = styled.div`
   width: 80%;
   min-height: 80vh;
   display: flex;
   flex-direction: column;
-  justify-content:flex-start;
+  justify-content: flex-start;
   background-color: #f5f5f5;
   padding: 20px;
   border-radius: 5px;
@@ -79,34 +80,32 @@ const Form = styled.form`
 `;
 
 function NousContacter() {
-    // Envoi su message de la page contact
-    const sendMessage = async (event) => {
-      event.preventDefault();
-      const form = event.target;
-  
-      const nom = form.nom.value;
-      const email = form.email.value;
-      const message = form.message.value;
-  
-      const response = await fetch(
-        `${process.env.REACT_APP_URL_SERVER}/api/contact`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ nom, email, message }),
-        }
-      );
-  
-      const data = await response.json();
-  
-      if (data) {
-        alert(data.message);
-      } else {
-        alert(data.message);
+  const [opModal, setOpModal] = useState(false);
+  const [contentModal, setContentModal] = useState("");
+  const sendMessage = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+
+    const nom = form.nom.value;
+    const email = form.email.value;
+    const message = form.message.value;
+
+    const response = await fetch(
+      `${process.env.REACT_APP_URL_SERVER}/api/contact`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nom, email, message }),
       }
-    };
+    );
+
+    const data = await response.json();
+
+    setOpModal(true);
+    setContentModal(data.message);
+  };
   return (
     <Container>
       <h3>Nous contacter</h3>
@@ -123,6 +122,7 @@ function NousContacter() {
 
         <button type="submit">Envoyer</button>
       </Form>
+      {opModal && <Modal message={contentModal} setOpModal={setOpModal} />}
     </Container>
   );
 }

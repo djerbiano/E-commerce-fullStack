@@ -16,6 +16,7 @@ import NousContacter from "./Components/NousContacter";
 import PanierContent from "./Containers/PanierContent";
 import NotFound404 from "./Components/NotFound404";
 import FavoContent from "./Components/FavoContent";
+import Admin from "./Containers/Admin";
 
 const AppContainer = styled.div`
   display: flex;
@@ -62,6 +63,14 @@ function App() {
               <Route path="/nousContacter" element={<NousContacter />} />
               <Route path="/panier" element={<PanierContent />} />
               <Route path="/favoris" element={<FavoContent />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/dashboard" element={<Admin />} />
+              <Route path="/admin/users" element={<Admin />} />
+              <Route path="/admin/products" element={<Admin />} />
+              <Route path="/admin/stocks" element={<Admin />} />
+              <Route path="/admin/trackings" element={<Admin />} />
+              <Route path="/admin/orders" element={<Admin />} />
+              <Route path="/admin/ratings" element={<Admin />} />
               <Route path="*" element={<NotFound404 />} />
             </Routes>
             <Footer />

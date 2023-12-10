@@ -1,6 +1,8 @@
+
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { MdHeadsetMic } from "react-icons/md";
+
 
 const Container = styled.div`
   width: 100%;
@@ -22,11 +24,13 @@ const ListItem = styled(Link)`
   }
 `;
 function Contact() {
+  
   return (
     <Container>
       <ListItem to="/nousContacter">
         <MdHeadsetMic />
       </ListItem>
+    
     </Container>
   );
 }
