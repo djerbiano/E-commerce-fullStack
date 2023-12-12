@@ -2,16 +2,16 @@ import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
 const data = [
-  { year: 2010, count: 30 },
-  { year: 2011, count: 36 },
-  { year: 2012, count: 22 },
-  { year: 2013, count: 25 },
-  { year: 2014, count: 42 },
-  { year: 2015, count: 25 },
-  { year: 2016, count: 28 },
+  { day: " Lundi", count: 50 },
+  { day: " Mardi", count: 150 },
+  { day: " Mercredi", count: 180 },
+  { day: " Jeudi", count: 250 },
+  { day: " Vendredi", count: 300 },
+  { day: " Samedi", count: 420 },
+  { day: " Dimanche", count: 190 },
 ];
 
-function Graph() {
+function GraphWeekly() {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -22,20 +22,22 @@ function Graph() {
     const ctx = document.getElementById("myChart").getContext("2d");
 
     chartRef.current = new Chart(ctx, {
-      type: "line",
+      type: "bar",
       data: {
-        labels: data.map((row) => row.year),
+        labels: data.map((row) => row.day),
         datasets: [
           {
-            label: "Acquisitions by year",
+            label: "Chiffre d'affaires par jour",
             data: data.map((row) => row.count),
-            backgroundColor: "rgba(75, 192, 192, 0.2)",
-            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: "#00800061",
+            borderColor: "green",
             borderWidth: 1,
           },
         ],
       },
+
       options: {
+        responsive: true,
         scales: {
           y: {
             beginAtZero: true,
@@ -52,4 +54,4 @@ function Graph() {
   );
 }
 
-export default Graph;
+export default GraphWeekly;

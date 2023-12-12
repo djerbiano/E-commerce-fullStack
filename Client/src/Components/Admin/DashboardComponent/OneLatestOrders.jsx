@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useRef } from "react";
+import OneLatestOrdersMenu from "./OneLatestOrdersMenu";
 
 const Container = styled.div`
   width: 100%;
@@ -44,6 +45,7 @@ function OneLatestOrders(props) {
       <p>89 $</p>
       <p ref={ref}>{props.status}</p>
       <p>10/05/2022</p>
+      <OneLatestOrdersMenu />
     </Container>
   );
 }

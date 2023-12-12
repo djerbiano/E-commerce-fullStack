@@ -8,7 +8,6 @@ const Container = styled.div`
   padding: 10px;
   position: relative;
   background-color: #f5f5f5;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
 
   & > :nth-child(1) {

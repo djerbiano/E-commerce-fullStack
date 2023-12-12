@@ -2,16 +2,16 @@ import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
 const data = [
-  { year: 2010, count: 50 },
-  { year: 2011, count: 36 },
-  { year: 2012, count: 22 },
-  { year: 2013, count: 25 },
-  { year: 2014, count: 42 },
-  { year: 2015, count: 25 },
-  { year: 2016, count: 28 },
+  { day: 1, count: 10 },
+  { day: 2, count: 36 },
+  { day: 3, count: 22 },
+  { day: 4, count: 25 },
+  { day: 5, count: 42 },
+  { day: 6, count: 25 },
+  { day: 7, count: 28 },
 ];
 
-function Graph() {
+function GraphVisitors() {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -24,10 +24,10 @@ function Graph() {
     chartRef.current = new Chart(ctx, {
       type: "bar",
       data: {
-        labels: data.map((row) => row.year),
+        labels: data.map((row) => row.day),
         datasets: [
           {
-            label: "Acquisitions by year",
+            label: "Visiteurs par jour",
             data: data.map((row) => row.count),
             backgroundColor: "rgba(97, 215, 255, 0.84)",
             borderColor: "rgba(97, 113, 255, 0.65)",
@@ -36,6 +36,8 @@ function Graph() {
         ],
       },
       options: {
+        responsive: true,
+
         scales: {
           y: {
             beginAtZero: true,
@@ -52,4 +54,4 @@ function Graph() {
   );
 }
 
-export default Graph;
+export default GraphVisitors;
