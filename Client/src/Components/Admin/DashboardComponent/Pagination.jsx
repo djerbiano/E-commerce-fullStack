@@ -32,7 +32,7 @@ const Content = styled.div`
     font-size: 1.2rem;
 
     &.active {
-      background-color: #000;
+      background-color: hsl(226.32deg 52.29% 21.37%);
       color: #fff;
       border-radius: 50px;
       padding: 5px 15px;

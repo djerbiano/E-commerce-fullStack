@@ -19,6 +19,7 @@ const Container = styled.div`
   background-color: hsl(226.32deg 52.29% 21.37%);
   border-radius: 0px 0px 10px 0px;
   position: relative;
+  z-index: 1;
 
   & > div {
     width: 50px;
