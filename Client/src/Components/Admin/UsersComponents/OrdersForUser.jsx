@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  width: 70%;
+  width: 90%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -40,13 +40,12 @@ const Content = styled.div`
     text-align: center;
     font-weight: bold;
     font-size: 20px;
-    cursor: pointer;
   }
 `;
 function OrdersForUser() {
   return (
     <Container>
-      <h1>Liste des commandes</h1>
+      <h2>Liste des commandes</h2>
       <ContainerInfo>
         <Header>
           <p>TrackingNumber</p>
@@ -57,6 +56,38 @@ function OrdersForUser() {
           <p>Total</p>
         </Header>
 
+        <Content>
+          <p>gfs12df5ds8sd</p>
+          <p>12/12/2023</p>
+          <p>**** **** **** 7852</p>
+          <p>France</p>
+          <p>Livré</p>
+          <p>50 $</p>
+        </Content>
+        <Content>
+          <p>gfs12df5ds8sd</p>
+          <p>12/12/2023</p>
+          <p>**** **** **** 7852</p>
+          <p>France</p>
+          <p>Livré</p>
+          <p>50 $</p>
+        </Content>
+        <Content>
+          <p>gfs12df5ds8sd</p>
+          <p>12/12/2023</p>
+          <p>**** **** **** 7852</p>
+          <p>France</p>
+          <p>Livré</p>
+          <p>50 $</p>
+        </Content>
+        <Content>
+          <p>gfs12df5ds8sd</p>
+          <p>12/12/2023</p>
+          <p>**** **** **** 7852</p>
+          <p>France</p>
+          <p>Livré</p>
+          <p>50 $</p>
+        </Content>
         <Content>
           <p>gfs12df5ds8sd</p>
           <p>12/12/2023</p>

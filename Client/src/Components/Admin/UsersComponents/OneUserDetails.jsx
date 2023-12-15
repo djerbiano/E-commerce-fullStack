@@ -87,7 +87,7 @@ const Info = styled.div`
   width: 70%;
   height: 100%;
 
-  h1 {
+  h2 {
     margin-bottom: 40px;
   }
 
@@ -101,6 +101,9 @@ const Info = styled.div`
     div {
       width: 200px;
       margin-bottom: 20px;
+      & > * {
+        margin-bottom: 10px;
+      }
     }
   }
 `;
@@ -126,11 +129,8 @@ const ActionButton = styled.div`
     &:hover {
       opacity: 0.8;
       transition: all 0.3s ease;
-
     }
-
   }
-
 `;
 
 function OneUserDetails() {
@@ -151,21 +151,18 @@ function OneUserDetails() {
             <p>Inscrit le: 10/05/2022</p>
           </Picture>
           <Info>
-            <h1>Informations</h1>
+            <h2>Informations</h2>
             <div>
-              <div>
-                <p>Name</p>
-                <p>Eric</p>
-                <p>LastName</p>
-                <p>DUPOND</p>
-                <p>Phone</p>
-                <p>0033 00 00 00 00</p>
-              </div>
               <div>
                 <p>Email</p>
                 <p>ericd@gmail.com</p>
                 <p>Valide</p>
               </div>
+              <div>
+                <p>Phone</p>
+                <p>0033 00 00 00 00</p>
+              </div>
+
               <div>
                 <p>Adresse</p>
                 <p>1 rue de test 75000 PARIS </p>

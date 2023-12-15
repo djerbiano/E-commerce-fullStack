@@ -2,6 +2,7 @@ import styled from "styled-components";
 import SearchBar from "./UsersComponents/SearchBar";
 import OneUser from "./UsersComponents/OneUser";
 import Pagination from "./DashboardComponent/Pagination";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -77,14 +78,13 @@ const Header = styled.div`
   }
 `;
 
-function Users() {
-  const allDiv = document.querySelectorAll("div");
+const LinkItem = styled(Link)`
+  text-decoration: none;
+  color: black;
+`;
 
-  allDiv.forEach((div) => {
-    div.addEventListener("click", () => {
-      window.location.href = "/admin/users/oneUser";
-    });
-  });
+function Users() {
+ 
   return (
     <Container>
       <SearchBar />
@@ -97,36 +97,16 @@ function Users() {
           <p>Adress</p>
           <p>Validate email</p>
         </Header>
-        <Div1>
+        <LinkItem to="/admin/users/oneuser">
+        <Div1 className="kj">
           <OneUser />
         </Div1>
-        <Div2>
+        </LinkItem>
+        <LinkItem to="/admin/users/oneuser">
+        <Div2 className="kj">
           <OneUser />
         </Div2>
-        <Div1>
-          <OneUser />
-        </Div1>
-        <Div2>
-          <OneUser />
-        </Div2>
-        <Div1>
-          <OneUser />
-        </Div1>
-        <Div2>
-          <OneUser />
-        </Div2>
-        <Div1>
-          <OneUser />
-        </Div1>
-        <Div2>
-          <OneUser />
-        </Div2>
-        <Div1>
-          <OneUser />
-        </Div1>
-        <Div2>
-          <OneUser />
-        </Div2>
+        </LinkItem>
       </Content>
       <Pagination />
     </Container>
