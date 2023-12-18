@@ -18,6 +18,7 @@ import NotFound404 from "./Components/NotFound404";
 import FavoContent from "./Components/FavoContent";
 import Admin from "./Containers/Admin";
 import OneUserDetails from "./Components/Admin/UsersComponents/OneUserDetails";
+import OneProduct from "./Components/Admin/ProductsComponent/OneProduct";
 
 const AppContainer = styled.div`
   display: flex;
@@ -69,6 +70,7 @@ function App() {
               <Route path="/admin/users" element={<Admin />} />
               <Route path="/admin/users/oneUser" element={<OneUserDetails />} />
               <Route path="/admin/products" element={<Admin />} />
+              <Route path="/admin/products/oneProduct/:id" element={<OneProduct />} />
               <Route path="/admin/stocks" element={<Admin />} />
               <Route path="/admin/trackings" element={<Admin />} />
               <Route path="/admin/orders" element={<Admin />} />

@@ -11,7 +11,7 @@ const controller = {
       if (products.length > 0) {
         return res.status(200).json(products);
       } else {
-        return handleErrors(res, 404, {
+        return handleErrors(res, 200, {
           message: "Aucun produit n'existe dans la base de données",
         });
       }
@@ -43,30 +43,120 @@ const controller = {
     }
   },
 
-  //Add product
-  addProduct: async (req, res) => {
+  //Get one product by id
+  getOneProductById: async (req, res) => {
     try {
       let compteExiste = await User.findOne({ _id: req.user.id });
-      //Vérification du token
+      // Vérification du token
       if (compteExiste === null || compteExiste.isAdmin === false) {
         return handleErrors(res, 403, {
           message:
             "Vous devez être un administrateur pour effectuer cette requête",
         });
       }
+      const products = await Product.findOne({ _id: req.params.byId });
 
-      const newProduct = new Product(req.body);
+      if (products) {
+        return res.status(200).json(products);
+      } else {
+        return handleErrors(res, 404, {
+          message: ` ${req.params.byId} n'existe pas`,
+        });
+      }
+    } catch (error) {
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
+    }
+  },
+
+  //Add product
+  addProduct: async (req, res) => {
+    let images;
+    try {
+      let compteExiste = await User.findOne({ _id: req.user.id });
+      // Vérification du token
+      if (compteExiste === null || compteExiste.isAdmin === false) {
+        return handleErrors(res, 403, {
+          message:
+            "Vous devez être un administrateur pour effectuer cette requête",
+        });
+      }
+      if (req.files.length === 0 || req.files.length < 3) {
+        return handleErrors(res, 400, {
+          message: "Les photos sont obligatoires",
+        });
+      }
+
+      const {
+        title,
+        regularPrice,
+        isOnSale,
+        salePrice,
+        isTopSeller,
+        isNewCollection,
+        isLimitedEdition,
+        desc1,
+        desc2,
+        desc3,
+        category,
+        color1,
+        sizes,
+        quantity1,
+      } = req.body;
+
+      images = req.files;
+
+      const newProduct = new Product({
+        title,
+        regularPrice,
+        isOnSale,
+        salePrice,
+        isTopSeller,
+        isNewCollection,
+        isLimitedEdition,
+        description: {
+          desc1: desc1,
+          desc2: desc2,
+          desc3: desc3,
+        },
+        pictures: {
+          pic1: images[0].filename,
+          pic2: images[1].filename,
+          pic3: images[2].filename,
+        },
+        category,
+        colors: [
+          {
+            color: color1,
+            sizes: [
+              {
+                size: sizes,
+                quantity: quantity1,
+              },
+            ],
+          },
+        ],
+        sizes,
+        quantity1,
+      });
 
       const savedProduct = await newProduct.save();
 
       if (savedProduct) {
         return res.status(200).json(savedProduct);
       } else {
+        deleteImage(images[0].filename);
+        deleteImage(images[1].filename);
+        deleteImage(images[2].filename);
         return handleErrors(res, 404, {
           message: "Impossible d'ajouter le produit",
         });
       }
     } catch (error) {
+      deleteImage(images[0].filename);
+      deleteImage(images[1].filename);
+      deleteImage(images[2].filename);
       return handleErrors(res, 400, {
         message: error.message,
       });

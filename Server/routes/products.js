@@ -11,6 +11,9 @@ route.get("/", productsController.getAllProducts);
 //Get one product
 route.get("/:oneProduct", productsController.getOneProduct);
 
+//Get one product by id
+route.get("/oneProduct/:byId", virifyToken, productsController.getOneProductById);
+
 //Add product
 route.post("/addProduct", virifyToken, multerMultiple, productsController.addProduct);
 

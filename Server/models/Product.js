@@ -33,26 +33,32 @@ const ProductsSchema = mongoose.Schema(
     description: {
       desc1: {
         type: String,
+        required: true,
       },
       desc2: {
         type: String,
+        required: true,
       },
       desc3: {
         type: String,
+        required: true,
       },
     },
     pictures: {
       pic1: {
         type: String,
         default: "avatarDefault.jpg",
+        required: true,
       },
       pic2: {
         type: String,
         default: "avatarDefault.jpg",
+        required: true,
       },
       pic3: {
         type: String,
         default: "avatarDefault.jpg",
+        required: true,
       },
     },
     category: {
@@ -86,6 +92,7 @@ const ProductsSchema = mongoose.Schema(
             quantity: {
               type: Number,
               default: 0,
+              required: true,
             },
           },
         ],
@@ -97,3 +104,4 @@ const ProductsSchema = mongoose.Schema(
 
 const Product = mongoose.model("Product", ProductsSchema);
 module.exports = Product;
+              

@@ -21,12 +21,12 @@ const controller = {
         });
       }
 
-      const orders = await Order.find();
+      const orders = await Order.find().populate("products.product");
 
       if (orders.length > 0) {
         return res.status(200).json(orders);
       } else {
-        return handleErrors(res, 404, {
+        return handleErrors(res, 200, {
           message: "Aucune commande n'existe dans la base de données",
         });
       }

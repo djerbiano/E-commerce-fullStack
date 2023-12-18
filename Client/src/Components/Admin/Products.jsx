@@ -1,6 +1,9 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Filter from "./ProductsComponent/Filter";
 import AddButton from "./ProductsComponent/AddProduct";
+//import OneProduct from "./ProductsComponent/OneProduct";
+import { IoIosRefresh } from "react-icons/io";
 
 const Container = styled.div`
   width: 100%;
@@ -32,6 +35,25 @@ const Title = styled.div`
       transition: all 0.5s ease;
     }
   }
+
+  & > :nth-child(3) {
+    display: flex;
+    align-items: center;
+
+    svg {
+      cursor: pointer;
+      font-size: 25px;
+      border: 1px solid black;
+      transition: all 0.5s ease;
+      border-radius: 5px;
+      &:hover {
+        transform: scale(1.3);
+        transition: all 0.5s ease;
+        background-color: green;
+        color: white;
+      }
+    }
+  }
 `;
 const ShortSelect = styled.div`
   width: 100%;
@@ -60,14 +82,15 @@ const Header = styled.div`
   height: 50px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   font-size: 16px;
   border-bottom: 1px solid gray;
   color: gray;
   p {
-    width: 100%;
     text-align: center;
     font-weight: bold;
+    width: 150px;
   }
 `;
 const Product = styled.div`
@@ -75,14 +98,15 @@ const Product = styled.div`
   height: 50px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   border-bottom: 1px solid gray;
   p {
-    width: 100%;
     text-align: center;
     font-weight: bold;
     cursor: pointer;
     font-size: 14px;
+    width: 150px;
   }
 
   &:hover {
@@ -92,16 +116,84 @@ const Product = styled.div`
 `;
 
 function Products() {
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [checkboxProducts, setCheckboxProducts] = useState({
+    isOnSale: false,
+    isTopSeller: false,
+    isNewCollection: false,
+    isLimitedEdtion: false,
+  });
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_URL_SERVER}/api/products`, {
+      method: "GET",
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.length > 0) {
+          setProducts(data);
+          setFilteredProducts(data);
+        } else {
+          setProducts(data);
+        }
+      });
+  }, []);
+
+  // handle category
+  const handleCategory = (category) => {
+    setCheckboxProducts({
+      isOnSale: false,
+      isTopSeller: false,
+      isNewCollection: false,
+      isLimitedEdtion: false,
+    });
+    if (category === "All") {
+      setFilteredProducts(products);
+    } else {
+      const filtered = products.filter(
+        (product) => product.category === category
+      );
+      setFilteredProducts(filtered);
+    }
+  };
+
+  //handle checkbox
+  const selectByCheckbox = () => {
+    const selectKey = Object.keys(checkboxProducts).filter(
+      (key) => checkboxProducts[key] === true
+    );
+
+    if (selectKey.length > 0) {
+      const filtered = filteredProducts.filter((product) =>
+        selectKey.every((key) => product[key] === true)
+      );
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredProducts(products);
+    }
+  };
+
+  //read one product
+
   return (
     <Container>
       <Title>
         <h2>Products</h2>
         <AddButton />
+        <div onClick={() => window.location.reload()}>
+          <IoIosRefresh />
+        </div>
       </Title>
       <ShortSelect>
-        <select id=" Category">
-          <option value="">Select Category</option>
-          <option value="All">All</option>
+        <select
+          id="selectCategory"
+          onChange={(e) => handleCategory(e.target.value)}
+        >
+          <option value="All">Select Category</option>
           <option value="Homme">Homme</option>
           <option value="Femme">Femme</option>
           <option value="Informatique">Informatique</option>
@@ -109,8 +201,12 @@ function Products() {
           <option value="Téléphonie">Téléphonie</option>
           <option value="Objets connectés">Objets connectés</option>
         </select>
-        <Filter />
+        <Filter
+          setCheckboxProducts={setCheckboxProducts}
+          selectByCheckbox={selectByCheckbox}
+        />
       </ShortSelect>
+
       <Header>
         <p>Id</p>
         <p>Category</p>
@@ -122,17 +218,32 @@ function Products() {
         <p>NewCollection</p>
         <p>LimitedEdtion</p>
       </Header>
-      <Product>
-        <p>Gjk56328lkjhy</p>
-        <p>Téléphonie</p>
-        <p>Iphone 8</p>
-        <p>200 $</p>
-        <p>true</p>
-        <p>120 $</p>
-        <p>true</p>
-        <p>true</p>
-        <p>false</p>
-      </Product>
+
+      {products.length > 0
+        ? filteredProducts.map((product) => {
+            return (
+              <Product
+                key={product._id}
+                onClick={() =>
+                  window.open(
+                    `/admin/products/oneProduct/${product._id}`,
+                    "_blank"
+                  )
+                }
+              >
+                <p>{product._id}</p>
+                <p>{product.category}</p>
+                <p>{product.title}</p>
+                <p>{product.regularPrice}</p>
+                <p>{product.isOnSale.toString()}</p>
+                <p>{product.salePrice}</p>
+                <p>{product.isTopSeller.toString()}</p>
+                <p>{product.isNewCollection.toString()}</p>
+                <p>{product.isLimitedEdition.toString()}</p>
+              </Product>
+            );
+          })
+        : products.message}
     </Container>
   );
 }

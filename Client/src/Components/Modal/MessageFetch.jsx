@@ -69,6 +69,7 @@ const Content = styled.div`
 function MessageFetch({ message, setOpModal }) {
   const closeModal = () => {
     setOpModal(false);
+    window.location.reload();
   };
   return (
     <Container>
