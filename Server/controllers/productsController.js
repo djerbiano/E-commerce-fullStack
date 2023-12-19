@@ -208,9 +208,14 @@ const controller = {
           "isTopSeller",
           "isNewCollection",
           "isLimitedEdition",
+          "desc1",
+          "desc2",
+          "desc3",
           "category",
           "stock",
-          "colors",
+          "color",
+          "size",
+          "quantity",
         ];
 
         for (const field of allowedFields) {

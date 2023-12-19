@@ -2,19 +2,32 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PicturesView from "../../Modal/PicturesView";
+import PatchProduct from "./PatchProduct";
+import ValidationChoise from "../../Modal/ValidationChoise";
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
+  min-height: 400px;
   padding: 10px;
   position: relative;
   background-color: #f5f5f5;
   display: flex;
+  @media (max-width: 616px) {
+    flex-direction: column;
+  }
 `;
 const DetailsContainer = styled.div`
   width: 100%;
   margin: 10px;
   display: flex;
+
+  @media (max-width: 616px) {
+    flex-direction: column;
+    align-items: center;
+    & > * {
+      margin-bottom: 20px;
+    }
+  }
 `;
 
 const Details = styled.div`
@@ -32,11 +45,45 @@ const Details = styled.div`
   p {
     font-size: 20px;
   }
+
+  @media (max-width: 616px) {
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    & > * {
+      margin-bottom: 10px;
+    }
+  }
 `;
 const Menu = styled.div`
-  width: 20%;
-  background-color: red;
+  height: 100%;
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  button {
+    width: 100%;
+    padding: 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: green;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 20px;
+    &:hover {
+      color: black;
+    }
+  }
+
+  & > :last-child {
+    background-color: red;
+
+    &:hover {
+      background-color: #ff0000;
+    }
+  }
 `;
 
 const Image = styled.div`
@@ -57,16 +104,39 @@ const Image = styled.div`
       box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
     }
   }
+
+  @media (max-width: 616px) {
+    flex-direction: column;
+    align-items: center;
+    & > * {
+      margin-bottom: 20px;
+    }
+  }
 `;
 function OneProduct() {
   const [opModal, setOpModal] = useState(false);
   const [pictures, setPictures] = useState(null);
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState("");
+  const [err, setErr] = useState("");
+  const [patchProduct, setPatchProduct] = useState(false);
+  const [patchProductDetails, setPatchProductDetails] = useState("");
+  const [modalValidation, setModalValidation] = useState(false);
 
   const handlePicture = (e) => {
     setOpModal(true);
     setPictures(e.target.src);
+  };
+
+  const patchThisProduct = (productId) => {
+    setPatchProduct(true);
+    setPatchProductDetails(productId);
+  };
+
+  // delete product
+  const deleteThisProduct = (productId) => {
+    setModalValidation(true);
+    setPatchProductDetails(productId);
   };
 
   useEffect(() => {
@@ -83,14 +153,15 @@ function OneProduct() {
         );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch product details");
+          throw new Error("Une erreur s'est produite");
         }
 
         const data = await response.json();
 
         setProductDetails(data);
       } catch (error) {
-        console.error("Error fetching product details:", error);
+        setErr(error);
+        console.error("Une erreur s'est produite:", error);
       }
     };
 
@@ -151,13 +222,35 @@ function OneProduct() {
                 onClick={handlePicture}
               />
             </Image>
+            <Menu>
+              <button onClick={() => patchThisProduct(productDetails._id)}>
+                Modifier le produit
+              </button>
+              <button onClick={() => deleteThisProduct(productDetails._id)}>
+                Supprimer
+              </button>
+            </Menu>
           </>
+        ) : err ? (
+          <p>{err.message}</p>
         ) : (
-          <p>Loading...</p>
+          <p> Chargement...</p>
         )}
       </DetailsContainer>
-      <Menu></Menu>
+
       {opModal && <PicturesView setOpModal={setOpModal} pictures={pictures} />}
+      {patchProduct && (
+        <PatchProduct
+          setPatchProduct={setPatchProduct}
+          patchProductDetails={patchProductDetails}
+        />
+      )}
+      {modalValidation && (
+        <ValidationChoise
+          setModalValidation={setModalValidation}
+          patchProductDetails={patchProductDetails}
+        />
+      )}
     </Container>
   );
 }
