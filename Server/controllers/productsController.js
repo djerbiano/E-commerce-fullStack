@@ -2,6 +2,7 @@ const dotenv = require("dotenv").config();
 const { User } = require("../models/Users");
 const Product = require("../models/Product");
 const { deleteImage, handleErrors } = require("../utils/helpers");
+const { parse } = require("dotenv");
 const controller = {
   //Get all products
   getAllProducts: async (req, res) => {
@@ -165,6 +166,7 @@ const controller = {
 
   //Update product
   updateProduct: async (req, res) => {
+    console.log(req.body.title);
     try {
       //Vérification du token
       let compteExiste = await User.findOne({ _id: req.user.id });
@@ -189,16 +191,6 @@ const controller = {
             message: "Vous n'avez rempli aucun champ",
           });
         }
-
-        /*if (req.body.title) {
-          updateProd.title = req.body.title;
-        }
-        if (req.body.regularPrice) {
-          updateProd.regularPrice = req.body.regularPrice;
-        }
-        if (req.body.salePrice) {
-          updateProd.salePrice = req.body.salePrice;
-        }*/
 
         const allowedFields = [
           "title",

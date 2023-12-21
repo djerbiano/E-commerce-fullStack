@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 const Container = styled.div`
   position: fixed;
@@ -7,7 +7,6 @@ const Container = styled.div`
   left: 0;
   width: 100%;
   min-height: 100%;
-  //background-color: rgba(0, 0, 0, 94%);
   background-color: rgba(0, 0, 0, 54%);
   z-index: 1;
   display: flex;
@@ -19,10 +18,11 @@ const Content = styled.div`
   background-color: white;
   padding: 20px;
   border-radius: 0 0 10px 10px;
-  width: 80%;
-  min-height: 70vh;
-
-  form {
+  width: 90%;
+  position: relative;
+  overflow-y: auto;
+  max-height: 80vh;
+  .form {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -42,6 +42,14 @@ const Content = styled.div`
         background-color: darkgreen;
         transition: 0.3s;
       }
+    }
+
+    .modal11 {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      margin-top: 20px;
     }
   }
 `;
@@ -101,7 +109,6 @@ const Description = styled.div`
   gap: 10px;
   margin: 20px 0;
   padding: 20px;
-  min-width: 400px;
   min-height: 300px;
   border-radius: 5px;
 
@@ -123,7 +130,6 @@ const Pictures = styled.div`
   gap: 10px;
   margin: 20px 0;
   padding: 20px;
-  min-width: 400px;
   min-height: 300px;
   border-radius: 5px;
 
@@ -174,7 +180,10 @@ const Containers = styled.div`
 `;
 
 function PatchProduct({ setPatchProduct, patchProductDetails }) {
+  const [opModal, setOpModal] = useState(true);
+  const [message, setMessage] = useState("");
   const [product, setProduct] = useState({});
+  const [dataReady, setDataReady] = useState(false);
 
   //Get Product details
   useEffect(() => {
@@ -191,6 +200,7 @@ function PatchProduct({ setPatchProduct, patchProductDetails }) {
         );
         const data = await response.json();
         setProduct(data);
+        setDataReady(true);
       } catch (error) {
         console.log(error);
       }
@@ -198,15 +208,86 @@ function PatchProduct({ setPatchProduct, patchProductDetails }) {
     fetchData();
   }, [patchProductDetails]);
 
-  
+  //Patch Product
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
 
+      formData.append("title", document.getElementById("title").value);
+      formData.append(
+        "regularPrice",
+        document.getElementById("regularPrice").value
+      );
+      formData.append("isOnSale", document.getElementById("isOnSale").checked);
+      formData.append("salePrice", document.getElementById("salePrice").value);
+      formData.append(
+        "isTopSeller",
+        document.getElementById("isTopSeller").checked
+      );
+      formData.append(
+        "isNewCollection",
+        document.getElementById("isNewCollection").checked
+      );
+      formData.append(
+        "isLimitedEdition",
+        document.getElementById("isLimitedEdition").checked
+      );
+      formData.append("stock", document.getElementById("stock").checked);
+
+      formData.append("desc1", document.getElementById("desc1").value);
+      formData.append("desc2", document.getElementById("desc2").value);
+      formData.append("desc3", document.getElementById("desc3").value);
+      formData.append("images", document.getElementById("pic1").files[0]);
+      formData.append("images", document.getElementById("pic2").files[0]);
+      formData.append("images", document.getElementById("pic3").files[0]);
+      formData.append(
+        "category",
+        document.getElementById("partchProductCategory").value
+      );
+      formData.append("color1", document.getElementById("color01").value);
+      formData.append("sizes", document.getElementById("sizes").value);
+      formData.append("quantity1", document.getElementById("quantity1").value);
+
+      const response = await fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/products/updateProduct/${patchProductDetails}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+
+            token: localStorage.getItem("token"),
+          },
+          body: new URLSearchParams(formData).toString(),
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        setOpModal(true);
+        setMessage(error.message);
+      }
+      const data = await response.json();
+      console.log(data);
+      setOpModal(true);
+      setMessage("Produit modifié avec succès");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  if (!dataReady) {
+    return <div>Loading...</div>;
+  }
   return (
     <Container>
       <Content>
-        <form>
+        <div className="form">
           <Category>
-            <select id="partchProductCategory">
-              <option value="">
+            <select id="partchProductCategory" name="category">
+              <option value={product.category}>
                 {product.category || "Selectionner la catégorie"}
               </option>
               <option value="Homme">Homme</option>
@@ -222,40 +303,35 @@ function PatchProduct({ setPatchProduct, patchProductDetails }) {
                 type="checkbox"
                 id="isOnSale"
                 name="isOnSale"
-                //checked={product.isOnSale || false}
-                defaultChecked={product.isOnSale || false}
+                defaultChecked={product.isOnSale}
               />
               <label htmlFor="isTopSeller">isTopSeller</label>
               <input
                 type="checkbox"
                 id="isTopSeller"
                 name="isTopSeller"
-                //checked={product.isTopSeller || false}
-                defaultChecked={product.isTopSeller || false}
+                defaultChecked={product.isTopSeller}
               />
               <label htmlFor="isNewCollection">isNewCollection</label>
               <input
                 type="checkbox"
                 id="isNewCollection"
                 name="isNewCollection"
-                //checked={product.isNewCollection || false}
-                defaultChecked={product.isNewCollection || false}
+                defaultChecked={product.isNewCollection}
               />
               <label htmlFor="isLimitedEdition">isLimitedEdition</label>
               <input
                 type="checkbox"
                 id="isLimitedEdition"
                 name="isLimitedEdition"
-                //checked={product.isLimitedEdition || false}
-                defaultChecked={product.isLimitedEdition || false}
+                defaultChecked={product.isLimitedEdition}
               />
               <label htmlFor="stock">stock</label>
               <input
                 type="checkbox"
                 id="stock"
                 name="stock"
-                //checked={product.stock || false}
-                defaultChecked={product.stock || false}
+                defaultChecked={product.stock}
               />
             </Checkbox>
           </Category>
@@ -267,21 +343,21 @@ function PatchProduct({ setPatchProduct, patchProductDetails }) {
                 type="text"
                 id="title"
                 name="title"
-                placeholder={product.title || ""}
+                defaultValue={product.title || ""}
               />
               <label htmlFor="regularPrice">Price</label>
               <input
                 type="number"
                 id="regularPrice"
                 name="regularPrice"
-                placeholder={product.regularPrice || ""}
+                defaultValue={product.regularPrice || ""}
               />
               <label htmlFor="salePrice">Sale Price</label>
               <input
                 type="number"
                 id="salePrice"
                 name="salePrice"
-                placeholder={product.salePrice || "non soldé"}
+                defaultValue={product.salePrice || ""}
               />
             </Details>
 
@@ -292,8 +368,8 @@ function PatchProduct({ setPatchProduct, patchProductDetails }) {
                 type="text"
                 id="desc1"
                 name="desc1"
-                placeholder={
-                  product.description ? product.description.desc1 : " "
+                defaultValue={
+                  product.description ? product.description.desc1 : ""
                 }
               />
               <label htmlFor="desc2">desc2</label>
@@ -301,8 +377,8 @@ function PatchProduct({ setPatchProduct, patchProductDetails }) {
                 type="text"
                 id="desc2"
                 name="desc2"
-                placeholder={
-                  product.description ? product.description.desc2 : " "
+                defaultValue={
+                  product.description ? product.description.desc2 : ""
                 }
               />
               <label htmlFor="desc3">desc3</label>
@@ -310,8 +386,8 @@ function PatchProduct({ setPatchProduct, patchProductDetails }) {
                 type="text"
                 id="desc3"
                 name="desc3"
-                placeholder={
-                  product.description ? product.description.desc3 : " "
+                defaultValue={
+                  product.description ? product.description.desc3 : ""
                 }
               />
             </Description>
@@ -332,11 +408,11 @@ function PatchProduct({ setPatchProduct, patchProductDetails }) {
               <input
                 type="text"
                 id="color01"
-                name="color1"
-                placeholder={product.colors ? product.colors[0].color : ""}
+                name="color"
+                defaultValue={product.colors ? product.colors[0].color : ""}
               />
               <label htmlFor="sizes">Size</label>
-              <select id="sizes">
+              <select id="sizes" name="size">
                 <option value="">
                   {product.colors ? product.colors[0].sizes[0].size : ""}
                 </option>
@@ -354,18 +430,35 @@ function PatchProduct({ setPatchProduct, patchProductDetails }) {
                 type="number"
                 id="quantity1"
                 name="quantity"
-                placeholder={
+                defaultValue={
                   product.colors ? product.colors[0].sizes[0].quantity : ""
                 }
               />
             </div>
           </Colors>
+          {opModal && (
+            <p
+              style={{
+                color: "red",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              {message}
+            </p>
+          )}
 
-          <button type="submit">Submit</button>
+          <button
+            onClick={() => {
+              handleSubmit();
+            }}
+          >
+            Submit
+          </button>
           <button type="button" onClick={() => setPatchProduct(false)}>
             Cancel
           </button>
-        </form>
+        </div>
       </Content>
     </Container>
   );

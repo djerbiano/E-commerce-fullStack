@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Filter from "./ProductsComponent/Filter";
 import AddButton from "./ProductsComponent/AddProduct";
-//import OneProduct from "./ProductsComponent/OneProduct";
 import { IoIosRefresh } from "react-icons/io";
 
 const Container = styled.div`
@@ -171,13 +170,18 @@ function Products() {
       const filtered = filteredProducts.filter((product) =>
         selectKey.every((key) => product[key] === true)
       );
-      setFilteredProducts(filtered);
+
+      if (filtered.length > 0) {
+        setFilteredProducts(filtered);
+      } else {
+        window.alert("Aucun produit ne répond à vos critères");
+        window.location.reload();
+      }
     } else {
       setFilteredProducts(products);
+      window.location.reload();
     }
   };
-
-  //read one product
 
   return (
     <Container>

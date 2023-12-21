@@ -1,4 +1,3 @@
-
 import styled from "styled-components";
 import Logo from "../Components/Logo";
 import InputSearch from "../Components/InputSearch";
@@ -69,18 +68,16 @@ const IconContainer = styled.div`
   & > :nth-child(3),
   & > :nth-child(4) {
     color: white;
-    &>* {
+    & > * {
       &:hover {
         cursor: pointer;
-      color: #fa5;
-      font-size: 2rem;
-      transition: 0.4s;
+        color: #fa5;
+        font-size: 2rem;
+        transition: 0.4s;
       }
     }
   }
 `;
-
-
 
 function Headers() {
   return (
@@ -89,6 +86,14 @@ function Headers() {
       <MenuHamb />
       <InputSearch />
       <IconContainer>
+        <p
+          style={{ cursor: "pointer", color: "#fa5" }}
+          onClick={() =>
+            window.open(` ${process.env.REACT_APP_URL_client}/admin`)
+          }
+        >
+          Admin
+        </p>
         <Contact />
         <Panier />
         <Favo />

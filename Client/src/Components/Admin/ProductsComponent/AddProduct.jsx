@@ -207,6 +207,7 @@ function AddProduct() {
       const formData = new FormData();
 
       formData.append("title", document.getElementById("title").value);
+      console.log(formData)
       formData.append(
         "regularPrice",
         document.getElementById("regularPrice").value
@@ -245,13 +246,13 @@ function AddProduct() {
       let pic2 = document.getElementById("pic2").files[0];
       let pic3 = document.getElementById("pic3").files[0];
 
+
       if (!pic1 || !pic2 || !pic3) {
         return (
           setOpModal(true),
           setResponseServer("Veuillez renseigner tous les champs du formulaire")
         );
       }
-
       const response = await fetch(
         `${process.env.REACT_APP_URL_SERVER}/api/products/addProduct`,
         {
@@ -265,10 +266,7 @@ function AddProduct() {
 
       const data = await response.json();
 
-      if (!response.ok) {
-        setOpModal(true);
-        return setResponseServer(data.error.message);
-      }
+   
 
       if (data.message) {
         setOpModal(true);
@@ -277,10 +275,14 @@ function AddProduct() {
         setAddProductDiv(false);
         setOpModal(true);
         setResponseServer(`Le produit ${data.title} a bien été ajouté`);
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     } catch (error) {
       setOpModal(true);
-      setResponseServer(`Une erreur est survenue lors de l'ajout du produit`);
+      setResponseServer( error.message);
 
       console.error(error);
     }

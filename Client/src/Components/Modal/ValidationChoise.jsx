@@ -17,9 +17,9 @@ const Container = styled.div`
 const Content = styled.div`
   background-color: white;
   padding: 20px;
-  border-radius: 0 0 10px 10px;
-  width: 50%;
-  min-height: 50vh;
+  border-radius:10px;
+  min-width: 30%;
+  min-height: 40vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -77,7 +77,11 @@ function ValidationChoise({ setModalValidation, patchProductDetails }) {
           },
         }
       );
-      navigate(`/admin/products`);
+      setTimeout(() => {
+        window.alert("Le produit a bien été supprimé");
+        navigate(`/admin/products`);
+      }, 1000);
+     
     } catch (error) {
       console.error("Error deleting product:", error);
     }
