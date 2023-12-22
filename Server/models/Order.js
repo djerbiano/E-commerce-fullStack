@@ -16,6 +16,7 @@ const orderSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
           required: true,
+          id: true,
         },
         color: { type: String, required: true },
         size: { type: String, required: true },
@@ -35,7 +36,6 @@ const orderSchema = new mongoose.Schema(
     },
     statusHistory: [
       {
-        _id: false,
         status: {
           type: String,
           enum: ["payée", "expédiée", "reçue"],

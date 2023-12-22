@@ -203,7 +203,7 @@ function OneProduct() {
               <p>Tailles : {productDetails.colors[0].sizes[0].size}</p>
               <p>Quantité : {productDetails.colors[0].sizes[0].quantity}</p>
               <p>Id : {productDetails._id}</p>
-              <p>Créer le : {Création ? Création.toLocaleString() : "N/A"}</p>
+              <p>Créer le : {Création ? Création.toLocaleString() : "N/D"}</p>
             </Details>
             <Image>
               <img

@@ -169,11 +169,12 @@ function Trackings() {
 
       {orders.length > 0 ? (
         orders.map((order) => {
+          const Création = order.createdAt ? new Date(order.createdAt) : null;
           return (
             <Order
               key={order._id}
               onClick={() =>
-                window.open(`/admin/products/oneProduct/${order._id}`, "_blank")
+                window.open(`/admin/trackings/oneTracking/${order.trackingNumber}`, "_blank")
               }
             >
               <p>{order._id}</p>
@@ -182,7 +183,7 @@ function Trackings() {
               <p>{order.status}</p>
               <p>{order.billingAddress}</p>
               <p>{order.shippingAddress}</p>
-              <p>{order.createdAt}</p>
+              <p>{Création ? Création.toLocaleString() : "N/D"}</p>
               <p>{order.total}</p>
             </Order>
           );

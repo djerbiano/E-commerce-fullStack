@@ -136,11 +136,13 @@ function Orders() {
       .then((data) => {
         if (data.length > 0) {
           setOrders(data);
+          console.log(data.createdAt);
         } else {
           setOrders(data);
         }
       });
   }, []);
+
   return (
     <Container>
       <Title>
@@ -168,6 +170,7 @@ function Orders() {
 
       {orders.length > 0 ? (
         orders.map((order) => {
+          const Création = order.createdAt ? new Date(order.createdAt) : null;
           return (
             <Order
               key={order._id}
@@ -181,7 +184,7 @@ function Orders() {
               <p>{order.status}</p>
               <p>{order.billingAddress}</p>
               <p>{order.shippingAddress}</p>
-              <p>{order.createdAt}</p>
+              <p>{Création ? Création.toLocaleString() : "N/D"}</p>
               <p>{order.total}</p>
             </Order>
           );
@@ -204,4 +207,4 @@ function Orders() {
   );
 }
 
-export default Orders
+export default Orders;

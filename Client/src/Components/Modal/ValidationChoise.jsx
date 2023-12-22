@@ -68,7 +68,7 @@ function ValidationChoise({ setModalValidation, patchProductDetails }) {
 
   const deleteThisProduct = async () => {
     try {
-      await fetch(
+      let response = await fetch(
         `${process.env.REACT_APP_URL_SERVER}/api/products/deleteProduct/${patchProductDetails}`,
         {
           method: "DELETE",
@@ -77,8 +77,14 @@ function ValidationChoise({ setModalValidation, patchProductDetails }) {
           },
         }
       );
+
+      let data = await response.json();
+
+   
+
+
       setTimeout(() => {
-        window.alert("Le produit a bien été supprimé");
+        window.alert(data.message);
         navigate(`/admin/products`);
       }, 1000);
      

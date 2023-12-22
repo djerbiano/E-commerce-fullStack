@@ -19,6 +19,7 @@ import FavoContent from "./Components/FavoContent";
 import Admin from "./Containers/Admin";
 import OneUserDetails from "./Components/Admin/UsersComponents/OneUserDetails";
 import OneProduct from "./Components/Admin/ProductsComponent/OneProduct";
+import OneTrakingsCommande from "./Components/Admin/TrakingsComponent/OneTrakingsCommande";
 
 const AppContainer = styled.div`
   display: flex;
@@ -73,6 +74,7 @@ function App() {
               <Route path="/admin/products/oneProduct/:id" element={<OneProduct />} />
               <Route path="/admin/stocks" element={<Admin />} />
               <Route path="/admin/trackings" element={<Admin />} />
+              <Route path="/admin/trackings/oneTracking/:id" element={<OneTrakingsCommande />} />
               <Route path="/admin/orders" element={<Admin />} />
               <Route path="/admin/ratings" element={<Admin />} />
               <Route path="*" element={<NotFound404 />} />
