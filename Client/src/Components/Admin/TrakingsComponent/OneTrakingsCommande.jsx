@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ValidationChoise from "../../Modal/ValidationChoise";
+import PatchOrder from "./PatchOrder";
 
 const Container = styled.div`
   width: 100%;
@@ -122,15 +123,24 @@ function OneTrakingsCommande() {
   const { id } = useParams();
   const [productDetails, setProductDetails] = useState("");
   const [err, setErr] = useState("");
-  const [patchProductDetails, setPatchProductDetails] = useState("");
+  const [orderDeleteTrackingNumber, setOrderDeleteTrackingNumber] =
+    useState("");
   const [modalValidation, setModalValidation] = useState(false);
+  const [modalPatchOrder, setModalPatchOrder] = useState(false);
 
-  // delete product
-  const deleteThisProduct = (productId) => {
-    setModalValidation(true);
-    setPatchProductDetails(productId);
+  // patch order
+  const patchThisOrder = (trackingNumber) => {
+    setModalPatchOrder(true);
+    setOrderDeleteTrackingNumber(trackingNumber);
   };
 
+  // delete order
+  const deleteThisOrder = (trackingNumber) => {
+    setModalValidation(true);
+    setOrderDeleteTrackingNumber(trackingNumber);
+  };
+
+  // get one order
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -159,12 +169,17 @@ function OneTrakingsCommande() {
 
     fetchData();
   }, [id]);
+
+  /*---------------convert date-----------*/
   const Création = productDetails.createdAt
     ? new Date(productDetails.createdAt)
     : null;
   const DerrnièreMiseAJour = productDetails.updatedAt
     ? new Date(productDetails.updatedAt)
     : null;
+  /*---------------convert date----------- */
+  // if multiple product
+
   return (
     <Container>
       <DetailsContainer>
@@ -204,11 +219,11 @@ function OneTrakingsCommande() {
                   productDetails.products.map((product) => {
                     return (
                       <div key={product._id}>
-                        <p>{product.product}</p>
-                        <p>{product.color}</p>
-                        <p>{product.price}</p>
-                        <p>{product.quantity}</p>
-                        <p>{product.size}</p>
+                        <p>Title :{product.product}</p>
+                        <p>Color :{product.color}</p>
+                        <p>{product.price} €</p>
+                        <p>Quantity :{product.quantity}</p>
+                        <p>Taille :{product.size}</p>
                       </div>
                     );
                   })
@@ -234,8 +249,16 @@ function OneTrakingsCommande() {
             </Details>
 
             <Menu>
-              <button>Modifier le statut</button>
-              <button onClick={() => deleteThisProduct(productDetails._id)}>
+              <button
+                onClick={() => patchThisOrder(productDetails.trackingNumber)}
+              >
+                Modifier le statut
+              </button>
+              <button
+                onClick={() => {
+                  deleteThisOrder(productDetails.trackingNumber);
+                }}
+              >
                 Supprimer
               </button>
             </Menu>
@@ -250,7 +273,14 @@ function OneTrakingsCommande() {
       {modalValidation && (
         <ValidationChoise
           setModalValidation={setModalValidation}
-          patchProductDetails={patchProductDetails}
+          orderDeleteTrackingNumber={orderDeleteTrackingNumber}
+        />
+      )}
+
+      {modalPatchOrder && (
+        <PatchOrder
+          setModalPatchOrder={setModalPatchOrder}
+          patchOrderDetails={productDetails.trackingNumber}
         />
       )}
     </Container>

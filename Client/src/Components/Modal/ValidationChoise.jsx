@@ -17,7 +17,7 @@ const Container = styled.div`
 const Content = styled.div`
   background-color: white;
   padding: 20px;
-  border-radius:10px;
+  border-radius: 10px;
   min-width: 30%;
   min-height: 40vh;
   display: flex;
@@ -63,9 +63,14 @@ const Content = styled.div`
     }
   }
 `;
-function ValidationChoise({ setModalValidation, patchProductDetails }) {
+function ValidationChoise({
+  setModalValidation,
+  patchProductDetails,
+  orderDeleteTrackingNumber,
+}) {
+  
   const navigate = useNavigate();
-
+  // delete product
   const deleteThisProduct = async () => {
     try {
       let response = await fetch(
@@ -80,14 +85,35 @@ function ValidationChoise({ setModalValidation, patchProductDetails }) {
 
       let data = await response.json();
 
-   
-
-
       setTimeout(() => {
         window.alert(data.message);
         navigate(`/admin/products`);
       }, 1000);
-     
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+
+  //delete order
+
+  const deleteThisOrder = async () => {
+    try {
+      let response = await fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/orders/deleteOrder/${orderDeleteTrackingNumber}`,
+        {
+          method: "DELETE",
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      let data = await response.json();
+
+      setTimeout(() => {
+        window.alert(data.message);
+       navigate (`/admin/trackings`);
+      }, 1000);
     } catch (error) {
       console.error("Error deleting product:", error);
     }
@@ -95,9 +121,19 @@ function ValidationChoise({ setModalValidation, patchProductDetails }) {
   return (
     <Container>
       <Content>
-        <h1>Vous voulez vraiment supprimer le produit ?</h1>
+        <h1>Vous voulez vraiment supprimer ?</h1>
         <div>
-          <button onClick={deleteThisProduct}>Oui</button>
+          <button
+            onClick={() => {
+              if (orderDeleteTrackingNumber) {
+                deleteThisOrder();
+              } else {
+                deleteThisProduct();
+              }
+            }}
+          >
+            Oui
+          </button>
           <button onClick={() => setModalValidation(false)}>Non</button>
         </div>
       </Content>

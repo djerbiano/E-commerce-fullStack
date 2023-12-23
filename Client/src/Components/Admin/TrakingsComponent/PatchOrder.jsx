@@ -28,15 +28,36 @@ const Content = styled.div`
     align-items: flex-start;
     gap: 10px;
 
+    & > :first-child {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      
+    }
+    select {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid gray;
+      outline: none;
+      width: 100%;
+    }
+
+    div {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px;
+    }
+
     button {
       padding: 10px;
+      margin-left: 20px;
       border-radius: 5px;
       border: none;
       color: white;
       background-color: green;
       cursor: pointer;
       width: 100px;
-      align-self: flex-end;
       transition: 0.3s;
       &:hover {
         background-color: darkgreen;
@@ -78,19 +99,12 @@ function PatchOrder({ setModalPatchOrder, patchOrderDetails }) {
   //Patch order
   const handleSubmit = async () => {
     try {
-      const formData = new FormData();
+      const dataform = document.getElementById("patchOrderStatus").value;
 
-      const statusHistory = [
-        {
-          status: document.getElementById("patchOrderStatus").value,
-        },
-      ];
-  
-      formData.append(
-        "status",
-        document.getElementById("patchOrderStatus").value
-      );
-      formData.append("statusHistory", JSON.stringify(statusHistory[0].status));
+      const requestData = {
+        status: dataform,
+        statusHistory: [{ status: dataform }],
+      };
 
       const response = await fetch(
         `${process.env.REACT_APP_URL_SERVER}/api/orders/updateOrder/${patchOrderDetails}`,
@@ -100,7 +114,7 @@ function PatchOrder({ setModalPatchOrder, patchOrderDetails }) {
             "Content-Type": "application/json",
             token: localStorage.getItem("token"),
           },
-          body:  formData,
+          body: JSON.stringify(requestData),
         }
       );
 
@@ -114,9 +128,9 @@ function PatchOrder({ setModalPatchOrder, patchOrderDetails }) {
       setOpModal(true);
       setMessage("Le statut a été modifiée avec succès");
 
-      /*setTimeout(() => {
+      setTimeout(() => {
         window.location.reload();
-      }, 2000);*/
+      }, 2000);
     } catch (error) {
       console.error(error);
     }
@@ -128,7 +142,7 @@ function PatchOrder({ setModalPatchOrder, patchOrderDetails }) {
     <Container>
       <Content>
         <div className="form">
-          <p>Status : {order.status}</p>
+          <p>Status actuel : {order.status}</p>
           <select
             id="patchOrderStatus"
             name="status"
@@ -152,17 +166,19 @@ function PatchOrder({ setModalPatchOrder, patchOrderDetails }) {
               {message}
             </p>
           )}
+          <div>
+            <button
+              onClick={() => {
+                handleSubmit();
+              }}
+            >
+              Submit
+            </button>
 
-          <button
-            onClick={() => {
-              handleSubmit();
-            }}
-          >
-            Submit
-          </button>
-          <button type="button" onClick={() => setModalPatchOrder(false)}>
-            Cancel
-          </button>
+            <button type="button" onClick={() => setModalPatchOrder(false)}>
+              Cancel
+            </button>
+          </div>
         </div>
       </Content>
     </Container>

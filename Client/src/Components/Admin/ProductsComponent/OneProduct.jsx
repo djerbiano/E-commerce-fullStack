@@ -127,7 +127,7 @@ function OneProduct() {
     setOpModal(true);
     setPictures(e.target.src);
   };
-
+//   patch product
   const patchThisProduct = (productId) => {
     setPatchProduct(true);
     setPatchProductDetails(productId);
@@ -139,6 +139,7 @@ function OneProduct() {
     setPatchProductDetails(productId);
   };
 
+  //get one product
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -229,7 +229,7 @@ const controller = {
       });
 
       if (order) {
-        order.status = req.body.status;
+        order.status = req.body.status || order.status;
         if (req.body.statusHistory) {
           order.statusHistory.push(...req.body.statusHistory);
         }

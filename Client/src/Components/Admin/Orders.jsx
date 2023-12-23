@@ -136,7 +136,6 @@ function Orders() {
       .then((data) => {
         if (data.length > 0) {
           setOrders(data);
-          console.log(data.createdAt);
         } else {
           setOrders(data);
         }
