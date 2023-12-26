@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { IoIosRefresh } from "react-icons/io";
-import { useState, useEffect } from "react";
-
+import { useState } from "react";
 const Container = styled.div`
   width: 100%;
   min-height: 500px;
@@ -124,24 +123,36 @@ const Order = styled.div`
 `;
 
 function Trackings() {
-  const [orders, setOrders] = useState([]);
+  const [finded, setFinded] = useState(false);
+  const [searchOrder, setSearchOrder] = useState([]);
+  const [trackingNumber, setTrackingNumber] = useState("");
 
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_URL_SERVER}/api/orders`, {
-      method: "GET",
-      headers: {
-        token: localStorage.getItem("token"),
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.length > 0) {
-          setOrders(data);
-        } else {
-          setOrders(data);
+  const handleChange = (e) => {
+    setTrackingNumber(e.target.value);
+  };
+
+  const getOneOrder = () => {
+    if (!trackingNumber) {
+      setFinded(false);
+      setSearchOrder([]);
+    } else {
+      fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/orders/${trackingNumber}`,
+        {
+          method: "GET",
+          headers: {
+            token: localStorage.getItem("token"),
+          },
         }
-      });
-  }, []);
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setFinded(true);
+          setSearchOrder(data);
+        });
+    }
+  };
+
   return (
     <Container>
       <Title>
@@ -150,10 +161,17 @@ function Trackings() {
           <IoIosRefresh />
         </div>
       </Title>
+
       <SearchByNameContainer>
         <div>
-          <input type="text" placeholder="Traking number" />
-          <button type="submit">Trouver</button>
+          <input
+            type="text"
+            placeholder="Tracking number"
+            onChange={handleChange}
+          />
+          <button type="button" onClick={getOneOrder}>
+            Trouver
+          </button>
         </div>
       </SearchByNameContainer>
       <Header>
@@ -167,27 +185,24 @@ function Trackings() {
         <p>Total</p>
       </Header>
 
-      {orders.length > 0 ? (
-        orders.map((order) => {
-          const Création = order.createdAt ? new Date(order.createdAt) : null;
-          return (
-            <Order
-              key={order._id}
-              onClick={() =>
-                window.open(`/admin/trackings/oneTracking/${order.trackingNumber}`, "_blank")
-              }
-            >
-              <p>{order._id}</p>
-              <p>{order.trackingNumber}</p>
-              <p>{order.user}</p>
-              <p>{order.status}</p>
-              <p>{order.billingAddress}</p>
-              <p>{order.shippingAddress}</p>
-              <p>{Création ? Création.toLocaleString() : "N/D"}</p>
-              <p>{order.total}</p>
-            </Order>
-          );
-        })
+      {finded && !searchOrder.message ? (
+        <Order
+          onClick={() =>
+            window.open(
+              `/admin/trackings/oneTracking/${searchOrder.trackingNumber}`,
+              "_blank"
+            )
+          }
+        >
+          <p>{searchOrder._id}</p>
+          <p>{searchOrder.trackingNumber}</p>
+          <p>{searchOrder.user._id}</p>
+          <p>{searchOrder.status}</p>
+          <p>{searchOrder.billingAddress}</p>
+          <p>{searchOrder.shippingAddress}</p>
+          <p>{searchOrder.createdAt}</p>
+          <p>{searchOrder.total}</p>
+        </Order>
       ) : (
         <p
           style={{
@@ -199,7 +214,7 @@ function Trackings() {
             fontSize: "20px",
           }}
         >
-          {orders.message}
+          {searchOrder.message || "Veuillez entrer un numero de tracking"}
         </p>
       )}
     </Container>

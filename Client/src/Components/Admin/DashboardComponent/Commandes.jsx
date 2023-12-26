@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { ImArrowDown2 } from "react-icons/im";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   background-color: white;
@@ -73,8 +74,9 @@ const Title = styled.div`
 `;
 
 function NewOrders() {
+  const navigate = useNavigate();
   return (
-    <Container>
+    <Container onClick={() => navigate("/admin/orders")}>
       <Content>
         <Picture>
           <HiOutlineShoppingCart />

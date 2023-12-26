@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { IoIosRefresh } from "react-icons/io";
 import { useState, useEffect } from "react";
+import FiltrerTrakings from "./TrakingsComponent/FiltrerTrakings";
 
 const Container = styled.div`
   width: 100%;
@@ -9,6 +10,10 @@ const Container = styled.div`
   flex-direction: column;
   margin-top: 30px;
   padding: 20px;
+
+  .errorMessage {
+    display: ${({ finded }) => (finded ? "flex" : "none")};
+  }
 `;
 const Title = styled.div`
   display: flex;
@@ -122,9 +127,40 @@ const Order = styled.div`
     cursor: pointer;
   }
 `;
+
 function Orders() {
   const [orders, setOrders] = useState([]);
+  const [filtredOrders, setFiltredOrders] = useState([]);
+  const [finded, setFinded] = useState(false);
+  const [searchOrder, setSearchOrder] = useState([]);
+  const [trackingNumber, setTrackingNumber] = useState("");
 
+  const handleChange = (e) => {
+    setTrackingNumber(e.target.value);
+  };
+
+  const getOneOrder = () => {
+    if (!trackingNumber) {
+      setFinded(false);
+      setSearchOrder([]);
+    } else {
+      fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/orders/${trackingNumber}`,
+        {
+          method: "GET",
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setFinded(true);
+          setSearchOrder(data);
+        });
+    }
+  };
+  // get all orders
   useEffect(() => {
     fetch(`${process.env.REACT_APP_URL_SERVER}/api/orders`, {
       method: "GET",
@@ -135,7 +171,9 @@ function Orders() {
       .then((res) => res.json())
       .then((data) => {
         if (data.length > 0) {
+          setFinded(false);
           setOrders(data);
+          setFiltredOrders(data);
         } else {
           setOrders(data);
         }
@@ -150,10 +188,21 @@ function Orders() {
           <IoIosRefresh />
         </div>
       </Title>
+      <FiltrerTrakings
+        orders={orders}
+        setOrders={setOrders}
+        setFiltredOrders={setFiltredOrders}
+      />
       <SearchByNameContainer>
         <div>
-          <input type="text" placeholder="Order Id" />
-          <button type="submit">Trouver</button>
+          <input
+            type="text"
+            placeholder="Tracking number"
+            onChange={handleChange}
+          />
+          <button type="button" onClick={getOneOrder}>
+            Trouver
+          </button>
         </div>
       </SearchByNameContainer>
       <Header>
@@ -166,15 +215,17 @@ function Orders() {
         <p>CreatedAt</p>
         <p>Total</p>
       </Header>
-
-      {orders.length > 0 ? (
-        orders.map((order) => {
+      {!finded && orders.length > 0 ? (
+        filtredOrders.map((order) => {
           const Création = order.createdAt ? new Date(order.createdAt) : null;
           return (
             <Order
               key={order._id}
               onClick={() =>
-                window.open(`/admin/products/oneProduct/${order._id}`, "_blank")
+                window.open(
+                  `/admin/trackings/oneTracking/${order.trackingNumber}`,
+                  "_blank"
+                )
               }
             >
               <p>{order._id}</p>
@@ -198,8 +249,41 @@ function Orders() {
             fontWeight: "bold",
             fontSize: "20px",
           }}
+          className="errorMessage"
         >
           {orders.message}
+        </p>
+      )}
+      {finded && !searchOrder.message ? (
+        <Order
+          onClick={() =>
+            window.open(
+              `/admin/trackings/oneTracking/${searchOrder.trackingNumber}`,
+              "_blank"
+            )
+          }
+        >
+          <p>{searchOrder._id}</p>
+          <p>{searchOrder.trackingNumber}</p>
+          <p>{searchOrder.user._id}</p>
+          <p>{searchOrder.status}</p>
+          <p>{searchOrder.billingAddress}</p>
+          <p>{searchOrder.shippingAddress}</p>
+          <p>{searchOrder.createdAt}</p>
+          <p>{searchOrder.total}</p>
+        </Order>
+      ) : (
+        <p
+          style={{
+            textAlign: "center",
+            padding: "10px",
+            marginTop: "10px",
+            color: "red",
+            fontWeight: "bold",
+            fontSize: "20px",
+          }}
+        >
+          {searchOrder.message}
         </p>
       )}
     </Container>

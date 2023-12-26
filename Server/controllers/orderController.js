@@ -80,11 +80,20 @@ const controller = {
 
       const order = await Order.findOne({
         trackingNumber: req.params.trackingNumber,
-      });
+      })
+        .populate({
+          path: "user",
+          select: "email",
+        })
+        .populate({
+          path: "products.product",
+          select: "title",
+        });
+
       if (order) {
         return res.status(200).json(order);
       } else {
-        return handleErrors(res, 404, {
+        return handleErrors(res, 200, {
           message: "Aucune commande n'existe dans la base de données",
         });
       }

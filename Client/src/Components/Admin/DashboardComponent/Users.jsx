@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { FaRegUser } from "react-icons/fa";
 import { ImArrowDown2 } from "react-icons/im";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   background-color: white;
@@ -72,9 +73,10 @@ const Title = styled.div`
   }
 `;
 
-function ProductsTotal() {
+function Users() {
+  const navigate = useNavigate();
   return (
-    <Container>
+    <Container onClick={() => navigate("/admin/users")}>
       <Content>
         <Picture>
           <FaRegUser />
@@ -94,4 +96,4 @@ function ProductsTotal() {
   );
 }
 
-export default ProductsTotal;
+export default Users;

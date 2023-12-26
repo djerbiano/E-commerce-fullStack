@@ -7,12 +7,16 @@ const route = express.Router();
 
 //Get all products
 route.get("/", productsController.getAllProducts);
+//Paginations
+route.get("/paginationProducts", productsController.pagination);
 
 //Get one product
 route.get("/:oneProduct", productsController.getOneProduct);
 
 //Get one product by id
 route.get("/oneProduct/:byId", virifyToken, productsController.getOneProductById);
+
+
 
 //Add product
 route.post("/addProduct", virifyToken, multerMultiple, productsController.addProduct);
@@ -29,9 +33,8 @@ route.post("/addFavoritesProducts/:favo",virifyToken,productsController.addFavor
 
 //Delete FavoritesProducts
 route.delete("/deleteFavoritesProducts/:delFavo",virifyToken,productsController.deleteFavorite);
+//Paginations
+route.get("/paginationProducts", productsController.pagination);
 
 
 module.exports = route;
-
-
-

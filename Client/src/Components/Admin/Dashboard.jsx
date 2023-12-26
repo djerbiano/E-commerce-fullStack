@@ -90,21 +90,18 @@ const LatestOrders = styled.div`
   margin-top: 20px;
   position: relative;
 
- 
-
   & > :last-child {
     position: absolute;
     bottom: 0;
     right: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
   }
 `;
 
 function Dashboard() {
   const [component, setComponent] = useState(<GraphYear />);
-
+ 
   const handelGraphComponent = (periode) => {
     switch (periode) {
       case "year":

@@ -21,6 +21,43 @@ const controller = {
       });
     }
   },
+  pagination: async (req, res) => {
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 1;
+
+      if (page < 1 || limit < 1) {
+        page = 1;
+        limit = 1;
+      }
+      const startIndex = (page - 1) * limit;
+
+      const products = await Product.find().skip(startIndex).limit(limit);
+
+      const totalCount = await Product.countDocuments();
+      const totalPages = Math.ceil(totalCount / limit);
+
+      const results = {
+        currentPage: page,
+        totalPages: totalPages,
+        totalCount: totalCount,
+        products: products,
+      };
+
+      if (products.length > 0) {
+        return res.status(200).json(results);
+      } else {
+        return handleErrors(res, 200, {
+          message: "Aucun produit n'existe dans la base de données",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return handleErrors(res, 400, {
+        message: error.message,
+      });
+    }
+  },
 
   //Get one product
   getOneProduct: async (req, res) => {

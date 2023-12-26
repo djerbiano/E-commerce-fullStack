@@ -91,6 +91,7 @@ const ContainerMain = styled.div`
 
 const ContainerAfterMain = styled.div`
   width: 100%;
+ height:100%;
   margin-top: 50px;
 `;
 
@@ -98,6 +99,7 @@ const ContentAfterMain = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%;
 `;
 
 const ProductContainer = styled.div`
@@ -105,9 +107,11 @@ const ProductContainer = styled.div`
   flex-direction: column;
   justify-content: space-around;
   margin-top: 20px;
+  height: 100%;
 
   & > :nth-child(1) {
     width: 100%;
+    height: 100%;
 
     @media (max-width: 660px) {
       width: 100%;

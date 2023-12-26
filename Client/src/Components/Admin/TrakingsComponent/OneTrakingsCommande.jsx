@@ -178,7 +178,7 @@ function OneTrakingsCommande() {
     ? new Date(productDetails.updatedAt)
     : null;
   /*---------------convert date----------- */
-  // if multiple product
+  
 
   return (
     <Container>
@@ -187,7 +187,8 @@ function OneTrakingsCommande() {
           <>
             <Details>
               <Detail>
-                <h2>User: {productDetails.user}</h2>
+                <h3>Email: {productDetails.user.email}</h3>
+                <p>Id: {productDetails.user._id}</p>
                 <p>Commande Id: {productDetails._id}</p>
                 <p>TrackingNumber: {productDetails.trackingNumber}</p>
                 <p>Créer le: {Création ? Création.toLocaleString() : "N/D"}</p>
@@ -219,11 +220,24 @@ function OneTrakingsCommande() {
                   productDetails.products.map((product) => {
                     return (
                       <div key={product._id}>
-                        <p>Title :{product.product}</p>
-                        <p>Color :{product.color}</p>
+                        <p
+                          style={{
+                            textTransform: "uppercase",
+                            cursor: "pointer",
+                          }}
+                          onClick={() =>
+                            window.open(
+                              `/admin/products/oneProduct/${product.product._id}`,
+                              "_blank"
+                            )
+                          }
+                        >
+                          {product.product.title}
+                        </p>
+                        <p>{product.color}</p>
                         <p>{product.price} €</p>
-                        <p>Quantity :{product.quantity}</p>
-                        <p>Taille :{product.size}</p>
+                        <p>Quantité: {product.quantity}</p>
+                        <p>{product.size}</p>
                       </div>
                     );
                   })

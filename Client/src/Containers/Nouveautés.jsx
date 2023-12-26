@@ -3,6 +3,7 @@ import NouvelleCollection from "../Components/NouvelleCollection";
 
 const Container = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -10,19 +11,12 @@ const Container = styled.div`
 
 const ContentContainer = styled.div`
   width: 100%;
-  height: auto;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   position: relative;
 
-  & > :nth-child(2) {
-    width: 100%;
-
-    @media (max-width: 930px) {
-      width: 100%;
-    }
-  }
 `;
 
 function Nouveautés() {
