@@ -52,6 +52,7 @@ const Container = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-bottom: 10px;
+    height: 30px;
     
   }
 `;

@@ -156,6 +156,7 @@ function Products() {
       const filtered = products.filter(
         (product) => product.category === category
       );
+      
       setFilteredProducts(filtered);
     }
   };
@@ -201,9 +202,9 @@ function Products() {
           <option value="Homme">Homme</option>
           <option value="Femme">Femme</option>
           <option value="Informatique">Informatique</option>
-          <option value="Tv - Son">Tv - Son</option>
+          <option value="TvSon">Tv - Son</option>
           <option value="Téléphonie">Téléphonie</option>
-          <option value="Objets connectés">Objets connectés</option>
+          <option value="ObjetsConnectés">Objets connectés</option>
         </select>
         <Filter
           setCheckboxProducts={setCheckboxProducts}

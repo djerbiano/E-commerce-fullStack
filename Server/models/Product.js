@@ -68,9 +68,9 @@ const ProductsSchema = mongoose.Schema(
         "Homme",
         "Femme",
         "Informatique",
-        "Tv - Son",
+        "TvSon",
         "Téléphonie",
-        "Objets connectés",
+        "ObjetsConnectés",
       ],
     },
     stock: {

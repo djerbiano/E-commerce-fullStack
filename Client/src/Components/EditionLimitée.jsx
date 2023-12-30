@@ -5,9 +5,12 @@ import { GrFavorite } from "react-icons/gr";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
   background-color: #fff;
   border-radius: 10px;
   width: 100%;
+ 
 `;
 const Title = styled.div`
   display: flex;

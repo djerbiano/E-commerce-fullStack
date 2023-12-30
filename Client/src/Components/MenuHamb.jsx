@@ -16,8 +16,8 @@ const MenuIcon = styled.div`
 `;
 
 const MenuContent = styled.div`
-  position: absolute;
-  top: 10vh;
+  position: fixed;
+  top: 0;
   left: 0;
   width: 100vw;
   height: 100%;
@@ -29,10 +29,9 @@ const MenuContent = styled.div`
     justify-content: center;
     align-items: flex-start;
     position: absolute;
-    top: 0;
-    left: 30%;
+    top: 5px;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     background: transparent;
 
     & > * {

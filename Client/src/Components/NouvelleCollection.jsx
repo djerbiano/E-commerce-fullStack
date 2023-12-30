@@ -14,6 +14,7 @@ const Container = styled.div`
 const ContainerTopVente = styled.div`
   width: 30%;
   max-width: 400px;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

@@ -6,8 +6,8 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  min-height: 100px;
   width: 90vw;
+  height: 100%;
 `;
 
 function FilterProducts() {

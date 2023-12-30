@@ -188,6 +188,10 @@ const controller = {
                 if (sizeObj.size === size) {
                   sizeObj.quantity -= quantity;
 
+                  if (sizeObj.quantity <= 0) {
+                    productInDb.stock = false;
+                  }
+
                   await productInDb.save();
                 }
               }

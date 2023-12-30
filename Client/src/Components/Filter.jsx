@@ -1,19 +1,18 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaWindowClose } from "react-icons/fa";
+import { IoFilterSharp } from "react-icons/io5";
 
 const FilterContainer = styled.div`
   display: flex;
-  width: 100%;
-  min-height: 500px;
+  align-items: flex-start;
+  height: 100%;
   margin-top: 20px;
   font-size: 1.2rem;
-  position: relative;
 
   @media (max-width: 1150px) {
     flex-direction: column;
 
-   
     & .open {
       transform: translateX(0);
       transition: transform 0.3s ease-in-out;
@@ -23,27 +22,17 @@ const FilterContainer = styled.div`
       transform: translateX(-110%);
       transition: transform 0.3s ease-in-out;
     }
-
-    & > :nth-child(2) {
-      position: absolute;
-      top: -20px;
-      right: -60px;
-      z-index: 1;
-    }
-    & > :nth-child(3) {
-      position: absolute;
-      top: 20px;
-      right: 0;
-    }
   }
 `;
 
-const Sidebar = styled.aside`
+const Sidebar = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-around;
-  min-height: 50vh;
+  flex-wrap: wrap;
+  height: 100%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   padding: 10px;
   border-radius: 5px;
@@ -57,25 +46,39 @@ const Sidebar = styled.aside`
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: flex-start;
-    min-width: 100%;
-    min-height: 100%;
+    width: 90%;
+    min-height: 40vh;
+    max-height: 80vh;
     transition: transform 0.3s ease-in-out;
-    z-index: 1;
     background-color: white;
+    position: fixed;
+    top: 10;
+    left: 0;
+  }
+  @media (max-width: 513px) {
+    height: 50vh;
+  }
+  @media (max-width: 372px) {
+    height: 80vh;
   }
 `;
 
 const SidebarClose = styled.div`
-  display: flex;
-  justify-content: flex-end;
   font-size: 1.5rem;
-  margin-bottom: 10px;
   padding: 5px;
-
+  margin-right: 10px;
+  background-color: white;
+  position: absolute;
+  top: 10;
+  right: 0;
+  z-index: 1;
 
   & > :nth-child(1) {
     cursor: pointer;
     color: #1a2753;
+    width: 30px;
+    height: 30px;
+    display: flex;
 
     &:hover {
       transform: scale(1.2);
@@ -90,6 +93,7 @@ const SidebarClose = styled.div`
 const CheckboxContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   label {
     input {
@@ -130,41 +134,82 @@ const SearchButton = styled.button`
   }
 `;
 const MainContent = styled.div`
-  min-width: 80%;
-
+  width: 80vw;
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
   @media (max-width: 1150px) {
-    min-width: 100%;
+    width: 100vw;
   }
 `;
-const ProductList = styled.ul`
-  list-style: none;
+const ProductList = styled.div`
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  width: 100%;
-  height: 100%;
+  @media (max-width: 455px) {
+    width: 80vw;
+    justify-content: center;
+  }
 `;
 
-const ProductItem = styled.li`
+const ProductItem = styled.div`
   padding: 10px;
   border: 1px solid #ccc;
-  margin: 10px 5px;
   border-radius: 5px;
   cursor: pointer;
-  width: 150px;
-  height: 200px;
+  width: 30%;
+  max-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  background-color: white;
+  margin: 10px 5px;
+
+  @media (max-width: 465px) {
+    width: 40%;
+  }
+  @media (max-width: 455px) {
+    width: 80%;
+  }
+`;
+
+const ContainerPicture = styled.div`
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 70%;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 5px;
+  }
+`;
+const ContainerText = styled.div`
+  width: 100%;
+  p {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+  }
 `;
 
 const FilterComponent = () => {
+  const [products, setProducts] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [priceRange, setPriceRange] = useState({ start: "", end: "" });
   const [categories, setCategories] = useState({
-    homme: false,
-    femme: false,
-    informatique: false,
-    tvSound: false,
-    phone: false,
-    smartDevices: false,
+    Homme: true,
+    Femme: true,
+    Informatique: true,
+    TvSon: true,
+    Téléphonie: true,
+    ObjetsConnectés: true,
   });
 
   const handleCategoryChange = (category) => {
@@ -183,32 +228,91 @@ const FilterComponent = () => {
   };
 
   const handleSearch = () => {
-    console.log("Categories:", categories);
-    console.log("Price Range:", priceRange);
+    if (priceRange.start === "" || priceRange.end === "") {
+      setProducts(products);
+    } else {
+      const filteredProductsByPrice = products.filter((product) => {
+        const price = product.salePrice || product.regularPrice;
+        return price >= priceRange.start && price <= priceRange.end;
+      });
+      setProducts(filteredProductsByPrice);
+    }
   };
-
-  //product list
-  const productList = [
-    { id: 1, name: "Product 1" },
-    { id: 2, name: "Product 2" },
-    { id: 3, name: "Product 3" },
-    { id: 4, name: "Product 4" },
-    { id: 5, name: "Product 5" },
-  ];
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  // get product
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_URL_SERVER}/api/products`,
+          {
+            method: "GET",
+            headers: {
+              token: localStorage.getItem("token"),
+            },
+          }
+        );
+        const data = await response.json();
+        if (data.length > 0) {
+          const filteredData = data.filter(
+            (product) => categories[product.category]
+          );
+
+          setProducts(filteredData);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [categories, priceRange]);
+
   return (
     <FilterContainer>
+      <MainContent>
+        <ProductList>
+          {products.length > 0 ? (
+            products.map((product) => (
+              <ProductItem key={product._id}>
+                <ContainerPicture>
+                  <img
+                    src={`${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic1}`}
+                    alt={product.title}
+                  />
+                </ContainerPicture>
+                <ContainerText>
+                  <p>{product.title}</p>
+                  <div>
+                    <p
+                      style={
+                        product.salePrice
+                          ? { textDecoration: "line-through" }
+                          : null
+                      }
+                    >
+                      {product.regularPrice}
+                    </p>
+                    <p>{product.salePrice || null}</p>
+                  </div>
+                </ContainerText>
+              </ProductItem>
+            ))
+          ) : (
+            <h1>Chargement...</h1>
+          )}
+        </ProductList>
+      </MainContent>
       <Sidebar className={isSidebarOpen ? "open" : "closed"}>
         <CheckboxContainer>
           <label>
             <input
               type="checkbox"
-              checked={categories.homme}
-              onChange={() => handleCategoryChange("homme")}
+              checked={categories.Homme}
+              onChange={() => handleCategoryChange("Homme")}
             />
             Homme
           </label>
@@ -216,40 +320,40 @@ const FilterComponent = () => {
           <label>
             <input
               type="checkbox"
-              checked={categories.femme}
-              onChange={() => handleCategoryChange("femme")}
+              checked={categories.Femme}
+              onChange={() => handleCategoryChange("Femme")}
             />
             Femme
           </label>
           <label>
             <input
               type="checkbox"
-              checked={categories.informatique}
-              onChange={() => handleCategoryChange("informatique")}
+              checked={categories.Informatique}
+              onChange={() => handleCategoryChange("Informatique")}
             />
             Informatique
           </label>
           <label>
             <input
               type="checkbox"
-              checked={categories.tvSound}
-              onChange={() => handleCategoryChange("tvSound")}
+              checked={categories.TvSon}
+              onChange={() => handleCategoryChange("TvSon")}
             />
             TV & Sound
           </label>
           <label>
             <input
               type="checkbox"
-              checked={categories.phone}
-              onChange={() => handleCategoryChange("phone")}
+              checked={categories.Téléphonie}
+              onChange={() => handleCategoryChange("Téléphonie")}
             />
             Smartphones
           </label>
           <label>
             <input
               type="checkbox"
-              checked={categories.smartDevices}
-              onChange={() => handleCategoryChange("smartDevices")}
+              checked={categories.ObjetsConnectés}
+              onChange={() => handleCategoryChange("ObjetsConnectés")}
             />
             Objets connectés
           </label>
@@ -278,16 +382,13 @@ const FilterComponent = () => {
         <SearchButton onClick={handleSearch}>Trouver</SearchButton>
       </Sidebar>
 
-      <SidebarClose> 
-       <FaWindowClose onClick={toggleSidebar} />
+      <SidebarClose>
+        {isSidebarOpen ? (
+          <FaWindowClose onClick={toggleSidebar} />
+        ) : (
+          <IoFilterSharp onClick={toggleSidebar} />
+        )}
       </SidebarClose>
-      <MainContent>
-        <ProductList>
-          {productList.map((product) => (
-            <ProductItem key={product.id}>{product.name}</ProductItem>
-          ))}
-        </ProductList>
-      </MainContent>
     </FilterContainer>
   );
 };

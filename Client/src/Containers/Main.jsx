@@ -111,7 +111,8 @@ const ProductContainer = styled.div`
 
   & > :nth-child(1) {
     width: 100%;
-    height: 100%;
+    //min-height: 400px;
+
 
     @media (max-width: 660px) {
       width: 100%;
@@ -120,6 +121,7 @@ const ProductContainer = styled.div`
   & > :nth-child(3) {
     flex-direction: row;
     width: 100%;
+    height: 100%;
 
     @media (max-width: 500px) {
       flex-direction: column;
