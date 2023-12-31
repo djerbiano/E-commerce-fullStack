@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { GrFavorite } from "react-icons/gr";
+import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   width: 90%;
   height: 80%;
@@ -58,10 +59,13 @@ const Container = styled.div`
 `;
 
 function TopVente({ productTopVent }) {
+  const navigate = useNavigate();
   const Product =
     productTopVent && productTopVent.length > 0 ? productTopVent[0] : null;
   return (
-    <Container>
+    <Container onClick={() => {
+      navigate(`/singleProduct/${Product._id}`);
+    }}>
       <div>
         <img
           src={

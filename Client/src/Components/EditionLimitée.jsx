@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { GrFavorite } from "react-icons/gr";
+import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -146,6 +147,7 @@ const ContainerPhoto = styled.div`
   }
 `;
 function EditionLimitée() {
+  const navigate = useNavigate();
   const [product, setProduct] = useState([]);
   const [totalProduct, setTotalProduct] = useState(1);
   const [page, setPage] = useState(1);
@@ -201,7 +203,7 @@ function EditionLimitée() {
       <ProductEditionLimitée>
         {product &&
           product.map((product) => (
-            <SingleProduct key={product._id}>
+            <SingleProduct key={product._id} onClick={() => navigate(`/singleProduct/${product._id}`)}>
               <ContainerPhoto>
                 <img
                   src={`${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic1}`}

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { GrFavorite } from "react-icons/gr";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   display: flex;
   justify-content: start;
@@ -145,6 +146,7 @@ const Price = styled.div`
 `;
 
 function Soldes() {
+  const navigate = useNavigate();
   const [product, setProduct] = useState([]);
 
   // get product soldé
@@ -187,7 +189,7 @@ function Soldes() {
     <Container>
       {product &&
         product.map((product) => (
-          <SingleProduct key={product._id}>
+          <SingleProduct key={product._id} onClick={() => navigate(`/singleProduct/${product._id}`)}>
             <ContainerPhoto>
               <img
                 src={`${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic1}`}

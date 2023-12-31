@@ -83,14 +83,7 @@ const controller = {
   //Get one product by id
   getOneProductById: async (req, res) => {
     try {
-      let compteExiste = await User.findOne({ _id: req.user.id });
-      // Vérification du token
-      if (compteExiste === null || compteExiste.isAdmin === false) {
-        return handleErrors(res, 403, {
-          message:
-            "Vous devez être un administrateur pour effectuer cette requête",
-        });
-      }
+    
       const products = await Product.findOne({ _id: req.params.byId });
 
       if (products) {

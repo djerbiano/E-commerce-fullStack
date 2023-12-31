@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaWindowClose } from "react-icons/fa";
 import { IoFilterSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const FilterContainer = styled.div`
   display: flex;
@@ -67,7 +68,6 @@ const SidebarClose = styled.div`
   font-size: 1.5rem;
   padding: 5px;
   margin-right: 10px;
-  background-color: white;
   position: absolute;
   top: 10;
   right: 0;
@@ -150,6 +150,14 @@ const ProductList = styled.div`
     width: 80vw;
     justify-content: center;
   }
+
+  .no-product {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: grey;
+  }
 `;
 
 const ProductItem = styled.div`
@@ -200,6 +208,7 @@ const ContainerText = styled.div`
 `;
 
 const FilterComponent = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [priceRange, setPriceRange] = useState({ start: "", end: "" });
@@ -277,7 +286,12 @@ const FilterComponent = () => {
         <ProductList>
           {products.length > 0 ? (
             products.map((product) => (
-              <ProductItem key={product._id}>
+              <ProductItem
+                key={product._id}
+                onClick={() => {
+                  navigate(`/singleProduct/${product._id}`);
+                }}
+              >
                 <ContainerPicture>
                   <img
                     src={`${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic1}`}
@@ -302,7 +316,9 @@ const FilterComponent = () => {
               </ProductItem>
             ))
           ) : (
-            <h1>Chargement...</h1>
+            <h2 className="no-product">
+              Aucun produit ne correspond à vos critères
+            </h2>
           )}
         </ProductList>
       </MainContent>

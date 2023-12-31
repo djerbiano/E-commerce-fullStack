@@ -3,6 +3,9 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import TopVente from "./TopVente";
 import { useEffect, useState } from "react";
 import { GrFavorite } from "react-icons/gr";
+import { useNavigate } from "react-router-dom";
+
+
 
 const Container = styled.div`
   display: flex;
@@ -158,6 +161,7 @@ const SingleProduct = styled.div`
 `;
 
 function NouvelleCollection() {
+  const navigate = useNavigate();
   const [productTopVent, setProductTopVent] = useState([]);
   const [totalProduct, setTotalProduct] = useState(1);
   const [page, setPage] = useState(1);
@@ -269,7 +273,9 @@ function NouvelleCollection() {
         <ProductsContainer>
           {productNouvelleCollection &&
             productNouvelleCollection.map((productNouvelleCollection) => (
-              <SingleProduct key={productNouvelleCollection._id}>
+              <SingleProduct key={productNouvelleCollection._id} onClick={() => {
+                navigate(`/singleProduct/${productNouvelleCollection._id}`);
+              }}>
                 <div>
                   <img
                     src={`${process.env.REACT_APP_URL_SERVER}/images/${productNouvelleCollection.pictures.pic1}`}

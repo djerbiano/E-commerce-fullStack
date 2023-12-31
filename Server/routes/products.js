@@ -14,9 +14,7 @@ route.get("/paginationProducts", productsController.pagination);
 route.get("/:oneProduct", productsController.getOneProduct);
 
 //Get one product by id
-route.get("/oneProduct/:byId", virifyToken, productsController.getOneProductById);
-
-
+route.get("/oneProduct/:byId", productsController.getOneProductById);
 
 //Add product
 route.post("/addProduct", virifyToken, multerMultiple, productsController.addProduct);

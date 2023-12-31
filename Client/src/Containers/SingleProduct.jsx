@@ -1,8 +1,6 @@
 import styled from "styled-components";
-import Logo from "../Assets/18830882_1200_B.jpg";
-import Logo2 from "../Assets/elle.jpeg";
-import Logo3 from "../Assets/soldes.jpg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -20,8 +18,6 @@ const Container = styled.div`
       width: 80vw !important;
     }
   }
-
-  
 `;
 
 const ProductContainer = styled.div`
@@ -86,14 +82,15 @@ const AllPicture = styled.div`
   }
 `;
 const SinglePicture = styled.div`
+  width: 400px;
+  height: 300px;
+  margin-left: 20px;
   & img {
-    width: 400px;
-    height: 600px;
-    object-fit: cover;
+    width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 
     @media (max-width: 980px) {
-      width: 300px;
-      height: 300px;
     }
   }
 `;
@@ -200,76 +197,199 @@ const EntretienProduct = styled.div`
   }
 `;
 function SingleProduct() {
+  const { id } = useParams();
   const [pictureView, setPictureView] = useState("");
+  const [product, setProduct] = useState({});
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedQuantity, setSelectedQuantity] = useState(0);
   const changePictureView = (e) => {
     setPictureView(e.target.src);
   };
 
+  //get product
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_URL_SERVER}/api/products/oneProduct/${id}`
+        );
+        const data = await response.json();
+        setProduct(data);
+
+        window.scrollTo(0, 0);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [id]);
+
+  const handleSizeChange = (e) => {
+    const selectedSize = e.target.value;
+    setSelectedSize(selectedSize);
+    const selectedSizeObject = product.colors
+      .flatMap((color) => color.sizes)
+      .find((size) => size.size === selectedSize);
+    setSelectedQuantity(selectedSizeObject ? selectedSizeObject.quantity : 0);
+  };
+
   return (
-    <Container>
-      <ProductContainer>
-        <ContainerPhoto>
-          <AllPicture>
-            <img src={Logo} alt="" onClick={changePictureView} />
-            <img src={Logo2} alt="" onClick={changePictureView} />
-            <img src={Logo3} alt="" onClick={changePictureView} />
-          </AllPicture>
-          <SinglePicture>
-            <img src={pictureView ? pictureView : Logo} alt="" />
-          </SinglePicture>
-        </ContainerPhoto>
+    <>
+      {!product.message ? (
+        <Container>
+          <ProductContainer>
+            <ContainerPhoto>
+              <AllPicture>
+                <img
+                  src={
+                    product.pictures &&
+                    `${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic1}`
+                  }
+                  alt={product && product.title}
+                  onClick={changePictureView}
+                />
+                <img
+                  src={
+                    product.pictures &&
+                    `${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic2}`
+                  }
+                  alt={product && product.title}
+                  onClick={changePictureView}
+                />
+                <img
+                  src={
+                    product.pictures &&
+                    `${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic3}`
+                  }
+                  alt={product && product.title}
+                  onClick={changePictureView}
+                />
+              </AllPicture>
+              <SinglePicture>
+                <img
+                  src={
+                    pictureView
+                      ? pictureView
+                      : product.pictures &&
+                        `${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic1}`
+                  }
+                  alt={product && product.title}
+                />
+              </SinglePicture>
+            </ContainerPhoto>
 
-        <ContainerByProduct>
-          <h1>CHEMISE AJUSTEE</h1>
-          <h2>200 $</h2>
-          <label htmlFor="color-select">Couleur :</label>
-          <select name="couleur" id="color-select">
-            <option value="">--Sélectionnez la couleur--</option>
-            <option value="red">Red</option>
-            <option value="green">Green</option>
-            <option value="white">White</option>
-            <option value="black">Black</option>
-          </select>
+            <ContainerByProduct>
+              <h1>{product.title}</h1>
+              <h2
+                style={{
+                  textDecoration: product.salePrice ? "line-through" : "none",
+                }}
+              >
+                {product.regularPrice} $
+              </h2>
+              {product.salePrice && <h3>{product.salePrice} $</h3>}
+              <label htmlFor="color-select">Couleur :</label>
+              <select
+                name="couleur"
+                id="color-select"
+                onChange={handleSizeChange}
+              >
+                <option value="">--Sélectionnez la couleur--</option>
+                {product.colors
+                  ? product.colors.map((color) => {
+                      return (
+                        <option value={color.color} key={color._id}>
+                          {color.color}
+                        </option>
+                      );
+                    })
+                  : null}
+              </select>
+              <label htmlFor="taille-select">Taille :</label>
+              <select
+                name="taille"
+                id="taille-select"
+                onChange={(e) => handleSizeChange(e)}
+                value={selectedSize}
+              >
+                <option value="">--Sélectionnez la taille--</option>
+                {product.colors
+                  ? product.colors.map((color) => {
+                      const items = color.sizes;
+                      return items.map((item) => {
+                        return (
+                          <option value={item.size} key={item._id}>
+                            {item.size}
+                          </option>
+                        );
+                      });
+                    })
+                  : null}
+              </select>
 
-          <label htmlFor="taille-select">Taille :</label>
-          <select name="taille" id="taille-select">
-            <option value="">--Sélectionnez la taille--</option>
-            <option value="l">L</option>
-            <option value="xl">XL</option>
-            <option value="xxl">XXL</option>
-          </select>
+              <div>
+                <p>Sélectionner la quantité</p>
+                <input
+                  type="number"
+                  min="1"
+                  max={selectedQuantity}
+                  defaultValue={1}
+                />
 
-          <div>
-            <p>Sélectionner la quantité</p>
-            <input type="number" min="1" max="10" defaultValue={1} />
-          </div>
+                {selectedQuantity > 0 ? (
+                  <p
+                    style={{
+                      color: "grey",
+                      fontSize: "1rem",
+                      width: "100%",
+                      marginTop: "10px",
+                    }}
+                  >
+                    Quantité disponible {selectedQuantity}
+                  </p>
+                ) : null}
+              </div>
 
-          <button type="button">Ajouter au panier</button>
-        </ContainerByProduct>
-      </ProductContainer>
+              <button type="button">Ajouter au panier</button>
+            </ContainerByProduct>
+          </ProductContainer>
 
-      <ProductDescription>
-        <DetailsProduct>
-          <h3>Détail du produit</h3>
-          <ul>
-            <li>Col: Col requin</li>
-            <li>Fermeture: Boutons</li>
-            <li>Niveau de transparence: Légère</li>
-            <li>Motif / Couleur: Couleur unie</li>
-          </ul>
-        </DetailsProduct>
-        <EntretienProduct>
-          <h3>Matière et entretien</h3>
-          <ul>
-            <li>100% coton</li>
-            <li>
-              Conseils d'entretien: Lavage en machine à 40 °C Ne pas mettre au
-              sèche-linge Blanchiment interdit
-            </li>
-          </ul>
-        </EntretienProduct>
-      </ProductDescription>
-    </Container>
+          <ProductDescription>
+            <DetailsProduct style={{ width: "50%" }}>
+              <h3>Détail du produit</h3>
+
+              <ul>
+                {product.description ? (
+                  <>
+                    <li>{product.description.desc1}</li>
+                    <li>{product.description.desc2}</li>
+                    <li>{product.description.desc3}</li>
+                  </>
+                ) : (
+                  <li>Aucune description disponible</li>
+                )}
+              </ul>
+            </DetailsProduct>
+            <EntretienProduct style={{ width: "50%" }}>
+              <h3>Matière et entretien</h3>
+              <ul>
+              {product.description ? (
+                <>
+                  <li>{product.description.desc1}</li>
+                  <li>{product.description.desc2}</li>
+                  <li>{product.description.desc3}</li>
+                </>
+              ) : (
+                <li>Aucune description disponible</li>
+              )}
+              </ul>
+            </EntretienProduct>
+          </ProductDescription>
+        </Container>
+      ) : (
+        <p>Chargement</p>
+      )}
+    </>
   );
 }
 
