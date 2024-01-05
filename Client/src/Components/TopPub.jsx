@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Logo from "../Assets/pexels-photo-837140.jpeg";
-
+import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   background-image: url(${Logo});
   background-size: cover;
@@ -55,12 +55,13 @@ const Content = styled.div`
 `;
 
 function TopPub() {
+  const navigate = useNavigate();
   return (
     <Container>
       <Content>
         <h2>Explorer la derrnière tendance</h2>
         <h1>Découvrez notre toute nouvelle collection</h1>
-        <button type="button">Achetez dès maintenant</button>
+        <button type="button" onClick={() => navigate("/produits")}>Achetez dès maintenant</button>
       </Content>
     </Container>
   );

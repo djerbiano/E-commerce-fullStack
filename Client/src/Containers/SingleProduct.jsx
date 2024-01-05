@@ -89,9 +89,10 @@ const SinglePicture = styled.div`
     width: 100%;
     max-height: 100%;
     object-fit: contain;
-
-    @media (max-width: 980px) {
-    }
+  }
+  @media (max-width: 400px) {
+    width: 100%;
+    height: 100%;
   }
 `;
 const ContainerByProduct = styled.div`
@@ -103,6 +104,17 @@ const ContainerByProduct = styled.div`
   min-height: 400px;
   font-size: 1.2rem;
   margin-bottom: 20px;
+
+  & > :nth-child(2) {
+    min-width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+
+    & > :nth-child(1) {
+      margin-right: 20px;
+    }
+  }
 
   & > :nth-child(4),
   & > :nth-child(6) {
@@ -126,6 +138,10 @@ const ContainerByProduct = styled.div`
     font-size: 1rem;
     width: 100%;
     align-items: center;
+
+    h2 {
+      font-size: 1.2rem;
+    }
 
     & > * {
       display: flex;
@@ -153,9 +169,10 @@ const ContainerByProduct = styled.div`
       }
     }
   }
-  & > :last-child {
+  & > :nth-child(8) {
     padding: 10px;
     border-radius: 10px;
+    margin: 0 0 20px 20px;
     &:hover {
       cursor: pointer;
       background-color: black;
@@ -172,8 +189,15 @@ const ProductDescription = styled.div`
   margin-top: 40px;
   padding: 10px;
 
+  & > * {
+    width: 40%;
+  }
+
   @media (max-width: 700px) {
     flex-direction: column;
+    & > * {
+      width: 100%;
+    }
   }
 `;
 
@@ -202,10 +226,13 @@ function SingleProduct() {
   const [product, setProduct] = useState({});
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedQuantity, setSelectedQuantity] = useState(0);
+  const [selectedQuantityClient, setSelectedQuantityClient] = useState(1);
+  const [selectedColorClient, setSelectedColorClient] = useState("");
+  const [selectedSizeClient, setSelectedSizeClient] = useState("");
+  const [error, setError] = useState(false);
   const changePictureView = (e) => {
     setPictureView(e.target.src);
   };
-
   //get product
   useEffect(() => {
     const fetchData = async () => {
@@ -232,6 +259,82 @@ function SingleProduct() {
       .find((size) => size.size === selectedSize);
     setSelectedQuantity(selectedSizeObject ? selectedSizeObject.quantity : 0);
   };
+
+  //add product to session storage
+  const addToCart = () => {
+    const existingCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+    // Vérifier si toutes les informations nécessaires sont disponibles
+    if (selectedColorClient !== "" && selectedSizeClient !== "") {
+      // Vérifier si le produit existe dans le panier
+      let existProduct = existingCart.find(
+        (item) =>
+          item.id === product._id &&
+          item.color === selectedColorClient &&
+          item.size === selectedSizeClient
+      );
+      if (existProduct) {
+        existProduct.quant =
+          selectedQuantityClient <= selectedQuantity
+            ? Number(selectedQuantityClient) + existProduct.quant
+            : selectedQuantity;
+
+        sessionStorage.setItem("cart", JSON.stringify(existingCart));
+
+        window.location.href = "/panier";
+      } else {
+        // Créer un nouvel objet représentant le produit à ajouter
+        const productToAdd = {
+          title: product.title,
+          size: selectedSizeClient,
+          quant:
+            selectedQuantityClient <= selectedQuantity
+              ? selectedQuantityClient
+              : selectedQuantity,
+          color: selectedColorClient,
+          id: product._id,
+          price: product.salePrice || product.regularPrice,
+          picture: product.pictures.pic1,
+        };
+
+        // Ajouter le produit au panier existant
+        existingCart.push(productToAdd);
+
+        // Mettre à jour le panier dans le sessionStorage
+        sessionStorage.setItem("cart", JSON.stringify(existingCart));
+
+        window.location.href = "/panier";
+      }
+    } else {
+      setError(true);
+    }
+  };
+
+  /*const addToCart = () => {
+    const existingCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+    // Vérifier si toutes les informations nécessaires sont disponibles
+    if (selectedColorClient !== "" && selectedSizeClient !== "") {
+      // Créer un nouvel objet représentant le produit à ajouter
+      const productToAdd = {
+        title: product.title,
+        size: selectedSizeClient,
+        quant: selectedQuantityClient <= selectedQuantity ? selectedQuantityClient : selectedQuantity,
+        color: selectedColorClient,
+        id: product._id,
+        price: product.salePrice || product.regularPrice,
+        picture: product.pictures.pic1,
+      };
+
+      // Ajouter le produit au panier existant
+      existingCart.push(productToAdd);
+
+      // Mettre à jour le panier dans le sessionStorage
+      sessionStorage.setItem("cart", JSON.stringify(existingCart));
+
+      window.location.href = "/panier";
+    } else {
+      setError(true);
+    }
+  };*/
 
   return (
     <>
@@ -280,19 +383,26 @@ function SingleProduct() {
 
             <ContainerByProduct>
               <h1>{product.title}</h1>
-              <h2
-                style={{
-                  textDecoration: product.salePrice ? "line-through" : "none",
-                }}
-              >
-                {product.regularPrice} $
-              </h2>
-              {product.salePrice && <h3>{product.salePrice} $</h3>}
+              <div>
+                <h2
+                  style={{
+                    textDecoration: product.salePrice ? "line-through" : "none",
+                  }}
+                >
+                  {product.regularPrice} $
+                </h2>
+                {product.salePrice && <h2>{product.salePrice}$</h2>}
+              </div>
+
               <label htmlFor="color-select">Couleur :</label>
               <select
                 name="couleur"
                 id="color-select"
-                onChange={handleSizeChange}
+                onChange={(e) => {
+                  handleSizeChange(e);
+                  setSelectedColorClient(e.target.value || "");
+                  setError(false);
+                }}
               >
                 <option value="">--Sélectionnez la couleur--</option>
                 {product.colors
@@ -309,8 +419,12 @@ function SingleProduct() {
               <select
                 name="taille"
                 id="taille-select"
-                onChange={(e) => handleSizeChange(e)}
-                value={selectedSize}
+                onChange={(e) => {
+                  handleSizeChange(e);
+                  setSelectedSizeClient(e.target.value);
+                  setError(false);
+                }}
+                disabled={selectedColorClient === "" ? "disabled" : ""}
               >
                 <option value="">--Sélectionnez la taille--</option>
                 {product.colors
@@ -334,6 +448,9 @@ function SingleProduct() {
                   min="1"
                   max={selectedQuantity}
                   defaultValue={1}
+                  onChange={(e) => {
+                    setSelectedQuantityClient(e.target.value);
+                  }}
                 />
 
                 {selectedQuantity > 0 ? (
@@ -350,12 +467,20 @@ function SingleProduct() {
                 ) : null}
               </div>
 
-              <button type="button">Ajouter au panier</button>
+              <button type="button" onClick={addToCart}>
+                Ajouter au panier
+              </button>
             </ContainerByProduct>
           </ProductContainer>
-
+          <div style={{ height: "20px" }}>
+            {error && (
+              <p style={{ color: "red", fontSize: "1.5rem" }}>
+                Veuillez selectionner la couleur et la taille !
+              </p>
+            )}
+          </div>
           <ProductDescription>
-            <DetailsProduct style={{ width: "50%" }}>
+            <DetailsProduct>
               <h3>Détail du produit</h3>
 
               <ul>
@@ -370,18 +495,18 @@ function SingleProduct() {
                 )}
               </ul>
             </DetailsProduct>
-            <EntretienProduct style={{ width: "50%" }}>
+            <EntretienProduct>
               <h3>Matière et entretien</h3>
               <ul>
-              {product.description ? (
-                <>
-                  <li>{product.description.desc1}</li>
-                  <li>{product.description.desc2}</li>
-                  <li>{product.description.desc3}</li>
-                </>
-              ) : (
-                <li>Aucune description disponible</li>
-              )}
+                {product.description ? (
+                  <>
+                    <li>{product.description.desc1}</li>
+                    <li>{product.description.desc2}</li>
+                    <li>{product.description.desc3}</li>
+                  </>
+                ) : (
+                  <li>Aucune description disponible</li>
+                )}
               </ul>
             </EntretienProduct>
           </ProductDescription>

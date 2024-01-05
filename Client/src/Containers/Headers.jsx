@@ -79,7 +79,7 @@ const IconContainer = styled.div`
   }
 `;
 
-function Headers() {
+function Headers( {cart}) {
   return (
     <Container>
       <Logo />
@@ -95,7 +95,7 @@ function Headers() {
           Admin
         </p>
         <Contact />
-        <Panier />
+        <Panier cart={cart} />
         <Favo />
         <MyCompte />
       </IconContainer>

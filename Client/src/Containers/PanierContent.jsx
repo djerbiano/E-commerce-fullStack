@@ -3,7 +3,6 @@ import ProductPanier from "../Components/ProductPanier";
 
 const Container = styled.div`
   width: 95vw;
-  min-height: 500px;
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
@@ -20,13 +19,11 @@ const Container = styled.div`
 const Articles = styled.div`
   width: 60%;
   height: 100%;
+  padding: 10px;
 
   @media (max-width: 730px) {
     width: 100%;
-  
-}
-
-
+  }
 `;
 
 const Products = styled.div`
@@ -93,27 +90,31 @@ const Paiement = styled.div`
     width: 100%;
     margin-top: 20px;
     font-size: 0.8rem;
-  
-}
+  }
 `;
 
-function PanierContent() {
+function PanierContent({ cart }) {
+  const total = cart.reduce(
+    (acc, product) =>
+      acc +
+      (product.quant >= 1 ? product.price * product.quant : product.price * 1),
+     
+    0
+  );
+
   return (
     <Container>
       <Articles>
         <h1>Panier</h1>
-        <h4>2 articles</h4>
+        <h4>{cart.length} articles</h4>
         <Products>
-          <ProductPanier />
-          <ProductPanier />
+          {cart.map((product) => (
+            <ProductPanier product={product} key={product.id} />
+          ))}
         </Products>
       </Articles>
       <Paiement>
         <h1>Récapitulatif du paiement</h1>
-        <div>
-          <h4>Articles</h4>
-          <h4>200 $</h4>
-        </div>
 
         <div>
           <h4>Expédition</h4>
@@ -122,7 +123,7 @@ function PanierContent() {
 
         <div>
           <h4>Total</h4>
-          <h4>200 $</h4>
+          <h4>{total} $</h4>
         </div>
         <div>
           <button>Paiement</button>

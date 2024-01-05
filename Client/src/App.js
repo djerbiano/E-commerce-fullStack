@@ -31,6 +31,7 @@ const AppContainer = styled.div`
 
 function App() {
   const [open, setOpen] = useState(false);
+  const [cart, setCart] = useState([]);
   const handleStorageChange = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
@@ -39,6 +40,7 @@ function App() {
     localStorage.removeItem("lastName");
     localStorage.removeItem("phone");
     localStorage.removeItem("address");
+    sessionStorage.clear();
     window.location.href = "/";
   };
   useEffect(() => {
@@ -50,12 +52,18 @@ function App() {
     // eslint-disable-next-line
   }, []);
 
+  //get cart
+  useEffect(() => {
+    const storedCart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    setCart(storedCart);
+}, []);
+
   return (
     <BrowserRouter>
       <AuthProvider>
         <MenuHambContext.Provider value={{ open, setOpen }}>
           <AppContainer>
-            <Headers />
+            <Headers cart={cart} />
             <Routes>
               <Route path="/" element={<Main />} />
               <Route path="/produits" element={<FilterProducts />} />
@@ -64,7 +72,7 @@ function App() {
               <Route path="/mesCommandes" element={<MesCommandes />} />
               <Route path="/réclamations" element={<Reclamations />} />
               <Route path="/nousContacter" element={<NousContacter />} />
-              <Route path="/panier" element={<PanierContent />} />
+              <Route path="/panier" element={<PanierContent cart={cart} />} />
               <Route path="/favoris" element={<FavoContent />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/dashboard" element={<Admin />} />

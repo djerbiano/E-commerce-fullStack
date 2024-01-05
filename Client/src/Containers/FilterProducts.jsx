@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Filter from "../Components/Filter";
+import { useEffect } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -11,7 +12,10 @@ const Container = styled.div`
 `;
 
 function FilterProducts() {
- 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Container>
       <Filter />

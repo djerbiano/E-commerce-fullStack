@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Logo from "../Assets/soldes.jpg";
-
+import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   background-image: url(${Logo});
   background-size: cover;
@@ -74,11 +74,12 @@ const Content = styled.div`
 `;
 
 function TopPub() {
+  const navigate = useNavigate();
   return (
     <Container>
       <Content>
         <h1>Soldes d'hiver -50% !</h1>
-        <button type="button">Achetez dès maintenant</button>
+        <button type="button" onClick={() => navigate("/produits")}>Achetez dès maintenant</button>
       </Content>
     </Container>
   );

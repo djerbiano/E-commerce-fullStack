@@ -208,6 +208,7 @@ const ContainerText = styled.div`
 `;
 
 const FilterComponent = () => {
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -237,9 +238,11 @@ const FilterComponent = () => {
   };
 
   const handleSearch = () => {
-    if (priceRange.start === "" || priceRange.end === "") {
+    if (priceRange.start === "" || priceRange.end === "" || priceRange.end < priceRange.start) {
       setProducts(products);
+      setError(true);
     } else {
+      setError(false);
       const filteredProductsByPrice = products.filter((product) => {
         const price = product.salePrice || product.regularPrice;
         return price >= priceRange.start && price <= priceRange.end;
@@ -272,6 +275,7 @@ const FilterComponent = () => {
           );
 
           setProducts(filteredData);
+          
         }
       } catch (error) {
         console.log(error);
@@ -389,12 +393,14 @@ const FilterComponent = () => {
               type="number"
               placeholder="End"
               value={priceRange.end}
-              min={1}
+              min={priceRange.start}
               onChange={(e) => handlePriceChange(e, "end")}
             />
           </label>
         </PriceFilterContainer>
-
+        {error && (
+          <p style={{ color: "red" }}>Veuillez saisir deux valeurs valides</p>
+        )}
         <SearchButton onClick={handleSearch}>Trouver</SearchButton>
       </Sidebar>
 

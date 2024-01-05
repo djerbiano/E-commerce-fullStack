@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Logo from "../Assets/18830882_1200_B.jpg";
 
 const Container = styled.div`
   display: flex;
@@ -36,6 +35,11 @@ const ContainerPhoto = styled.div`
     width: 100%;
     object-fit: cover;
     border-radius: 10px;
+
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.05);
+    }
   }
 `;
 
@@ -45,6 +49,12 @@ const DetailsProduct = styled.div`
   flex-direction: column;
   justify-content: flex-start;
 
+  & > :first-child {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   & > :last-child {
     color: #000;
     font-size: 12px;
@@ -53,11 +63,14 @@ const DetailsProduct = styled.div`
     color: #6e6e6e;
     text-decoration: underline;
     cursor: pointer;
+    position: absolute;
+    bottom: 2px;
+    left: 10px;
 
     @media (max-width: 400px) {
       position: absolute;
       bottom: 2px;
-      left: 0px;
+      left: 10px;
     }
   }
 `;
@@ -86,35 +99,68 @@ const Total = styled.div`
 
   @media (max-width: 400px) {
     bottom: 10px;
-    left: 0px;
+    left: 10px;
   }
 `;
 
-function ProductPanier() {
+function ProductPanier({ product }) {
+  const handleRemove = (product) => {
+    const existingCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+    // Vérifier si le produit existe dans le panier
+    let deleteProduct = existingCart.find(
+      (item) =>
+        item._id === product._id &&
+        item.color === product.color &&
+        item.size === product.size
+    );
+    // Supprimer du panier en fonction de l'ID du produit
+    const updatedCart = existingCart.filter((item) => item !== deleteProduct);
+    // Mettre a jour le sessionStorage
+    sessionStorage.setItem("cart", JSON.stringify(updatedCart));
+
+    window.location.reload();
+  };
+
   return (
     <Container>
       <ContainerPhoto>
-        <img src={Logo} alt="" />
+        <img
+          src={`${process.env.REACT_APP_URL_SERVER}/images/${
+            product ? product.picture : "Chargement"
+          }`}
+          alt={product ? product.title : "Chargement"}
+          onClick={() => {
+            window.location.href = `/singleProduct/${product.id}`;
+          }}
+        />
       </ContainerPhoto>
       <DetailsProduct>
-        <h3>CHEMISE AJUSTEE</h3>
-        <h4>200 $</h4>
-        <p>Couleur: red</p>
-        <p>Taille: XS</p>
+        <h3
+          onClick={() => {
+            window.location.href = `/singleProduct/${product.id}`;
+          }}
+        >
+          {product ? product.title : "Chargement"}
+        </h3>
+        <h4>{product ? product.price : "Chargement"} $</h4>
+        <p>Couleur: {product ? product.color : "Chargement"}</p>
+        <p>Taille: {product ? product.size : "Chargement"}</p>
         <Quantité>
           <p>Qté:</p>
           <select>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
+            <option value={product.quant < 1 ? 1 : product.quant}>
+              {product.quant < 1 ? 1 : product.quant}
+            </option>
           </select>
         </Quantité>
         <Total>
-          <p>Total: 200 $</p>
+          <p>
+            Total:{" "}
+            {product.quant < 1 ? product.price : product.quant * product.price}{" "}
+            $
+          </p>
         </Total>
-        <button>Supprimer</button>
+        <button onClick={() => handleRemove(product)}>Supprimer</button>
       </DetailsProduct>
     </Container>
   );
