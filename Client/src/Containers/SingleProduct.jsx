@@ -224,7 +224,7 @@ function SingleProduct() {
   const { id } = useParams();
   const [pictureView, setPictureView] = useState("");
   const [product, setProduct] = useState({});
-  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedSize, setSelectedSize] = useState(""); // eslint-disable-line
   const [selectedQuantity, setSelectedQuantity] = useState(0);
   const [selectedQuantityClient, setSelectedQuantityClient] = useState(1);
   const [selectedColorClient, setSelectedColorClient] = useState("");
@@ -250,7 +250,6 @@ function SingleProduct() {
     };
     fetchData();
   }, [id]);
-
   const handleSizeChange = (e) => {
     const selectedSize = e.target.value;
     setSelectedSize(selectedSize);
@@ -263,9 +262,8 @@ function SingleProduct() {
   //add product to session storage
   const addToCart = () => {
     const existingCart = JSON.parse(sessionStorage.getItem("cart")) || [];
-    // Vérifier si toutes les informations nécessaires sont disponibles
+    
     if (selectedColorClient !== "" && selectedSizeClient !== "") {
-      // Vérifier si le produit existe dans le panier
       let existProduct = existingCart.find(
         (item) =>
           item.id === product._id &&
@@ -282,7 +280,7 @@ function SingleProduct() {
 
         window.location.href = "/panier";
       } else {
-        // Créer un nouvel objet représentant le produit à ajouter
+
         const productToAdd = {
           title: product.title,
           size: selectedSizeClient,
@@ -292,6 +290,7 @@ function SingleProduct() {
               : selectedQuantity,
           color: selectedColorClient,
           id: product._id,
+          idUnique: product._id+Date.now(),
           price: product.salePrice || product.regularPrice,
           picture: product.pictures.pic1,
         };
@@ -309,32 +308,6 @@ function SingleProduct() {
     }
   };
 
-  /*const addToCart = () => {
-    const existingCart = JSON.parse(sessionStorage.getItem("cart")) || [];
-    // Vérifier si toutes les informations nécessaires sont disponibles
-    if (selectedColorClient !== "" && selectedSizeClient !== "") {
-      // Créer un nouvel objet représentant le produit à ajouter
-      const productToAdd = {
-        title: product.title,
-        size: selectedSizeClient,
-        quant: selectedQuantityClient <= selectedQuantity ? selectedQuantityClient : selectedQuantity,
-        color: selectedColorClient,
-        id: product._id,
-        price: product.salePrice || product.regularPrice,
-        picture: product.pictures.pic1,
-      };
-
-      // Ajouter le produit au panier existant
-      existingCart.push(productToAdd);
-
-      // Mettre à jour le panier dans le sessionStorage
-      sessionStorage.setItem("cart", JSON.stringify(existingCart));
-
-      window.location.href = "/panier";
-    } else {
-      setError(true);
-    }
-  };*/
 
   return (
     <>
@@ -406,13 +379,11 @@ function SingleProduct() {
               >
                 <option value="">--Sélectionnez la couleur--</option>
                 {product.colors
-                  ? product.colors.map((color) => {
-                      return (
-                        <option value={color.color} key={color._id}>
-                          {color.color}
-                        </option>
-                      );
-                    })
+                  ? product.colors.map((color) => (
+                      <option value={color.color} key={color.color}>
+                        {color.color}
+                      </option>
+                    ))
                   : null}
               </select>
               <label htmlFor="taille-select">Taille :</label>
@@ -428,16 +399,16 @@ function SingleProduct() {
               >
                 <option value="">--Sélectionnez la taille--</option>
                 {product.colors
-                  ? product.colors.map((color) => {
-                      const items = color.sizes;
-                      return items.map((item) => {
-                        return (
-                          <option value={item.size} key={item._id}>
-                            {item.size}
+                  ? product.colors
+                      .filter((color) => color.color === selectedColorClient)
+                      .map((filteredColor) =>
+                        filteredColor.sizes.map((size) => (
+                          <option key={size.size} value={size.size}>
+                            {size.size}
                           </option>
-                        );
-                      });
-                    })
+                        ))
+                      )
+                      .flat()
                   : null}
               </select>
 

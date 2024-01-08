@@ -3,6 +3,7 @@ import SearchBar from "./UsersComponents/SearchBar";
 import OneUser from "./UsersComponents/OneUser";
 import Pagination from "./DashboardComponent/Pagination";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -43,7 +44,7 @@ const Div1 = styled.div`
     transition: all 0.2s ease-in-out;
   }
 `;
-
+//eslint-disable-next-line
 const Div2 = styled.div`
   background-color: #f0f0f0;
   transition: all 0.2s ease-in-out;
@@ -84,7 +85,30 @@ const LinkItem = styled(Link)`
 `;
 
 function Users() {
- 
+  const [users, setUsers] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    try {
+      fetch(`${process.env.REACT_APP_URL_SERVER}/api/users/allUsers`, {
+        method: "GET",
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.length > 0) {
+            setUsers(data);
+          } else {
+            setError(data.message || "Aucun user");
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <Container>
       <SearchBar />
@@ -97,16 +121,20 @@ function Users() {
           <p>Adress</p>
           <p>Validate email</p>
         </Header>
-        <LinkItem to="/admin/users/oneuser">
-        <Div1 className="kj">
-          <OneUser />
-        </Div1>
-        </LinkItem>
-        <LinkItem to="/admin/users/oneuser">
-        <Div2 className="kj">
-          <OneUser />
-        </Div2>
-        </LinkItem>
+
+        {users ? (
+          users.map((user) => {
+            return (
+              <LinkItem to={`/admin/users/oneuser/${user.email}`} key={user._id}>
+                <Div1 className="kj">
+                  <OneUser user={user} />
+                </Div1>
+              </LinkItem>
+            );
+          })
+        ) : (
+          <div>{error}</div>
+        )}
       </Content>
       <Pagination />
     </Container>

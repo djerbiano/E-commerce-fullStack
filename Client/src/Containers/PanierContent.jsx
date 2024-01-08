@@ -101,7 +101,6 @@ function PanierContent({ cart }) {
      
     0
   );
-
   return (
     <Container>
       <Articles>
@@ -109,7 +108,8 @@ function PanierContent({ cart }) {
         <h4>{cart.length} articles</h4>
         <Products>
           {cart.map((product) => (
-            <ProductPanier product={product} key={product.id} />
+            <ProductPanier product={product} key={product.idUnique} />
+        
           ))}
         </Products>
       </Articles>

@@ -240,7 +240,12 @@ function AddProduct() {
       formData.append("sizes", document.getElementById("sizes").value);
       formData.append("quantity1", document.getElementById("quantity1").value);
 
-      // Envoi de la requête avec formData
+
+      formData.append("color2", document.getElementById("color2").value);
+      formData.append("sizes2", document.getElementById("sizes2").value);
+      formData.append("quantity2", document.getElementById("quantity2").value);
+
+    
 
       let pic1 = document.getElementById("pic1").files[0];
       let pic2 = document.getElementById("pic2").files[0];
@@ -418,6 +423,24 @@ function AddProduct() {
                 <label htmlFor="quantity1">Quantity</label>
                 <input type="number" id="quantity1" placeholder="Quantity" />
               </div>
+              <div>
+              <label htmlFor="color2">Color 2</label>
+              <input type="text" id="color2" />
+              <label htmlFor="sizes2">Size</label>
+              <select id="sizes2">
+                <option value="">Select Size</option>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="2XL">2XL</option>
+                <option value="3XL">3XL</option>
+                <option value="4XL">4XL</option>
+              </select>
+              <label htmlFor="quantity2">Quantity</label>
+              <input type="number" id="quantity2" placeholder="Quantity" />
+            </div>
             </Color>
 
             <ContainerButton>

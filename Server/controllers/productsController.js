@@ -83,7 +83,6 @@ const controller = {
   //Get one product by id
   getOneProductById: async (req, res) => {
     try {
-    
       const products = await Product.findOne({ _id: req.params.byId });
 
       if (products) {
@@ -133,6 +132,9 @@ const controller = {
         color1,
         sizes,
         quantity1,
+        color2,
+        sizes2,
+        quantity2,
       } = req.body;
 
       images = req.files;
@@ -156,6 +158,7 @@ const controller = {
           pic3: images[2].filename,
         },
         category,
+
         colors: [
           {
             color: color1,
@@ -166,9 +169,17 @@ const controller = {
               },
             ],
           },
+
+          {
+            color: color2,
+            sizes: [
+              {
+                size: sizes2,
+                quantity: quantity2,
+              },
+            ],
+          },
         ],
-        sizes,
-        quantity1,
       });
 
       const savedProduct = await newProduct.save();

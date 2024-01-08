@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import ModifierQuantitePanier from "./ModifierQuantitePanier";
 
 const Container = styled.div`
   display: flex;
@@ -54,7 +55,8 @@ const DetailsProduct = styled.div`
       cursor: pointer;
     }
   }
-
+  & > :nth-child(6) {
+  }
   & > :last-child {
     color: #000;
     font-size: 12px;
@@ -153,11 +155,11 @@ function ProductPanier({ product }) {
             </option>
           </select>
         </Quantité>
+        <ModifierQuantitePanier product={product} />
         <Total>
           <p>
-            Total:{" "}
-            {product.quant < 1 ? product.price : product.quant * product.price}{" "}
-            $
+            Total:
+            {product.quant < 1 ? product.price : product.quant * product.price}$
           </p>
         </Total>
         <button onClick={() => handleRemove(product)}>Supprimer</button>

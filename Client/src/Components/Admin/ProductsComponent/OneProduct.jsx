@@ -116,7 +116,7 @@ const Image = styled.div`
 function OneProduct() {
   const [opModal, setOpModal] = useState(false);
   const [pictures, setPictures] = useState(null);
-  const { id } = useParams();
+  const { id} = useParams();
   const [productDetails, setProductDetails] = useState("");
   const [err, setErr] = useState("");
   const [patchProduct, setPatchProduct] = useState(false);

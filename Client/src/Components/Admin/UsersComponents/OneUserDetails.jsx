@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { IoChevronBackOutline } from "react-icons/io5";
-import Logo from "../../../Assets/avatarDefault.jpg";
 import OrdersForUser from "./OrdersForUser";
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import Logo from "../../../Assets/18830882_1200_B.jpg";
 
 const Container = styled.div`
   width: 100%;
@@ -70,6 +72,7 @@ const Picture = styled.div`
 
   div {
     width: 80%;
+    aspect-ratio: 1/1;
 
     img {
       width: 100%;
@@ -133,50 +136,115 @@ const ActionButton = styled.div`
   }
 `;
 
+const ErrorDiv = styled.div`
+  width: 100%;
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+
+  p {
+    width: 100%;
+    word-wrap: break-word;
+    color: red;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+
+  }
+`;
+
 function OneUserDetails() {
+  const [user, setUser] = useState({});
+  const [err, setErr] = useState("");
+  const { email } = useParams();
+
+  //get one user
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_URL_SERVER}/api/users/getOneUser/${email}`,
+          {
+            method: "GET",
+            headers: {
+              token: localStorage.getItem("token"),
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (data.message) {
+          setErr(data.message);
+        } else {
+          setUser(data);
+        }
+      } catch (error) {
+        setErr(error);
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [email]);
   return (
     <Container>
       <BackButton onClick={() => window.history.back()}>
         <IoChevronBackOutline />
         <button>Retour</button>
       </BackButton>
-      <Section>
-        <InfoContainer>
-          <Picture>
-            <div>
-              <img src={Logo} alt="" />
-            </div>
-            <h1>Eric DUPOND</h1>
-            <p>UserId: 6hg521v4ggh552 </p>
-            <p>Inscrit le: 10/05/2022</p>
-          </Picture>
-          <Info>
-            <h2>Informations</h2>
-            <div>
+      {!err ? (
+        <Section>
+          <InfoContainer>
+            <Picture>
               <div>
-                <p>Email</p>
-                <p>ericd@gmail.com</p>
-                <p>Valide</p>
+                <img
+                  src={
+                    user.avatar
+                      ? `${process.env.REACT_APP_URL_SERVER}/images/${user.avatar}`
+                      : Logo
+                  }
+                  alt=""
+                />
               </div>
+              <h1>{user.name}</h1>
+              <p>UserId: {user._id} </p>
+              <p>Inscrit le: {user.createdAt}</p>
+            </Picture>
+            <Info>
+              <h2>Informations</h2>
               <div>
-                <p>Phone</p>
-                <p>0033 00 00 00 00</p>
+                <div>
+                  <p>Email</p>
+                  <p>{user.email}</p>
+                  <p>{user.validateEmail ? "Valide" : "Invalide"}</p>
+                </div>
+                <div>
+                  <p>Phone</p>
+                  <p>{user.phone}</p>
+                </div>
+
+                <div>
+                  <p>Adresse</p>
+                  <p>{user.address}</p>
+                </div>
               </div>
 
-              <div>
-                <p>Adresse</p>
-                <p>1 rue de test 75000 PARIS </p>
-              </div>
-            </div>
-
-            <ActionButton>
-              <button>Supprimer le compte</button>
-              <button>Bannir le compte</button>
-            </ActionButton>
-          </Info>
-        </InfoContainer>
-        <OrdersForUser />
-      </Section>
+              <ActionButton>
+                <button>Supprimer le compte</button>
+                <button>Bannir le compte</button>
+              </ActionButton>
+            </Info>
+          </InfoContainer>
+          <OrdersForUser />
+        </Section>
+      ) : (
+        <ErrorDiv>
+          <p>{err}</p>
+        </ErrorDiv>
+      )}
     </Container>
   );
 }

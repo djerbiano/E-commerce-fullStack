@@ -11,26 +11,26 @@ const OneUserr = styled.div`
   }
 `;
 
-function OneUser() {
+function OneUser({ user }) {
   return (
     <OneUserr>
       <div>
-        <p>Eric</p>
+        <p>{user.name}</p>
       </div>
       <div>
-        <p>DUPOND</p>
+        <p>{user.lastName}</p>
       </div>
       <div>
-        <p>0033 00 00 00 00</p>
+        <p>{user.phone}</p>
       </div>
       <div>
-        <p> erickd@gmail</p>
+        <p>{user.email}</p>
       </div>
       <div>
-        <p>1 rue de test 75000 PARIS </p>
+        <p>{user.address}</p>
       </div>
       <div>
-        <p>Oui</p>
+        <p>{user.validateEmail ? "Valide" : "Invalide"}</p>
       </div>
     </OneUserr>
   );
