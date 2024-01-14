@@ -67,8 +67,8 @@ function ValidationChoise({
   setModalValidation,
   patchProductDetails,
   orderDeleteTrackingNumber,
+  userDeleteByEmail,
 }) {
-  
   const navigate = useNavigate();
   // delete product
   const deleteThisProduct = async () => {
@@ -95,7 +95,6 @@ function ValidationChoise({
   };
 
   //delete order
-
   const deleteThisOrder = async () => {
     try {
       let response = await fetch(
@@ -112,7 +111,31 @@ function ValidationChoise({
 
       setTimeout(() => {
         window.alert(data.message);
-       navigate (`/admin/trackings`);
+        navigate(`/admin/trackings`);
+      }, 1000);
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+
+  //delete order
+  const deleteThisUser = async () => {
+    try {
+      let response = await fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/users//${userDeleteByEmail}`,
+        {
+          method: "DELETE",
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      let data = await response.json();
+
+      setTimeout(() => {
+        window.alert(data.message);
+        navigate(`/admin/users`);
       }, 1000);
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -127,8 +150,10 @@ function ValidationChoise({
             onClick={() => {
               if (orderDeleteTrackingNumber) {
                 deleteThisOrder();
-              } else {
+              } else if (patchProductDetails) {
                 deleteThisProduct();
+              } else {
+                deleteThisUser();
               }
             }}
           >

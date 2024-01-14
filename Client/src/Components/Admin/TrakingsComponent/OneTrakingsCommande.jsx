@@ -121,7 +121,7 @@ const Status = styled.div`
 
 function OneTrakingsCommande() {
   const { id } = useParams();
-  const [productDetails, setProductDetails] = useState("");
+  const [productDetails, setProductDetails] = useState({});
   const [err, setErr] = useState("");
   const [orderDeleteTrackingNumber, setOrderDeleteTrackingNumber] =
     useState("");
@@ -144,23 +144,24 @@ function OneTrakingsCommande() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `${process.env.REACT_APP_URL_SERVER}/api/orders/${id}`,
-          {
-            method: "GET",
-            headers: {
-              token: localStorage.getItem("token"),
-            },
+        if (id) {
+          const response = await fetch(
+            `${process.env.REACT_APP_URL_SERVER}/api/orders/${id}`,
+            {
+              method: "GET",
+              headers: {
+                token: localStorage.getItem("token"),
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Une erreur s'est produite");
           }
-        );
 
-        if (!response.ok) {
-          throw new Error("Une erreur s'est produite");
+          const data = await response.json();
+          setProductDetails(data);
         }
-
-        const data = await response.json();
-
-        setProductDetails(data);
       } catch (error) {
         setErr(error);
         console.error("Une erreur s'est produite:", error);
@@ -178,7 +179,6 @@ function OneTrakingsCommande() {
     ? new Date(productDetails.updatedAt)
     : null;
   /*---------------convert date----------- */
-  
 
   return (
     <Container>
@@ -187,8 +187,8 @@ function OneTrakingsCommande() {
           <>
             <Details>
               <Detail>
-                <h3>Email: {productDetails.user.email}</h3>
-                <p>Id: {productDetails.user._id}</p>
+                <h3>Email: {productDetails.email}</h3>
+                <p>UserId: {productDetails.user}</p>
                 <p>Commande Id: {productDetails._id}</p>
                 <p>TrackingNumber: {productDetails.trackingNumber}</p>
                 <p>Créer le: {Création ? Création.toLocaleString() : "N/D"}</p>

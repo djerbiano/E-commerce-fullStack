@@ -80,7 +80,7 @@ const Form = styled.form`
 `;
 
 function SetReclamation() {
-  const [userId] = useState(localStorage.getItem("userId"));
+  const [email] = useState(localStorage.getItem("email"));
   const [commande, setCommande] = useState([]);
   const [data, setData] = useState(true);
   const [opModal, setOpModal] = useState(false);
@@ -91,7 +91,7 @@ function SetReclamation() {
     const getAllOrders = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_URL_SERVER}/api/orders/user/${userId}`,
+          `${process.env.REACT_APP_URL_SERVER}/api/orders/user/${email}`,
           {
             method: "GET",
             headers: {
@@ -114,7 +114,7 @@ function SetReclamation() {
 
     getAllOrders();
     //eslint-disable-next-line
-  }, [userId]);
+  }, [email]);
 
   // Envoi de la réclamation
   const sendReclamation = async (event) => {

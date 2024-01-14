@@ -41,13 +41,15 @@ const controller = {
   getAllOrderByUser: async (req, res) => {
     try {
       //Vérification du token
-      if (req.user.id !== req.params.userrId) {
-        return res.status(403).json({
-          message: "Token non valide, veuillez vous reconnecter",
-        });
+      if (req.user.isAdmin === false){
+        if (req.user.email !== req.params.email) {
+          return res.status(403).json({
+            message: "Token non valide, veuillez vous reconnecter",
+          });
+        }
       }
-
-      const orders = await Order.find({ user: req.params.userrId }).populate({
+    
+      const orders = await Order.find({ email: req.params.email }).populate({
         path: "products.product",
         select: "title pictures",
       });
@@ -81,16 +83,9 @@ const controller = {
       const order = await Order.findOne({
         trackingNumber: req.params.trackingNumber,
       })
-        .populate({
-          path: "user",
-          select: "email",
-        })
-        .populate({
-          path: "products.product",
-          select: "title",
-        });
 
       if (order) {
+        console.log(order);
         return res.status(200).json(order);
       } else {
         return handleErrors(res, 200, {
@@ -165,6 +160,7 @@ const controller = {
         products: req.body.products,
         title: req.body,
         user: req.user.id,
+        email: req.user.email,
         total: req.body.total,
         billingAddress: req.body.billingAddress || req.body.shippingAddress,
         shippingAddress: req.body.shippingAddress,
@@ -285,7 +281,7 @@ const controller = {
 
       if (user._id.toString() !== orderId.user.toString()) {
         return handleErrors(res, 403, {
-          message: "Vous devez étre connecté pour effectuer cette demande",
+          message: "Vous devez étre connecté pour effectuer cette demande, (Il s'agit peut-être d'une ancienne commande passer par votre premier compte).",
         });
       }
 

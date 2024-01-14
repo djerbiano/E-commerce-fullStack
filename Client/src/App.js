@@ -84,7 +84,7 @@ function App() {
               <Route path="/admin/trackings" element={<Admin />} />
               <Route path="/admin/trackings/oneTracking/:id" element={<OneTrakingsCommande />} />
               <Route path="/admin/orders" element={<Admin />} />
-              <Route path="/admin/ratings" element={<Admin />} />
+              <Route path="/admin/reclamations" element={<Admin />} />
               <Route path="*" element={<NotFound404 />} />
             </Routes>
             <Footer />

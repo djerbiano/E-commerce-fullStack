@@ -7,7 +7,7 @@ import Products from "../Admin/Products";
 import Stocks from "../Admin/Stocks";
 import Trackings from "../Admin/Trackings";
 import Orders from "../Admin/Orders";
-import Ratings from "../Admin/Ratings";
+import Reclamations from "./Reclamations";
 
 const Container = styled.div`
   width: 100%;
@@ -15,7 +15,7 @@ const Container = styled.div`
 `;
 
 function MainAdmin() {
-  const [component, setComponent] = useState(null);
+  const [component, setComponent] = useState(null); 
   const [path, setPath] = useState("");
   const location = useLocation();
 
@@ -43,8 +43,8 @@ function MainAdmin() {
       case "/admin/orders":
         setComponent(<Orders />);
         break;
-      case "/admin/ratings":
-        setComponent(<Ratings />);
+      case "/admin/reclamations":
+        setComponent(<Reclamations />);
         break;
       default:
         setComponent(<Dashboard />);

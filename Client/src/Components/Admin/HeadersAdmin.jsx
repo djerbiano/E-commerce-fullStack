@@ -123,9 +123,9 @@ function HeadersAdmin() {
           <MdOutlineEuroSymbol />
           <p>Orders</p>
         </LinkItems>
-        <LinkItems to="/admin/ratings">
+        <LinkItems to="/admin/reclamations">
           <FaStarHalfAlt />
-          <p>Ratings</p>
+          <p>Réclamations</p>
         </LinkItems>
       </div>
       <div>

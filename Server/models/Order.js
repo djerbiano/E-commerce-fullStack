@@ -29,6 +29,10 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    email: {
+      type: String,
+      required: true,
+    },
     status: {
       type: String,
       enum: ["payée", "expédiée", "reçue"],

@@ -127,8 +127,7 @@ const Order = styled.div`
     cursor: pointer;
   }
 `;
-
-function Orders() {
+function Reclamations() {
   const [orders, setOrders] = useState([]);
   const [filtredOrders, setFiltredOrders] = useState([]);
   const [finded, setFinded] = useState(false);
@@ -182,7 +181,7 @@ function Orders() {
   return (
     <Container>
       <Title>
-        <h2>Orders</h2>
+        <h2>Réclamations</h2>
         <div onClick={() => window.location.reload()}>
           <IoIosRefresh />
         </div>
@@ -289,4 +288,4 @@ function Orders() {
   );
 }
 
-export default Orders;
+export default Reclamations; 

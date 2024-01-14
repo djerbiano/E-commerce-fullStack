@@ -132,7 +132,7 @@ const Product = styled.div`
 `;
 
 function MesInformations() {
-  const [userId] = useState(localStorage.getItem("userId"));
+  const [email] = useState(localStorage.getItem("email"));
   const [orders, setOrders] = useState([]);
   const [data, setData] = useState(true);
   const [opModal, setOpModal] = useState(false);
@@ -142,7 +142,7 @@ function MesInformations() {
     const getAllOrders = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_URL_SERVER}/api/orders/user/${userId}`,
+          `${process.env.REACT_APP_URL_SERVER}/api/orders/user/${email}`,
           {
             method: "GET",
             headers: {
@@ -165,7 +165,7 @@ function MesInformations() {
 
     getAllOrders();
     //eslint-disable-next-line
-  }, [userId]);
+  }, [email ]); 
 
   const confirmeReceptionCommande = async (orderId) => {
     setLoader(true);
@@ -194,7 +194,7 @@ function MesInformations() {
       <h3>Mes commandes</h3>
 
       <ContainerCommandes>
-        {data  ? (
+        {data ? (
           orders.map((order) => (
             <Commande key={order._id}>
               <TitleCommande>

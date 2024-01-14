@@ -100,8 +100,8 @@ const controller = {
 
         return res.status(200).json(filteredUsers);
       } else {
-        return handleErrors(res, 404, {
-          message: `${req.params.searchUser} non trouvé`,
+        return handleErrors(res, 200, {
+          message: ` - ${req.params.searchUser} - n'existe pas`,
         });
       }
     } catch (error) {
@@ -140,21 +140,13 @@ const controller = {
       const salt = await bcrypt.genSalt(10);
       req.body.password = await bcrypt.hash(req.body.password.trim(), salt);
 
-
-
-
-  if (req.file === undefined) {
+      if (req.file === undefined) {
         user = new User(req.body);
       } else {
         user = new User(req.body);
       }
-
-
-
-
-      
-
-     /* if (req.file === undefined) {
+      // ps  : avant le déploiement, la photo a prendre en compte
+      /* if (req.file === undefined) {
         user = new User({
           email: req.body.email,
           password: req.body.password,
@@ -172,7 +164,7 @@ const controller = {
 
       // Générer un token JWT pour l'utilisateur
       const token = jwt.sign(
-        { id: user._id, isAdmin: user.isAdmin },
+        { id: user._id, isAdmin: user.isAdmin, email: user.email },
         process.env.JWT_SECRET_KEY,
         {
           expiresIn: "5h",
@@ -225,7 +217,7 @@ const controller = {
         if (user && isPasswordMatch) {
           // Générer un token JWT pour l'utilisateur
           const token = jwt.sign(
-            { id: user._id, isAdmin: user.isAdmin },
+            { id: user._id, isAdmin: user.isAdmin, email: user.email },
             process.env.JWT_SECRET_KEY,
             {
               expiresIn: "5h",
@@ -247,7 +239,7 @@ const controller = {
       } else {
         return handleErrors(res, 401, {
           message: "Un problème est survenu, veuillez réessayer",
-        }); 
+        });
       }
     } catch (error) {
       return handleErrors(res, 400, {
@@ -364,7 +356,7 @@ const controller = {
         deleteImage(photo);
       }
 
-      // Supprimer l'utilisateur
+      // Supprimer l'utilisateur et laisser les commandes pour pouvoir les récupérer si le user s'inscrit de nouveau
       setTimeout(async () => {
         await User.findOneAndDelete({
           email: req.params.deleteUser,

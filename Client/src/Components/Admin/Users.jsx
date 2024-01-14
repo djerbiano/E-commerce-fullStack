@@ -22,6 +22,14 @@ const Container = styled.div`
 const Content = styled.div`
   width: 100%;
   min-height: 100vh;
+
+  .erreur {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+    text-transform: uppercase;
+    font-size: 2rem;
+  }
 `;
 
 const Div1 = styled.div`
@@ -87,7 +95,9 @@ const LinkItem = styled(Link)`
 function Users() {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState("");
+  const [searchUser, setSearchUser] = useState("");
 
+  //Get all users
   useEffect(() => {
     try {
       fetch(`${process.env.REACT_APP_URL_SERVER}/api/users/allUsers`, {
@@ -100,18 +110,43 @@ function Users() {
         .then((data) => {
           if (data.length > 0) {
             setUsers(data);
+            setError("");
           } else {
-            setError(data.message || "Aucun user");
+            setError(data);
           }
         });
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [ searchUser]);
+
+  const search = async () => {
+    if (searchUser) {
+      fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/users/search/${searchUser}`,
+        {
+          method: "GET",
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.message) {
+            setError(data);
+          } else {
+            setUsers(data);
+          }
+        });
+    } else {
+      setError("Veuillez entrer un email");
+    }
+  };
 
   return (
     <Container>
-      <SearchBar />
+      <SearchBar setSearchUser={setSearchUser} search={search} />
       <Content>
         <Header>
           <p>Name</p>
@@ -121,19 +156,21 @@ function Users() {
           <p>Adress</p>
           <p>Validate email</p>
         </Header>
-
-        {users ? (
+        {error && error.message ? (
+          <div className="erreur">{error.message}</div>
+        ) : (
           users.map((user) => {
             return (
-              <LinkItem to={`/admin/users/oneuser/${user.email}`} key={user._id}>
+              <LinkItem
+                to={`/admin/users/oneuser/${user.email}`}
+                key={user._id}
+              >
                 <Div1 className="kj">
                   <OneUser user={user} />
                 </Div1>
               </LinkItem>
             );
           })
-        ) : (
-          <div>{error}</div>
         )}
       </Content>
       <Pagination />

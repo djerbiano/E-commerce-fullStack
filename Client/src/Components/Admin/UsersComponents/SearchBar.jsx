@@ -1,6 +1,4 @@
-import { useState } from "react";
 import styled from "styled-components";
-import { TfiExchangeVertical } from "react-icons/tfi";
 
 const Container = styled.div`
   width: 100%;
@@ -23,7 +21,7 @@ const Container = styled.div`
   }
 
   button {
-    width: 100px; 
+    width: 100px;
     height: 40px;
     border-radius: 5px;
     border: 1px solid gray;
@@ -46,34 +44,32 @@ const Container = styled.div`
     cursor: pointer;
     border: 1px solid gray;
     border-radius: 5px;
-    
+
     &:hover {
       color: white;
       background-color: #1a2753;
     }
   }
 `;
-
-const SearchByNameContainer = styled.div``;
 const SearchByMailContainer = styled.div``;
 
-function SearchBar() {
-  const [searchByName, setSearchByName] = useState(false);
+function SearchBar({ setSearchUser, search }) {
+  const handleSearch = (e) => {
+    e.preventDefault();
+    search();
+  };
   return (
     <Container>
-      <TfiExchangeVertical onClick={() => setSearchByName(!searchByName)} />
-
-      {searchByName ? (
-        <SearchByNameContainer>
-          <input type="text" placeholder="Recherche par Nom" />
-          <button type="submit">Trouver</button>
-        </SearchByNameContainer>
-      ) : (
-        <SearchByMailContainer>
-          <input type="text" placeholder="Recherche par Email" />
-          <button type="submit">Trouver</button>
-        </SearchByMailContainer>
-      )}
+      <SearchByMailContainer>
+      <form onSubmit={handleSearch}>
+        <input
+          type="text"
+          placeholder="Recherche par Email"
+          onChange={(e) => setSearchUser(e.target.value)}
+        />
+        <button  type="submit">Trouver</button>
+      </form>
+      </SearchByMailContainer>
     </Container>
   );
 }

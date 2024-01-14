@@ -4,6 +4,7 @@ import OrdersForUser from "./OrdersForUser";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Logo from "../../../Assets/18830882_1200_B.jpg";
+import ValidationChoise from "../../Modal/ValidationChoise";
 
 const Container = styled.div`
   width: 100%;
@@ -87,6 +88,7 @@ const Info = styled.div`
   margin-left: 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 70%;
   height: 100%;
 
@@ -97,9 +99,10 @@ const Info = styled.div`
   & > :nth-child(2) {
     width: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-around;
     align-items: flex-start;
     flex-wrap: wrap;
+    padding: 20px;
 
     div {
       width: 200px;
@@ -159,6 +162,7 @@ function OneUserDetails() {
   const [user, setUser] = useState({});
   const [err, setErr] = useState("");
   const { email } = useParams();
+const [modalValidation ,setModalValidation] = useState(false); 
 
   //get one user
   useEffect(() => {
@@ -211,40 +215,42 @@ function OneUserDetails() {
               </div>
               <h1>{user.name}</h1>
               <p>UserId: {user._id} </p>
-              <p>Inscrit le: {user.createdAt}</p>
+              <p>Inscrit le: {user.createdAt && user.createdAt.toString().slice(0, 10)}</p> 
             </Picture>
             <Info>
               <h2>Informations</h2>
               <div>
                 <div>
-                  <p>Email</p>
+                  <p>Email:</p>
                   <p>{user.email}</p>
-                  <p>{user.validateEmail ? "Valide" : "Invalide"}</p>
+                  <p>Mail vérifié: {user.validateEmail ? "vérifié" : "non vérifié"}</p>
+                 
                 </div>
                 <div>
-                  <p>Phone</p>
+                  <p>Phone:</p>
                   <p>{user.phone}</p>
                 </div>
 
                 <div>
-                  <p>Adresse</p>
+                  <p>Adresse:</p>
                   <p>{user.address}</p>
                 </div>
               </div>
 
               <ActionButton>
-                <button>Supprimer le compte</button>
-                <button>Bannir le compte</button>
+                <button onClick={() => setModalValidation(true)}>Supprimer le compte</button>
               </ActionButton>
             </Info>
           </InfoContainer>
-          <OrdersForUser />
+          <OrdersForUser user={user} />
         </Section>
       ) : (
         <ErrorDiv>
           <p>{err}</p>
         </ErrorDiv>
       )}
+
+      {modalValidation && <ValidationChoise setModalValidation={setModalValidation} userDeleteByEmail={user.email} />}
     </Container>
   );
 }

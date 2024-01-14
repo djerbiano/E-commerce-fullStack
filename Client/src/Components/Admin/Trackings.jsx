@@ -196,7 +196,7 @@ function Trackings() {
         >
           <p>{searchOrder._id}</p>
           <p>{searchOrder.trackingNumber}</p>
-          <p>{searchOrder.user._id}</p>
+          <p>{searchOrder._id}</p>
           <p>{searchOrder.status}</p>
           <p>{searchOrder.billingAddress}</p>
           <p>{searchOrder.shippingAddress}</p>
