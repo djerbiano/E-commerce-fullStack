@@ -124,9 +124,7 @@ function MainPaiement() {
   const [phoneNumber, setPhoneNumber] = useState("");
 
   // États pour les consentements
-
-  const [marketingConsent, setMarketingConsent] = useState(true);
-  const [paidMediaConsent, setPaidMediaConsent] = useState(false);
+  const [conditionsConsent, setConditionsConsent] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
 
   // Fonction de soumission du formulaire
@@ -148,7 +146,8 @@ function MainPaiement() {
       zipcode,
       city,
       phoneNumber,
-      marketingConsent,
+      conditionsConsent,
+      selectedPayment,
     };
 
     console.log("Données de paiement :", formData);
@@ -337,8 +336,8 @@ function MainPaiement() {
               <CheckboxLabel>
                 <CheckboxInput
                   type="checkbox"
-                  checked={paidMediaConsent}
-                  onChange={(e) => setPaidMediaConsent(e.target.checked)}
+                  checked={conditionsConsent}
+                  onChange={(e) => setConditionsConsent(e.target.checked)}
                 />
                 <p>J'accepte les conditions de vente </p>
               </CheckboxLabel>

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import ProductPanier from "../Components/ProductPanier";
-
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
 const Container = styled.div`
   width: 95vw;
   margin-top: 20px;
@@ -94,6 +95,8 @@ const Paiement = styled.div`
 `;
 
 function PanierContent({ cart }) {
+  const { isAuthenticated } = useContext(AuthContext);
+
   const total = cart.reduce(
     (acc, product) =>
       acc +
@@ -103,9 +106,14 @@ function PanierContent({ cart }) {
   );
 
   // handlePaiemente
+
   const paiement = () => {
-    const token = localStorage.getItem("token");
-    window.location.href = token ? "/paiement" : "/monProfile";
+    if (cart.length === 0) {
+      alert("Veuillez ajouter des articles au panier");
+      window.location.href = "/";
+    } else {
+      window.location.href = isAuthenticated ? "/paiement" : "/monProfile";
+    }
   };
   return (
     <Container>
