@@ -98,9 +98,15 @@ function PanierContent({ cart }) {
     (acc, product) =>
       acc +
       (product.quant >= 1 ? product.price * product.quant : product.price * 1),
-     
+
     0
   );
+
+  // handlePaiemente
+  const paiement = () => {
+    const token = localStorage.getItem("token");
+    window.location.href = token ? "/paiement" : "/monProfile";
+  };
   return (
     <Container>
       <Articles>
@@ -109,7 +115,6 @@ function PanierContent({ cart }) {
         <Products>
           {cart.map((product) => (
             <ProductPanier product={product} key={product.idUnique} />
-        
           ))}
         </Products>
       </Articles>
@@ -126,7 +131,7 @@ function PanierContent({ cart }) {
           <h4>{total} $</h4>
         </div>
         <div>
-          <button>Paiement</button>
+          <button onClick={paiement}>Paiement</button>
         </div>
       </Paiement>
     </Container>

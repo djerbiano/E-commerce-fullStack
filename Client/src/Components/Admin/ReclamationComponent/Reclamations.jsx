@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { IoIosRefresh } from "react-icons/io";
 import { useState, useEffect } from "react";
-import FiltrerTrakings from "./TrakingsComponent/FiltrerTrakings";
+import FiltrerReclamation from "../ReclamationComponent/FiltrerReclamation";
 
 const Container = styled.div`
   width: 100%;
@@ -10,9 +10,9 @@ const Container = styled.div`
   flex-direction: column;
   margin-top: 30px;
   padding: 20px;
-
   .errorMessage {
-    display: ${({ finded }) => (finded ? "flex" : "none")};
+    display: ${({ err }) => (err ? "flex" : "none")};
+    
   }
 `;
 const Title = styled.div`
@@ -117,33 +117,45 @@ const Order = styled.div`
   p {
     text-align: center;
     font-weight: bold;
-    cursor: pointer;
     font-size: 14px;
     width: 150px;
   }
 
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+  button {
+    width: 100px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    background-color: hsl(226.32deg 52.29% 21.37%);
+    color: white;
     cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    &:hover {
+      background-color: hsl(226.32deg 52.29% 21.37% / 65%);
+      transition: all 0.5s ease;
+    }
   }
 `;
 function Reclamations() {
-  const [orders, setOrders] = useState([]);
-  const [filtredOrders, setFiltredOrders] = useState([]);
+  const [reclamations, setReclamations] = useState([]);
+  const [filtredReclamations, setFiltredReclamations] = useState([]);
   const [finded, setFinded] = useState(false);
-  const [searchOrder, setSearchOrder] = useState([]);
-  const [trackingNumber, setTrackingNumber] = useState("");
+  const [searchReclamations, setSearchReclamations] = useState([]);
+  const [reclamId, setReclamId] = useState("");
+  const [err, setErr] = useState(false);
   const handleChange = (e) => {
-    setTrackingNumber(e.target.value);
+    setReclamId(e.target.value);
   };
 
-  const getOneOrder = () => {
-    if (!trackingNumber) {
+  const getOneReclamation = () => {
+    if (!reclamId) {
       setFinded(false);
-      setSearchOrder([]);
+      setErr(false);
+      setSearchReclamations([]);
     } else {
       fetch(
-        `${process.env.REACT_APP_URL_SERVER}/api/orders/${trackingNumber}`,
+        `${process.env.REACT_APP_URL_SERVER}/api/contact/suivi/oneReclamation/${reclamId}`,
         {
           method: "GET",
           headers: {
@@ -154,13 +166,14 @@ function Reclamations() {
         .then((res) => res.json())
         .then((data) => {
           setFinded(true);
-          setSearchOrder(data);
+          setSearchReclamations(data);
+          setErr(true);
         });
     }
   };
-  // get all orders
+  // get all Reclamations
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_URL_SERVER}/api/orders`, {
+    fetch(`${process.env.REACT_APP_URL_SERVER}/api/contact/suivi`, {
       method: "GET",
       headers: {
         token: localStorage.getItem("token"),
@@ -170,10 +183,11 @@ function Reclamations() {
       .then((data) => {
         if (data.length > 0) {
           setFinded(false);
-          setOrders(data);
-          setFiltredOrders(data);
+          setReclamations(data);
+          setFiltredReclamations(data);
         } else {
-          setOrders(data);
+          setErr(false);
+          setReclamations(data);
         }
       });
   }, []);
@@ -186,89 +200,95 @@ function Reclamations() {
           <IoIosRefresh />
         </div>
       </Title>
-      <FiltrerTrakings
-        orders={orders}
-        setOrders={setOrders}
-        setFiltredOrders={setFiltredOrders}
+      <FiltrerReclamation
+        reclamations={reclamations}
+        setFiltredReclamations={setFiltredReclamations}
       />
       <SearchByNameContainer>
         <div>
           <input
             type="text"
-            placeholder="Tracking number"
+            placeholder="Tracking number = Commande ID"
             onChange={handleChange}
           />
-          <button type="button" onClick={getOneOrder}>
+          <button type="button" onClick={getOneReclamation}>
             Trouver
           </button>
         </div>
       </SearchByNameContainer>
       <Header>
-        <p>Order ID</p>
-        <p>Traking number</p>
+        <p>Réclamation ID</p>
+        <p>Commande ID</p>
         <p>User ID</p>
+        <p>Email</p>
         <p>Status</p>
-        <p>BillingAddress</p>
-        <p>ShippingAddress</p>
-        <p>CreatedAt</p>
-        <p>Total</p>
+        <p>Créer</p>
+        <p>Consulter</p>
       </Header>
-      {!finded && orders.length > 0 ? (
-        filtredOrders.map((order) => {
-          const Création = order.createdAt ? new Date(order.createdAt) : null;
+      {!finded && reclamations.length > 0 ? (
+        filtredReclamations.map((reclamation) => {
+          const Création = reclamation.createdAt
+            ? new Date(reclamation.createdAt)
+            : null;
           return (
-            <Order
-              key={order._id}
-              onClick={() =>
-                window.open(
-                  `/admin/trackings/oneTracking/${order.trackingNumber}`,
-                  "_blank"
-                )
-              }
-            >
-              <p>{order._id}</p>
-              <p>{order.trackingNumber}</p>
-              <p>{order.user}</p>
-              <p>{order.status}</p>
-              <p>{order.billingAddress}</p>
-              <p>{order.shippingAddress}</p>
+            <Order key={reclamation._id}>
+              <p>{reclamation._id}</p>
+              <p>{reclamation.order._id}</p>
+              <p>{reclamation.order.user}</p>
+              <p>{reclamation.order.email}</p>
+              <p>{reclamation.status}</p>
               <p>{Création ? Création.toLocaleString() : "N/D"}</p>
-              <p>{order.total}</p>
+              <p>
+                <button
+                  onClick={() =>
+                    window.open(
+                      `/admin/trackings/oneTracking/${reclamation.trackingNumber}`,
+                      "_blank"
+                    )
+                  }
+                >
+                  Voir
+                </button>
+              </p>
             </Order>
           );
         })
       ) : (
-        <p
-          style={{
-            textAlign: "center",
-            padding: "10px",
-            marginTop: "10px",
-            color: "red",
-            fontWeight: "bold",
-            fontSize: "20px",
-          }}
-          className="errorMessage"
-        >
-          {orders.message}
-        </p>
+        <p 
+        style={{
+          textAlign: "center",
+          padding: "10px",
+          marginTop: "10px",
+          color: "red",
+          fontWeight: "bold",
+          fontSize: "20px",
+        }}
+        className={err ? "errorMessage" : ""}>{reclamations.message}</p>
       )}
-      {finded && !searchOrder.message ? (
-        <Order
-          onClick={() =>
-            window.open(
-              `/admin/trackings/oneTracking/${searchOrder.trackingNumber}`,
-              "_blank"
-            )
-          }
-        >
-          <p>{searchOrder._id}</p>
-          <p>{searchOrder.trackingNumber}</p>
-          <p>{searchOrder.user}</p>
-          <p>{searchOrder.status}</p>
-          <p>{searchOrder.billingAddress}</p>
-          <p>{searchOrder.shippingAddress}</p>
-          <p>{searchOrder.createdAt}</p>
-          <p>{searchOrder.total}</p>
+      {finded && !searchReclamations.message ? (
+        <Order key={searchReclamations._id}>
+          <p>{searchReclamations._id}</p>
+          <p>{searchReclamations.order._id}</p>
+          <p>{searchReclamations.order.user}</p>
+          <p>{searchReclamations.order.email}</p>
+          <p>{searchReclamations.status}</p>
+          <p>
+            {searchReclamations
+              ? searchReclamations.createdAt.toLocaleString()
+              : "N/D"}
+          </p>
+          <p>
+            <button
+              onClick={() =>
+                window.open(
+                  `/admin/trackings/oneTracking/${searchReclamations.trackingNumber}`,
+                  "_blank"
+                )
+              }
+            >
+              Voir
+            </button>
+          </p>
         </Order>
       ) : (
         <p
@@ -281,11 +301,11 @@ function Reclamations() {
             fontSize: "20px",
           }}
         >
-          {searchOrder.message}
+          {searchReclamations.message}
         </p>
       )}
     </Container>
   );
 }
 
-export default Reclamations; 
+export default Reclamations;

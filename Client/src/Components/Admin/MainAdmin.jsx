@@ -7,7 +7,7 @@ import Products from "../Admin/Products";
 import Stocks from "../Admin/Stocks";
 import Trackings from "../Admin/Trackings";
 import Orders from "../Admin/Orders";
-import Reclamations from "./Reclamations";
+import Reclamations from "./ReclamationComponent/Reclamations";
 
 const Container = styled.div`
   width: 100%;

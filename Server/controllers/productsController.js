@@ -170,7 +170,7 @@ const controller = {
             ],
           },
 
-          {
+          /* {
             color: color2,
             sizes: [
               {
@@ -178,7 +178,7 @@ const controller = {
                 quantity: quantity2,
               },
             ],
-          },
+          },*/
         ],
       });
 
@@ -245,12 +245,33 @@ const controller = {
           "category",
           "stock",
           "color",
+          "color1",
           "size",
           "quantity",
         ];
-
+        console.log(req.body.desc1);
+        console.log(updateProd.description.desc1);
         for (const field of allowedFields) {
           if (req.body[field] !== undefined) {
+            if (req.body.quantity1 !== undefined) {
+              if (
+                updateProd.colors.length === 1 &&
+                updateProd.colors[0].sizes.length === 1
+              ) {
+                updateProd.colors[0].sizes[0].quantity = parseInt(
+                  req.body.quantity1
+                );
+                updateProd.colors[0].color = req.body.color1;
+                if (req.body.sizes.length > 0) {
+                  updateProd.colors[0].sizes[0].size = req.body.sizes;
+                }
+              }
+            }
+            updateProd.description = {
+              desc1: req.body.desc1 || updateProd.description.desc1,
+              desc2: req.body.desc2 || updateProd.description.desc2,
+              desc3: req.body.desc3 || updateProd.description.desc3,
+            };
             updateProd[field] = req.body[field];
           }
         }

@@ -207,7 +207,7 @@ function AddProduct() {
       const formData = new FormData();
 
       formData.append("title", document.getElementById("title").value);
-      console.log(formData)
+      console.log(formData);
       formData.append(
         "regularPrice",
         document.getElementById("regularPrice").value
@@ -240,17 +240,13 @@ function AddProduct() {
       formData.append("sizes", document.getElementById("sizes").value);
       formData.append("quantity1", document.getElementById("quantity1").value);
 
-
-      formData.append("color2", document.getElementById("color2").value);
-      formData.append("sizes2", document.getElementById("sizes2").value);
-      formData.append("quantity2", document.getElementById("quantity2").value);
-
-    
+      //formData.append("color2", document.getElementById("color2").value);
+      //formData.append("sizes2", document.getElementById("sizes2").value);
+      //formData.append("quantity2", document.getElementById("quantity2").value);
 
       let pic1 = document.getElementById("pic1").files[0];
       let pic2 = document.getElementById("pic2").files[0];
       let pic3 = document.getElementById("pic3").files[0];
-
 
       if (!pic1 || !pic2 || !pic3) {
         return (
@@ -271,8 +267,6 @@ function AddProduct() {
 
       const data = await response.json();
 
-   
-
       if (data.message) {
         setOpModal(true);
         setResponseServer(data.message);
@@ -287,7 +281,7 @@ function AddProduct() {
       }
     } catch (error) {
       setOpModal(true);
-      setResponseServer( error.message);
+      setResponseServer(error.message);
 
       console.error(error);
     }
@@ -406,7 +400,7 @@ function AddProduct() {
             <Color>
               <p>Colors :</p>
               <div>
-                <label htmlFor="color1">Color 1</label>
+                <label htmlFor="color1">Color {/*1*/}</label>
                 <input type="text" id="color1" />
                 <label htmlFor="sizes">Size</label>
                 <select id="sizes">
@@ -423,24 +417,25 @@ function AddProduct() {
                 <label htmlFor="quantity1">Quantity</label>
                 <input type="number" id="quantity1" placeholder="Quantity" />
               </div>
-              <div>
-              <label htmlFor="color2">Color 2</label>
-              <input type="text" id="color2" />
-              <label htmlFor="sizes2">Size</label>
-              <select id="sizes2">
-                <option value="">Select Size</option>
-                <option value="XS">XS</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-                <option value="2XL">2XL</option>
-                <option value="3XL">3XL</option>
-                <option value="4XL">4XL</option>
-              </select>
-              <label htmlFor="quantity2">Quantity</label>
-              <input type="number" id="quantity2" placeholder="Quantity" />
-            </div>
+              {/* si besoin de plusieurs colors*/}
+              {/*<div>
+                <label htmlFor="color2">Color 2</label>
+                <input type="text" id="color2" />
+                <label htmlFor="sizes2">Size</label>
+                <select id="sizes2">
+                  <option value="">Select Size</option>
+                  <option value="XS">XS</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="2XL">2XL</option>
+                  <option value="3XL">3XL</option>
+                  <option value="4XL">4XL</option>
+                </select>
+                <label htmlFor="quantity2">Quantity</label>
+                <input type="number" id="quantity2" placeholder="Quantity" />
+              </div>*/}
             </Color>
 
             <ContainerButton>

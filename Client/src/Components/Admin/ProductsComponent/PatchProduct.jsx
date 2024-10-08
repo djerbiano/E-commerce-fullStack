@@ -247,20 +247,21 @@ function PatchProduct({ setPatchProduct, patchProductDetails }) {
       formData.append("color1", document.getElementById("color01").value);
       formData.append("sizes", document.getElementById("sizes").value);
       formData.append("quantity1", document.getElementById("quantity1").value);
-
+     
       const response = await fetch(
         `${process.env.REACT_APP_URL_SERVER}/api/products/updateProduct/${patchProductDetails}`,
         {
           method: "PATCH",
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": "application/x-www-form-urlencoded", 
 
             token: localStorage.getItem("token"),
           },
           body: new URLSearchParams(formData).toString(),
+          
+          
         }
       );
-
       if (!response.ok) {
         const error = await response.json();
         setOpModal(true);

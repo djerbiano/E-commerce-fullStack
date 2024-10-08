@@ -13,6 +13,7 @@ const productsRoute = require("./routes/products");
 const authRoute = require("./routes/auth");
 const orderRoute = require("./routes/order");
 const reclamationRoute = require("./routes/contact");
+const suiviReclamationRoute = require("./routes/reclamation");
 
 const server = express();
 server.use(cors());
@@ -44,6 +45,7 @@ server.use("/api/users", userRoute);
 server.use("/api/products", productsRoute);
 server.use("/api/orders", orderRoute);
 server.use("/api/contact", reclamationRoute);
+server.use("/api/contact/suivi", suiviReclamationRoute);
 server.all("*", (req, res) => {
   res.status(404).send("<h1>Endpoint inexistant</h1>");
 });

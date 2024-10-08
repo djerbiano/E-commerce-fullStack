@@ -20,6 +20,7 @@ import Admin from "./Containers/Admin";
 import OneUserDetails from "./Components/Admin/UsersComponents/OneUserDetails";
 import OneProduct from "./Components/Admin/ProductsComponent/OneProduct";
 import OneTrakingsCommande from "./Components/Admin/TrakingsComponent/OneTrakingsCommande";
+import MainPaiement from "./Components/paiement/MainPaiement";
 
 const AppContainer = styled.div`
   display: flex;
@@ -73,6 +74,7 @@ function App() {
               <Route path="/réclamations" element={<Reclamations />} />
               <Route path="/nousContacter" element={<NousContacter />} />
               <Route path="/panier" element={<PanierContent cart={cart} />} />
+              <Route path="/paiement" element={<MainPaiement />} />
               <Route path="/favoris" element={<FavoContent />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/dashboard" element={<Admin />} />
