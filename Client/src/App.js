@@ -74,7 +74,7 @@ function App() {
               <Route path="/réclamations" element={<Reclamations />} />
               <Route path="/nousContacter" element={<NousContacter />} />
               <Route path="/panier" element={<PanierContent cart={cart} />} />
-              <Route path="/paiement" element={<MainPaiement />} />
+              <Route path="/paiement" element={<MainPaiement cart={cart} />} />
               <Route path="/favoris" element={<FavoContent />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/dashboard" element={<Admin />} />

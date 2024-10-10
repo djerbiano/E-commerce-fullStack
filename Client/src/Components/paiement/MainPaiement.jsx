@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import visaCardLogo from "../../Assets/vitrophanie-CB-1.jpg";
+import paypalLogo from "../../Assets/Paypal_2014_logo.jpg";
+import FinishPaiementModal from "./FinishPaiement.jsx";
 
 import styled from "styled-components";
 
@@ -110,22 +113,26 @@ const PaymentIcon = styled.img`
   border-radius: 5px;
 `;
 
-function MainPaiement() {
-  // États pour les informations de contact
-  const [email, setEmail] = useState("");
+function MainPaiement({ cart }) {
+  const [modalFinishPaiement, setModalFinishPaiement] = useState(false);
+  const [email, setEmail] = useState("test@test");
+  const [firstName, setFirstName] = useState("test");
+  const [lastName, setLastName] = useState("test");
+  const [address1, setAddress1] = useState("test");
+  const [address2, setAddress2] = useState("test");
+  const [zipcode, setZipcode] = useState("test");
+  const [city, setCity] = useState("test");
+  const [phoneNumber, setPhoneNumber] = useState("test");
+  const [conditionsConsent, setConditionsConsent] = useState(true);
+  const [selectedPayment, setSelectedPayment] = useState("paypal");
 
-  // États pour les informations d'adresse
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
-  const [zipcode, setZipcode] = useState("");
-  const [city, setCity] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const total = cart.reduce(
+    (acc, product) =>
+      acc +
+      (product.quant >= 1 ? product.price * product.quant : product.price * 1),
 
-  // États pour les consentements
-  const [conditionsConsent, setConditionsConsent] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState(null);
+    0
+  );
 
   // Fonction de soumission du formulaire
   const handleSubmit = (e) => {
@@ -150,13 +157,13 @@ function MainPaiement() {
       selectedPayment,
     };
 
-    console.log("Données de paiement :", formData);
-    // Ici, vous pouvez envoyer les données au serveur ou procéder au paiement
+    console.log("Données de paiement :", formData, cart);
+    console.log(cart);
+    setModalFinishPaiement(true);
   };
 
   return (
     <MainContainer>
-      {/* Section Contact */}
       <Section>
         <SectionHeader>
           <SectionTitle>Contact</SectionTitle>
@@ -182,8 +189,6 @@ function MainPaiement() {
               />
             </FormGroup>
           </FormRow>
-
-          {/* Section Adresse */}
           <Section>
             <SectionHeader>
               <SectionTitle>Adresse</SectionTitle>
@@ -306,8 +311,6 @@ function MainPaiement() {
                 />
               </FormGroup>
             </FormRow>
-
-            {/* Téléphone (Facultatif) */}
             <FormRow>
               <FormGroup style={{ flex: "1 1 100%", marginRight: "0" }}>
                 <Label htmlFor="phoneNumber">Téléphone (Facultatif)</Label>
@@ -325,13 +328,9 @@ function MainPaiement() {
                 />
               </FormGroup>
             </FormRow>
-
-            {/* Pays (Fixe à France) */}
             <FormRow>
               <strong>Pays:</strong>&nbsp; <span>France</span>
             </FormRow>
-
-            {/* Consentements */}
             <CheckboxContainer>
               <CheckboxLabel>
                 <CheckboxInput
@@ -355,13 +354,13 @@ function MainPaiement() {
 
               <PaymentIcon
                 alt="visa"
-                src="https://www.reussir-mon-ecommerce.fr/wp-content/uploads/2016/03/vitrophanie-CB-1.jpg"
+                src={visaCardLogo}
                 selected={selectedPayment === "visa"}
-                onClick={() => setSelectedPayment("visa")} 
+                onClick={() => setSelectedPayment("visa")}
               />
               <PaymentIcon
                 alt="PAYPAL"
-                src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Paypal_2014_logo.png"
+                src={paypalLogo}
                 selected={selectedPayment === "paypal"}
                 onClick={() => setSelectedPayment("paypal")}
               />
@@ -372,6 +371,11 @@ function MainPaiement() {
           </Section>
         </Form>
       </Section>
+
+      {
+      modalFinishPaiement &&  <FinishPaiementModal totallPrice={total} methodePaiement={selectedPayment} />
+      }
+     
     </MainContainer>
   );
 }
