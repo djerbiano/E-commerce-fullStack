@@ -115,7 +115,7 @@ const PaymentIcon = styled.img`
 
 function MainPaiement({ cart }) {
   const [modalFinishPaiement, setModalFinishPaiement] = useState(false);
-  const [email, setEmail] = useState("test@test");
+  const [email, setEmail] = useState("saberghoudi2222@hotmail.fr");
   const [firstName, setFirstName] = useState("test");
   const [lastName, setLastName] = useState("test");
   const [address1, setAddress1] = useState("test");
@@ -125,6 +125,7 @@ function MainPaiement({ cart }) {
   const [phoneNumber, setPhoneNumber] = useState("test");
   const [conditionsConsent, setConditionsConsent] = useState(true);
   const [selectedPayment, setSelectedPayment] = useState("paypal");
+  const [dataOrder, setDataOrder] = useState(null);
 
   const total = cart.reduce(
     (acc, product) =>
@@ -135,6 +136,7 @@ function MainPaiement({ cart }) {
   );
 
   // Fonction de soumission du formulaire
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // Validation basique
@@ -144,7 +146,7 @@ function MainPaiement({ cart }) {
     }
 
     // Collecte des données
-    const formData = {
+    let formData = {
       email,
       firstName,
       lastName,
@@ -156,9 +158,7 @@ function MainPaiement({ cart }) {
       conditionsConsent,
       selectedPayment,
     };
-
-    console.log("Données de paiement :", formData, cart);
-    console.log(cart);
+    setDataOrder(formData);
     setModalFinishPaiement(true);
   };
 
@@ -372,10 +372,13 @@ function MainPaiement({ cart }) {
         </Form>
       </Section>
 
-      {
-      modalFinishPaiement &&  <FinishPaiementModal totallPrice={total} methodePaiement={selectedPayment} />
-      }
-     
+      {modalFinishPaiement && (
+        <FinishPaiementModal
+          totallPrice={total}
+          dataOrder={dataOrder}
+          cart={cart}
+        />
+      )}
     </MainContainer>
   );
 }

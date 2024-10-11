@@ -138,28 +138,74 @@ const Loading = styled.div`
   }
 `;
 
-function FinishPaiement({ totallPrice, methodePaiement }) {
+function FinishPaiement({ totallPrice, dataOrder, cart }) {
   const [typePaiement, setTypePaiement] = useState(null);
   const [loading, setLoading] = useState(false);
   const [validatePaiement, setValidatePaiement] = useState(false);
 
   useEffect(() => {
-    if (methodePaiement === "paypal") {
+    if (dataOrder.selectedPayment === "paypal") {
       setTypePaiement(true);
     } else {
       setTypePaiement(false);
     }
-  }, [methodePaiement]);
+  }, [dataOrder]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+
+    let formData = {
+      products: [],
+    };
+
+    cart.forEach((product) => {
+      formData.products.push({
+        product: product.id,
+        color: product.color,
+        size: product.size,
+        quantity: product.quant,
+        price: product.price,
+      });
+    });
+
+    let order = {
+      products: formData.products,
+      user: userId,
+      total: totallPrice,
+      billingAddress: dataOrder.address1,
+      shippingAddress: dataOrder.address1,
+    };
+
+    const response = await fetch(
+      `${process.env.REACT_APP_URL_SERVER}/api/orders/addOrder/${userId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+        body: JSON.stringify(order),
+      }
+    );
+
+    console.log(response);
+
     setLoading(true);
     setTimeout(() => {
-      setValidatePaiement(true);
-      setTimeout(() => {
-        window.location.href = "/";
-        sessionStorage.clear();
-      }, 3000);
+      if (!response.ok === true) {
+        setLoading(true);
+      } else {
+        setValidatePaiement(true);
+        setTimeout(() => {
+          window.location.href = "/";
+          sessionStorage.clear();
+        }, 4000);
+      }
     }, 3000);
+
   };
 
   return typePaiement ? (

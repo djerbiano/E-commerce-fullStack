@@ -112,7 +112,7 @@ function PanierContent({ cart }) {
       alert("Veuillez ajouter des articles au panier");
       window.location.href = "/";
     } else {
-      window.location.href = isAuthenticated ? "/paiement" : "/monProfile";
+      window.location.href = isAuthenticated === "true"  ? "/paiement" : "/monProfile";
     }
   };
   return (
