@@ -68,6 +68,7 @@ function ValidationChoise({
   patchProductDetails,
   orderDeleteTrackingNumber,
   userDeleteByEmail,
+  reclamationDeleteById,
 }) {
   const navigate = useNavigate();
   // delete product
@@ -141,6 +142,31 @@ function ValidationChoise({
       console.error("Error deleting product:", error);
     }
   };
+
+  //delete reclamation
+  const deleteThisReclamation = async () => {
+    try {
+      let response = await fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/contact/suivi/delete/${reclamationDeleteById}`,
+        {
+          method: "DELETE",
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      let data = await response.json();
+
+      setTimeout(() => {
+        window.alert(data.message);
+        navigate(`/admin/reclamations`);
+      }, 1000);
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+
   return (
     <Container>
       <Content>
@@ -152,6 +178,8 @@ function ValidationChoise({
                 deleteThisOrder();
               } else if (patchProductDetails) {
                 deleteThisProduct();
+              } else if (reclamationDeleteById) {
+                deleteThisReclamation();
               } else {
                 deleteThisUser();
               }

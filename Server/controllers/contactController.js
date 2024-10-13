@@ -6,13 +6,14 @@ const sendMailReclamationConfirmation = require("../mails/reclamation");
 const sendMailContact = require("../mails/contactMail");
 const { patch } = require("../routes/reclamation");
 const controller = {
-  //Get all order
+  
   reclamationFromUser: async (req, res) => {
     try {
       //Vérification du token
       let compteExiste = await User.findOne({ _id: req.user.id });
 
       if (!compteExiste) {
+       
         return handleErrors(res, 403, {
           message: " Utilisateur inexistant ",
         });
@@ -29,7 +30,7 @@ const controller = {
 
       if (!user || !order) {
         return handleErrors(res, 403, {
-          message: " Utilisateur inexistant ",
+          message: " Utilisateur ou numéro de commande inexistant ",
         });
       }
 

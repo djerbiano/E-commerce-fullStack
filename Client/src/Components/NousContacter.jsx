@@ -105,6 +105,9 @@ function NousContacter() {
 
     setOpModal(true);
     setContentModal(data.message);
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 500);
   };
   return (
     <Container>

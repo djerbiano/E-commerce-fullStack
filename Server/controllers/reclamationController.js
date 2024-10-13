@@ -38,7 +38,7 @@ const controller = {
 
   //Get one reclamation
   getOneReclamation: async (req, res) => {
-try {
+    try {
       //Vérification du token
       let compteExiste = await User.findOne({ _id: req.user.id });
       if (compteExiste === null || compteExiste.isAdmin === false) {
@@ -47,11 +47,10 @@ try {
             "Vous devez être un administrateur pour effectuer cette requête",
         });
       }
-  
       const reclamation = await Reclamation.findOne({
         _id: req.params.reclamId,
-      });
-  
+      }).populate("order");
+
       if (reclamation) {
         return res.status(200).json(reclamation);
       } else {
@@ -59,13 +58,11 @@ try {
           message: "Aucune reclamation n'existe dans la base de données",
         });
       }
-  
-} catch (error) {
-  return handleErrors(res, 500, {
-    message: `Une erreur est survenue, veuillez reessayer plus tard ${error}`,
-  });
-  
-}
+    } catch (error) {
+      return handleErrors(res, 500, {
+        message: `Une erreur est survenue, veuillez reessayer plus tard ${error}`,
+      });
+    }
   },
   //Update reclamation
   updateReclamation: async (req, res) => {
@@ -82,31 +79,29 @@ try {
 
       const reclamation = await Reclamation.findOne({
         _id: req.params.reclamationId,
-      });
+      }).populate("order");
+      if (reclamation) {
+        reclamation.messages.push(req.body);
+        reclamation.status = req.body.message;
 
-      if (order) {
-        order.status = req.body.status || order.status;
-        if (req.body.statusHistory) {
-          order.statusHistory.push(...req.body.statusHistory);
-        }
-
-        const updatedOrder = await order.save();
+        const updatedReclamation = await reclamation.save();
 
         ///////// send mail   //////////
 
-        const user = await User.findById(updatedOrder.user);
-        const newStatus = req.body.status;
+        const user = await User.findById(updatedReclamation.order.user);
+        const newStatus = req.body.message;
         sendMailOrderStatusUpdate(user.email, newStatus);
 
         ///////////////////////////////
 
-        return res.status(200).json(updatedOrder);
+        return res.status(200).json(updatedReclamation);
       } else {
         return handleErrors(res, 404, {
-          message: "Aucune commande n'existe dans la base de données",
+          message: "Aucune réclamation n'existe dans la base de données",
         });
       }
     } catch (error) {
+      console.log(error);
       return handleErrors(res, 400, {
         message: error.message,
       });
@@ -126,26 +121,19 @@ try {
         });
       }
 
-      const order = await Order.findOne({
-        trackingNumber: req.params.orderDeleteTrackingNumber,
-      });
+      const reclamation = await Reclamation.findOne({
+        _id: req.params.reclamationId,
+      }).populate("order");
 
-      if (order) {
-        await Order.findByIdAndDelete(order._id);
-
-        ///////// send mail   //////////
-
-        const user = await User.findById(order.user);
-        sendMailOrderCancellation(user.email);
-
-        ///////////////////////////////
+      if (reclamation) {
+        await Reclamation.findByIdAndDelete(reclamation._id);
 
         return handleErrors(res, 200, {
-          message: "La commande a bien été supprimée",
+          message: "La réclamation a bien été supprimée",
         });
       } else {
         return handleErrors(res, 404, {
-          message: "Aucune commande n'existe dans la base de données",
+          message: "Aucune réclamation n'existe dans la base de données",
         });
       }
     } catch (error) {

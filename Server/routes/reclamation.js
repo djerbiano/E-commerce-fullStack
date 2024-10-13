@@ -12,6 +12,9 @@ route.get("/oneReclamation/:reclamId", virifyToken, controller.getOneReclamation
 
 
 // Update Réclamation
-route.post("/:reclamationId", virifyToken, controller.updateReclamation);
+route.patch("/:reclamationId", virifyToken, controller.updateReclamation);
+
+// Delete reclamation
+route.delete("/delete/:reclamationId", virifyToken, controller.deleteReclamation);
 
 module.exports = route;

@@ -115,14 +115,14 @@ const PaymentIcon = styled.img`
 
 function MainPaiement({ cart }) {
   const [modalFinishPaiement, setModalFinishPaiement] = useState(false);
-  const [email, setEmail] = useState("saberghoudi2222@hotmail.fr");
-  const [firstName, setFirstName] = useState("test");
-  const [lastName, setLastName] = useState("test");
-  const [address1, setAddress1] = useState("test");
-  const [address2, setAddress2] = useState("test");
-  const [zipcode, setZipcode] = useState("test");
-  const [city, setCity] = useState("test");
-  const [phoneNumber, setPhoneNumber] = useState("test");
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [zipcode, setZipcode] = useState("");
+  const [city, setCity] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [conditionsConsent, setConditionsConsent] = useState(true);
   const [selectedPayment, setSelectedPayment] = useState("paypal");
   const [dataOrder, setDataOrder] = useState(null);

@@ -12,6 +12,7 @@ import SingleProduct from "./Containers/SingleProduct";
 import MyProfile from "./Containers/MyProfile";
 import MesCommandes from "./Containers/MesCommandes";
 import Reclamations from "./Containers/Reclamations";
+import OneTrakingsReclamation from "./Components/Admin/ReclamationComponent/OneTrakingsReclamation.jsx";
 import NousContacter from "./Components/NousContacter";
 import PanierContent from "./Containers/PanierContent";
 import NotFound404 from "./Components/NotFound404";
@@ -55,9 +56,9 @@ function App() {
 
   //get cart
   useEffect(() => {
-    const storedCart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    const storedCart = JSON.parse(sessionStorage.getItem("cart")) || [];
     setCart(storedCart);
-}, []);
+  }, []);
 
   return (
     <BrowserRouter>
@@ -79,12 +80,22 @@ function App() {
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/dashboard" element={<Admin />} />
               <Route path="/admin/users" element={<Admin />} />
-              <Route path="/admin/users/oneUser/:email" element={<OneUserDetails />} />
+              <Route path="/admin/réclamations/oneReclamation/:id" element={<OneTrakingsReclamation />}/>
+              <Route
+                path="/admin/users/oneUser/:email"
+                element={<OneUserDetails />}
+              />
               <Route path="/admin/products" element={<Admin />} />
-              <Route path="/admin/products/oneProduct/:id" element={<OneProduct />} />
+              <Route
+                path="/admin/products/oneProduct/:id"
+                element={<OneProduct />}
+              />
               <Route path="/admin/stocks" element={<Admin />} />
               <Route path="/admin/trackings" element={<Admin />} />
-              <Route path="/admin/trackings/oneTracking/:id" element={<OneTrakingsCommande />} />
+              <Route
+                path="/admin/trackings/oneTracking/:id"
+                element={<OneTrakingsCommande />}
+              />
               <Route path="/admin/orders" element={<Admin />} />
               <Route path="/admin/reclamations" element={<Admin />} />
               <Route path="*" element={<NotFound404 />} />

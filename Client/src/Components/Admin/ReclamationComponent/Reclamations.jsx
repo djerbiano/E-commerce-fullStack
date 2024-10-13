@@ -12,7 +12,6 @@ const Container = styled.div`
   padding: 20px;
   .errorMessage {
     display: ${({ err }) => (err ? "flex" : "none")};
-    
   }
 `;
 const Title = styled.div`
@@ -208,7 +207,7 @@ function Reclamations() {
         <div>
           <input
             type="text"
-            placeholder="Tracking number = Commande ID"
+            placeholder="Réclamation ID"
             onChange={handleChange}
           />
           <button type="button" onClick={getOneReclamation}>
@@ -225,12 +224,14 @@ function Reclamations() {
         <p>Créer</p>
         <p>Consulter</p>
       </Header>
+   
       {!finded && reclamations.length > 0 ? (
         filtredReclamations.map((reclamation) => {
           const Création = reclamation.createdAt
             ? new Date(reclamation.createdAt)
             : null;
           return (
+          
             <Order key={reclamation._id}>
               <p>{reclamation._id}</p>
               <p>{reclamation.order._id}</p>
@@ -242,7 +243,7 @@ function Reclamations() {
                 <button
                   onClick={() =>
                     window.open(
-                      `/admin/trackings/oneTracking/${reclamation.trackingNumber}`,
+                      `/admin/réclamations/oneReclamation/${reclamation._id}`,
                       "_blank"
                     )
                   }
@@ -254,16 +255,19 @@ function Reclamations() {
           );
         })
       ) : (
-        <p 
-        style={{
-          textAlign: "center",
-          padding: "10px",
-          marginTop: "10px",
-          color: "red",
-          fontWeight: "bold",
-          fontSize: "20px",
-        }}
-        className={err ? "errorMessage" : ""}>{reclamations.message}</p>
+        <p
+          style={{
+            textAlign: "center",
+            padding: "10px",
+            marginTop: "10px",
+            color: "red",
+            fontWeight: "bold",
+            fontSize: "20px",
+          }}
+          className={err ? "errorMessage" : ""}
+        >
+          {reclamations.message}
+        </p>
       )}
       {finded && !searchReclamations.message ? (
         <Order key={searchReclamations._id}>
@@ -277,11 +281,12 @@ function Reclamations() {
               ? searchReclamations.createdAt.toLocaleString()
               : "N/D"}
           </p>
+
           <p>
             <button
               onClick={() =>
                 window.open(
-                  `/admin/trackings/oneTracking/${searchReclamations.trackingNumber}`,
+                  `/admin/réclamations/oneReclamation/${searchReclamations._id}`,
                   "_blank"
                 )
               }

@@ -4,12 +4,11 @@ const { User } = require("../models/Users");
 
 const ReclamationsSchema = mongoose.Schema(
   {
-    status:{
+    status: {
       enum: ["En attente", "Traitement", "Cloturer"],
       type: String,
       required: true,
-      default: "En attente"
-
+      default: "En attente",
     },
     order: {
       type: mongoose.Schema.Types.ObjectId,
@@ -26,6 +25,9 @@ const ReclamationsSchema = mongoose.Schema(
         message: {
           type: String,
           required: true,
+        },
+        startDate: { type: Date, 
+          default: () => new Date() 
         },
       },
     ],
