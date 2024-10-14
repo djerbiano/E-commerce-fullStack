@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { ImSad } from "react-icons/im";
 import { FaArrowUp } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   background-color: white;
@@ -72,8 +73,9 @@ const Title = styled.div`
 `;
 
 function Reclamation() {
+  const navigate = useNavigate();
   return (
-    <Container>
+    <Container onClick={() => navigate("/admin/reclamations")}>
       <Content>
         <Picture>
           <ImSad />

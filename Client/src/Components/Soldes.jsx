@@ -185,6 +185,32 @@ function Soldes() {
     };
     fetchData();
   }, []);
+
+  
+  // Ajouter au favoris
+  const addToFavorite = async (productId) => {
+    try {
+      const idProduct = productId;
+
+      const response = await fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/products/addFavoritesProducts/${idProduct}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      const data = await response.json();
+   
+
+      alert(data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Container>
       {product &&
@@ -196,13 +222,13 @@ function Soldes() {
                 alt={product.title}
               />
               <div>Soldé</div>
-              <GrFavorite title="Ajouter aux favoris" />
+              <GrFavorite title="Ajouter aux favoris"  onClick={() => addToFavorite(product._id)} />
             </ContainerPhoto>
             <h4>{product.title}</h4>
 
             <Price>
               <h4>{product.regularPrice} $</h4>
-              <h4>150$</h4>
+              <h4>{product.salePrice} $</h4>
             </Price>
           </SingleProduct>
         ))}

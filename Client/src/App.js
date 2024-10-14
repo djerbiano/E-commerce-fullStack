@@ -22,6 +22,7 @@ import OneUserDetails from "./Components/Admin/UsersComponents/OneUserDetails";
 import OneProduct from "./Components/Admin/ProductsComponent/OneProduct";
 import OneTrakingsCommande from "./Components/Admin/TrakingsComponent/OneTrakingsCommande";
 import MainPaiement from "./Components/paiement/MainPaiement";
+import RegisterNewUser from "./Components/Register/RegisterNewUser.jsx";
 
 const AppContainer = styled.div`
   display: flex;
@@ -71,6 +72,7 @@ function App() {
               <Route path="/produits" element={<FilterProducts />} />
               <Route path="/singleProduct/:id" element={<SingleProduct />} />
               <Route path="/monProfile" element={<MyProfile />} />
+              <Route path="/register" element={<RegisterNewUser />} />
               <Route path="/mesCommandes" element={<MesCommandes />} />
               <Route path="/réclamations" element={<Reclamations />} />
               <Route path="/nousContacter" element={<NousContacter />} />

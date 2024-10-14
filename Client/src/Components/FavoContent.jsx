@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import Logo from "../Assets/18830882_1200_B.jpg"
+import { useEffect, useState } from "react";
+import { MdDeleteForever } from "react-icons/md";
 
 const FavoritesContainer = styled.div`
   display: flex;
@@ -25,20 +26,19 @@ const ProductCard = styled.div`
   width: 300px;
   text-align: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
 
   img {
-    max-width: 100%;
+    max-width: 80%;
     border-radius: 8px;
     margin-bottom: 10px;
   }
 
   h3 {
-    font-size: 1.5rem;
     margin-bottom: 10px;
   }
 
   p {
-    font-size: 1.2rem;
     margin-bottom: 10px;
   }
 
@@ -55,35 +55,97 @@ const ProductCard = styled.div`
       background-color: #1a2753;
     }
   }
+
+  & > :last-child {
+    color: #ff0000;
+    cursor: pointer;
+    font-size: 30px;
+    position: absolute;
+    top: 2%;
+    right: 2%;
+
+    &:hover {
+      box-shadow: 0 0 5px black;
+      transform: scale(1.1);
+      transition: all 0.3s;
+      border-radius: 50px;
+    }
+  }
 `;
 
 const FavoContent = () => {
+  const [favoriteListe, setFavoriteListe] = useState([]);
+  //Get all favorite products
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_URL_SERVER}/api/users/favoritesProducts`,
+          {
+            method: "GET",
+            headers: {
+              token: localStorage.getItem("token"),
+            },
+          }
+        );
+
+        const data = await response.json();
+        setFavoriteListe(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // delete favorite product
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/products/deleteFavoritesProducts/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      const data = await response.json();
+      alert(data.message);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <FavoritesContainer>
       <h2>Produits Favoris</h2>
 
-      <ProductContainer>
-        <ProductCard>
-          <img src={Logo} alt="" />
-          <h3>titre</h3>
-          <p>Prix: 200€</p>
-          <button>Ajouter au Panier</button>
-        </ProductCard>
+      {favoriteListe && favoriteListe.length > 0 ? (
+        <ProductContainer>
+          {favoriteListe.map((product) => (
+            <ProductCard key={product._id}>
+              <img
+                src={
+                  product &&
+                  `${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic1}`
+                }
+                alt={product && product.title}
+              />
 
-        <ProductCard>
-        <img src={Logo} alt="" />
-        <h3>titre</h3>
-        <p>Prix: 200€</p>
-        <button>Ajouter au Panier</button>
-      </ProductCard>
-
-      <ProductCard>
-      <img src={Logo} alt="" />
-      <h3>titre</h3>
-      <p>Prix: 200€</p>
-      <button>Ajouter au Panier</button>
-    </ProductCard>
-      </ProductContainer>
+              <h3>{product && product.title}</h3>
+              <p>
+                {product.salePrice ? product.salePrice : product.regularPrice}€
+              </p>
+              <button>Ajouter au Panier</button>
+              <MdDeleteForever onClick={() => handleDelete(product._id)} />
+            </ProductCard>
+          ))}
+        </ProductContainer>
+      ) : (
+        <p>Aucun produit favoris trouvé.</p>
+      )}
     </FavoritesContainer>
   );
 };

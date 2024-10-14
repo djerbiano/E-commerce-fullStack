@@ -161,7 +161,7 @@ function Orders() {
   };
   // get all orders
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_URL_SERVER}/api/orders`, {
+   fetch(`${process.env.REACT_APP_URL_SERVER}/api/orders`, {
       method: "GET",
       headers: {
         token: localStorage.getItem("token"),
@@ -171,12 +171,13 @@ function Orders() {
       .then((data) => {
         if (data.length > 0) {
           setFinded(false);
-          setOrders(data);
+          setOrders(data);  
           setFiltredOrders(data);
+         
         } else {
           setOrders(data);
         }
-      });
+      }); 
   }, []);
 
   return (
@@ -214,7 +215,7 @@ function Orders() {
         <p>CreatedAt</p>
         <p>Total</p>
       </Header>
-      {!finded && orders.length > 0 ? (
+      {!finded && orders.length > 0   ? (
         filtredOrders.map((order) => {
           const Création = order.createdAt ? new Date(order.createdAt) : null;
           return (
@@ -284,6 +285,23 @@ function Orders() {
         >
           {searchOrder.message}
         </p>
+      )}
+
+      {!finded && orders.message ? (
+        <p
+          style={{
+            textAlign: "center",
+            padding: "10px",
+            marginTop: "10px",
+            color: "red",
+            fontWeight: "bold",
+            fontSize: "20px",
+          }}
+        >
+          {orders.message}
+        </p>
+      ) : (
+        ""
       )}
     </Container>
   );

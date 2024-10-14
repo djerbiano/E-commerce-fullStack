@@ -190,6 +190,30 @@ function EditionLimitée() {
     };
     fetchData();
   }, [page, limit]);
+// Ajouter au favoris
+  const addToFavorite = async (productId) => {
+    try {
+      const idProduct = productId;
+
+      const response = await fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/products/addFavoritesProducts/${idProduct}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      const data = await response.json();
+     
+
+      alert(data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Container>
@@ -210,7 +234,7 @@ function EditionLimitée() {
                   alt={product.title}
                 />
                 <div>Limited</div>
-                <GrFavorite title="Ajouter aux favoris" />
+                <GrFavorite title="Ajouter aux favoris"  onClick={() => addToFavorite(product._id)} />
               </ContainerPhoto>
               <h3>{product.title}</h3>
               <h4>{product.regularPrice} $</h4>

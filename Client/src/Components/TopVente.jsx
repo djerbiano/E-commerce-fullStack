@@ -54,7 +54,6 @@ const Container = styled.div`
     white-space: nowrap;
     margin-bottom: 10px;
     height: 30px;
-    
   }
 `;
 
@@ -62,10 +61,37 @@ function TopVente({ productTopVent }) {
   const navigate = useNavigate();
   const Product =
     productTopVent && productTopVent.length > 0 ? productTopVent[0] : null;
+
+  // Ajouter au favoris
+  const addToFavorite = async (productId) => {
+    try {
+      const idProduct = productId;
+
+      const response = await fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/products/addFavoritesProducts/${idProduct}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      const data = await response.json();
+      
+
+      alert(data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <Container onClick={() => {
-      navigate(`/singleProduct/${Product._id}`);
-    }}>
+    <Container
+      onClick={() => {
+        navigate(`/singleProduct/${Product._id}`);
+      }}
+    >
       <div>
         <img
           src={
@@ -77,7 +103,10 @@ function TopVente({ productTopVent }) {
       </div>
       <h3>{Product && Product.title}</h3>
       <h4>{Product && Product.regularPrice} $</h4>
-      <GrFavorite title="Ajouter aux favoris" />
+      <GrFavorite
+        title="Ajouter aux favoris"
+        onClick={() => addToFavorite(Product._id)}
+      />
     </Container>
   );
 }

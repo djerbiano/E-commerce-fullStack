@@ -249,6 +249,30 @@ function NouvelleCollection() {
     };
     fetchData();
   }, [pageNouvelleCollection, limitNouvelleCollection]);
+// Ajouter au favoris
+  const addToFavorite = async (productId) => {
+    try {
+      const idProduct = productId;
+
+      const response = await fetch(
+        `${process.env.REACT_APP_URL_SERVER}/api/products/addFavoritesProducts/${idProduct}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      const data = await response.json();
+     
+
+      alert(data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Container>
@@ -284,7 +308,7 @@ function NouvelleCollection() {
                 </div>
                 <h2>{productNouvelleCollection.title}</h2>
                 <h4>{productNouvelleCollection.regularPrice} $</h4>
-                <GrFavorite title="Ajouter aux favoris" />
+                <GrFavorite title="Ajouter aux favoris"  onClick={() => addToFavorite(productNouvelleCollection._id)} />
               </SingleProduct>
             ))}
         </ProductsContainer>

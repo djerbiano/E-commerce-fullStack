@@ -347,15 +347,15 @@ const controller = {
       const product = await Product.findOne({ _id: req.params.favo });
 
       if (!product) {
-        return handleErrors(res, 404, {
+        return handleErrors(res, 200, {
           message: ` Le produit n'existe pas`,
         });
       }
       const favoriteList = await user.favoritesProduct;
       const productInList = req.params.favo;
       if (favoriteList.includes(productInList)) {
-        return handleErrors(res, 400, {
-          message: ` L'article est déjà dans votre liste`,
+        return handleErrors(res, 200, {
+          message: ` L'article est déjà dans votre liste de favoris`,
         });
       }
 
@@ -363,7 +363,7 @@ const controller = {
       await user.save();
 
       return handleErrors(res, 200, {
-        message: "Le produit a bien éte ajouté",
+        message: "Le produit a bien éte ajouté dans la liste de favoris",
       });
     } catch (error) {
       return handleErrors(res, 400, {

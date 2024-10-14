@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   height: 70vh;
@@ -57,7 +58,36 @@ const Content = styled.div`
   }
 `;
 
+const Register = styled.p`
+  color: blue;
+  text-decoration: underline;
+  margin-top: 10px;
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+    color: red;
+    text-decoration: none;
+    transition: 0.4s;
+  }
+`;
+
+const ForgetPassword = styled.p`
+  color: blue;
+  text-decoration: underline;
+  margin-top: 10px;
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+    color: red;
+    text-decoration: none;
+    transition: 0.4s;
+  }
+`;
+
 function NotUserResponse() {
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -104,9 +134,13 @@ function NotUserResponse() {
 
           <button type="submit">Se connecter</button>
         </form>
-        <p>Vous n'avez pas de compte ?</p>
+        <Register onClick={() => navigate("/register")}>
+          Vous n'avez pas de compte ?
+        </Register>
 
-        <p>Mot de passe oublie ?</p>
+        <ForgetPassword onClick={() => window.location.href = `${process.env.REACT_APP_URL_SERVER}/api/auth/password`}>
+          Mot de passe oublie ?
+        </ForgetPassword>
       </Content>
     </Container>
   );

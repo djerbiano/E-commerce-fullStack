@@ -6,10 +6,12 @@ import FinishPaiementModal from "./FinishPaiement.jsx";
 import styled from "styled-components";
 
 const MainContainer = styled.main`
-  display: flex;
-  flex-direction: column;
-  width: 90%;
+   max-width: 400px;
+  padding: 20px;
   margin-top: 50px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const Section = styled.section`
@@ -37,27 +39,20 @@ const FormRow = styled.div`
 `;
 
 const FormGroup = styled.div`
-  flex: 1 1 45%;
-  margin-right: 5%;
-  margin-bottom: 1rem;
-
-  &:nth-child(2n) {
-    margin-right: 0;
-  }
+margin-bottom: 15px;
 `;
 
 const Input = styled.input`
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 0.25rem;
+ width: 100%;
+  padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 16px;
 `;
 
 const Label = styled.label`
-  font-weight: bold;
-  display: flex;
-  align-items: center;
+  display: block;
+  margin-bottom: 5px;
 `;
 
 const Asterisk = styled.span`
@@ -185,7 +180,7 @@ function MainPaiement({ cart }) {
                 maxLength="50"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Veuillez saisir votre email"
+                placeholder="Email"
               />
             </FormGroup>
           </FormRow>
@@ -209,7 +204,7 @@ function MainPaiement({ cart }) {
                   maxLength="15"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="Veuille saisir votre prénom"
+                  placeholder="Prénom"
                 />
               </FormGroup>
 
@@ -228,7 +223,7 @@ function MainPaiement({ cart }) {
                   maxLength="20"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  placeholder="Veuille saisir votre nom"
+                  placeholder="Nom"
                 />
               </FormGroup>
             </FormRow>
@@ -250,7 +245,7 @@ function MainPaiement({ cart }) {
                   maxLength="70"
                   value={address1}
                   onChange={(e) => setAddress1(e.target.value)}
-                  placeholder="Veuillez saisir votre adresse de livraison"
+                  placeholder="Adresse postale"
                 />
               </FormGroup>
             </FormRow>
@@ -307,7 +302,7 @@ function MainPaiement({ cart }) {
                   maxLength="25"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  placeholder="Veuillez saisir votre ville"
+                  placeholder="Ville"
                 />
               </FormGroup>
             </FormRow>
@@ -324,7 +319,7 @@ function MainPaiement({ cart }) {
                   maxLength="25"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder="0712345678"
+                  placeholder="Numéro de téléphone"
                 />
               </FormGroup>
             </FormRow>

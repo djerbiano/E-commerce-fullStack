@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import NewOrders from "./DashboardComponent/Commandes";
 import TotalOrders from "./DashboardComponent/Ventes";
-import ProductsTotal from "./DashboardComponent/Users";
+import Users from "./DashboardComponent/Users";
 import Reclamation from "./DashboardComponent/Reclamation";
 import GraphYear from "./DashboardComponent/GraphYear";
 import GraphVisitors from "./DashboardComponent/GraphVisitors";
@@ -124,7 +124,7 @@ function Dashboard() {
       <TopSection>
         <TotalOrders />
         <NewOrders />
-        <ProductsTotal />
+        <Users />
         <Reclamation />
       </TopSection>
 
@@ -157,6 +157,7 @@ function Dashboard() {
           <OneLatestOrders status="Annulée" />
           <OneLatestOrders status="Livré" />
           <OneLatestOrders status="Livré" />
+          
         </div>
         <Pagination />
       </LatestOrders>

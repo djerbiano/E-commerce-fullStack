@@ -26,8 +26,13 @@ function FiltrerTrakings({ orders, setFiltredOrders }) {
     if (status === "All") {
       setFiltredOrders(orders);
     } else {
+
+      if (!orders.message){
       const filtered = orders.filter((order) => order.status === status);
       setFiltredOrders(filtered);
+      } else {
+        alert(orders.message);
+      }
     }
   };
   return (
