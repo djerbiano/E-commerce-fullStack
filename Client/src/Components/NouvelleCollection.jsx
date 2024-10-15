@@ -13,6 +13,7 @@ const Container = styled.div`
   border-radius: 10px;
   width: 100%;
   height: 100%;
+  padding: 10px;
 `;
 const ContainerTopVente = styled.div`
   width: 30%;
@@ -100,13 +101,12 @@ const ProductsContainer = styled.div`
 const SingleProduct = styled.div`
   max-width: 33%;
   min-width: 33%;
-  min-height: 100%;
-  cursor: pointer;
+  height: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
   h2 {
     width: 100%;
     text-align: center;
@@ -135,6 +135,21 @@ const SingleProduct = styled.div`
   &:hover {
     transform: scale(1.03);
     transition: all 0.2s;
+  }
+
+  button {
+    background-color: #ffaa55;
+    color: #ffffff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+
+    &:hover {
+      background-color: #1a2753;
+    }
   }
 
   & > :last-child {
@@ -297,9 +312,7 @@ function NouvelleCollection() {
         <ProductsContainer>
           {productNouvelleCollection &&
             productNouvelleCollection.map((productNouvelleCollection) => (
-              <SingleProduct key={productNouvelleCollection._id} onClick={() => {
-                navigate(`/singleProduct/${productNouvelleCollection._id}`);
-              }}>
+              <SingleProduct key={productNouvelleCollection._id}>
                 <div>
                   <img
                     src={`${process.env.REACT_APP_URL_SERVER}/images/${productNouvelleCollection.pictures.pic1}`}
@@ -308,6 +321,9 @@ function NouvelleCollection() {
                 </div>
                 <h2>{productNouvelleCollection.title}</h2>
                 <h4>{productNouvelleCollection.regularPrice} $</h4>
+                <button   onClick={() => {
+                  navigate(`/singleProduct/${productNouvelleCollection._id}`);
+                }} >Voir</button>
                 <GrFavorite title="Ajouter aux favoris"  onClick={() => addToFavorite(productNouvelleCollection._id)} />
               </SingleProduct>
             ))}

@@ -6,6 +6,7 @@ import Panier from "../Components/Panier";
 import Favo from "../Components/Favo";
 import MyCompte from "../Components/MyCompte";
 import MenuHamb from "../Components/MenuHamb";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -80,6 +81,7 @@ const IconContainer = styled.div`
 `;
 
 function Headers( {cart}) {
+  const navigate = useNavigate();
   return (
     <Container>
       <Logo />
@@ -89,7 +91,8 @@ function Headers( {cart}) {
         <p
           style={{ cursor: "pointer", color: "#fa5" }}
           onClick={() =>
-            window.open(` ${process.env.REACT_APP_URL_client}/admin`)
+          
+            navigate("/admin")
           }
         >
           Admin

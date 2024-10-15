@@ -26,7 +26,6 @@ const Container = styled.div`
     height: 70%;
     aspect-ratio: 1;
     object-fit: contain;
-    cursor: pointer;
   }
   & > :last-child {
     position: absolute;
@@ -54,6 +53,20 @@ const Container = styled.div`
     white-space: nowrap;
     margin-bottom: 10px;
     height: 30px;
+  }
+  button {
+    background-color: #ffaa55;
+    color: #ffffff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+
+    &:hover {
+      background-color: #1a2753;
+    }
   }
 `;
 
@@ -88,9 +101,7 @@ function TopVente({ productTopVent }) {
   };
   return (
     <Container
-      onClick={() => {
-        navigate(`/singleProduct/${Product._id}`);
-      }}
+    
     >
       <div>
         <img
@@ -103,6 +114,9 @@ function TopVente({ productTopVent }) {
       </div>
       <h3>{Product && Product.title}</h3>
       <h4>{Product && Product.regularPrice} $</h4>
+      <button   onClick={() => {
+        navigate(`/singleProduct/${Product._id}`);
+      }} >Voir</button>
       <GrFavorite
         title="Ajouter aux favoris"
         onClick={() => addToFavorite(Product._id)}

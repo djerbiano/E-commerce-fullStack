@@ -79,10 +79,14 @@ function App() {
               <Route path="/panier" element={<PanierContent cart={cart} />} />
               <Route path="/paiement" element={<MainPaiement cart={cart} />} />
               <Route path="/favoris" element={<FavoContent />} />
+
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/dashboard" element={<Admin />} />
               <Route path="/admin/users" element={<Admin />} />
-              <Route path="/admin/réclamations/oneReclamation/:id" element={<OneTrakingsReclamation />}/>
+              <Route
+                path="/admin/réclamations/oneReclamation/:id"
+                element={<OneTrakingsReclamation />}
+              />
               <Route
                 path="/admin/users/oneUser/:email"
                 element={<OneUserDetails />}
@@ -100,6 +104,7 @@ function App() {
               />
               <Route path="/admin/orders" element={<Admin />} />
               <Route path="/admin/reclamations" element={<Admin />} />
+
               <Route path="*" element={<NotFound404 />} />
             </Routes>
             <Footer />

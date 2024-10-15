@@ -27,6 +27,9 @@ const ProductCard = styled.div`
   text-align: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   img {
     max-width: 80%;
@@ -126,19 +129,25 @@ const FavoContent = () => {
         <ProductContainer>
           {favoriteListe.map((product) => (
             <ProductCard key={product._id}>
-              <img
-                src={
-                  product &&
-                  `${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic1}`
-                }
-                alt={product && product.title}
-              />
-
-              <h3>{product && product.title}</h3>
+              <div>
+                <img
+                  src={
+                    product &&
+                    `${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic1}`
+                  }
+                  alt={product && product.title}
+                />
+              </div>
+              <div>
+                <h3>{product && product.title}</h3>
+              </div>
               <p>
                 {product.salePrice ? product.salePrice : product.regularPrice}€
               </p>
-              <button>Ajouter au Panier</button>
+              <div>
+                <button onClick={() => window.location.href = `/singleProduct/${product._id}`}>Voir</button>
+              </div>
+
               <MdDeleteForever onClick={() => handleDelete(product._id)} />
             </ProductCard>
           ))}

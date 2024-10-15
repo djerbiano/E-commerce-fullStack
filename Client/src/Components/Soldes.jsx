@@ -36,7 +36,6 @@ const SingleProduct = styled.div`
   align-items: center;
   justify-content: center;
   padding: 10px;
-  cursor: pointer;
   position: relative;
   margin: 20px 0px;
 
@@ -59,6 +58,21 @@ const SingleProduct = styled.div`
     white-space: nowrap;
     margin-bottom: 20px;
     height: 100%;
+  }
+
+  button {
+    background-color: #ffaa55;
+    color: #ffffff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+
+    &:hover {
+      background-color: #1a2753;
+    }
   }
 `;
 
@@ -215,7 +229,7 @@ function Soldes() {
     <Container>
       {product &&
         product.map((product) => (
-          <SingleProduct key={product._id} onClick={() => navigate(`/singleProduct/${product._id}`)}>
+          <SingleProduct key={product._id} >
             <ContainerPhoto>
               <img
                 src={`${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic1}`}
@@ -229,7 +243,11 @@ function Soldes() {
             <Price>
               <h4>{product.regularPrice} $</h4>
               <h4>{product.salePrice} $</h4>
+              
             </Price>
+            <button   onClick={() => {
+              navigate(`/singleProduct/${product._id}`);
+            }} >Voir</button>
           </SingleProduct>
         ))}
     </Container>

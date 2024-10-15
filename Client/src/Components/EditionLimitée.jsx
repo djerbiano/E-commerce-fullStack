@@ -60,7 +60,6 @@ const SingleProduct = styled.div`
   align-items: center;
   justify-content: space-evenly; 
   padding: 10px;
-  cursor: pointer;
   position: relative;
   margin-bottom: 30px;
 
@@ -82,6 +81,21 @@ const SingleProduct = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-bottom: 10px;
+  }
+
+  button {
+    background-color: #ffaa55;
+    color: #ffffff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+
+    &:hover {
+      background-color: #1a2753;
+    }
   }
 `;
 
@@ -131,6 +145,14 @@ const ContainerPhoto = styled.div`
     right: 0;
     font-size: 30px;
     cursor: pointer;
+ 
+    @media (max-width: 656px) {
+    bottom: 90%;
+    font-size: 25px;
+  }
+  @media (max-width: 500px) {
+    bottom: 95%;
+  }
 
     &:hover {
       scale: 1.2;
@@ -227,7 +249,7 @@ function EditionLimitée() {
       <ProductEditionLimitée>
         {product &&
           product.map((product) => (
-            <SingleProduct key={product._id} onClick={() => navigate(`/singleProduct/${product._id}`)}>
+            <SingleProduct key={product._id} >
               <ContainerPhoto>
                 <img
                   src={`${process.env.REACT_APP_URL_SERVER}/images/${product.pictures.pic1}`}
@@ -238,6 +260,9 @@ function EditionLimitée() {
               </ContainerPhoto>
               <h3>{product.title}</h3>
               <h4>{product.regularPrice} $</h4>
+              <button   onClick={() => {
+                navigate(`/singleProduct/${product._id}`);
+              }} >Voir</button>
             </SingleProduct>
           ))}
       </ProductEditionLimitée>

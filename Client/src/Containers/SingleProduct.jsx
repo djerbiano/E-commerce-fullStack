@@ -261,8 +261,15 @@ function SingleProduct() {
 
   //add product to session storage
   const addToCart = () => {
+    let stock = product.colors[0].sizes[0].quantity;
+
+    if (stock < 1 || product.stock === false) {
+      alert("Ce produit n'est plus en stock");
+      return;
+    }
+
     const existingCart = JSON.parse(sessionStorage.getItem("cart")) || [];
-    
+
     if (selectedColorClient !== "" && selectedSizeClient !== "") {
       let existProduct = existingCart.find(
         (item) =>
@@ -280,7 +287,6 @@ function SingleProduct() {
 
         window.location.href = "/panier";
       } else {
-
         const productToAdd = {
           title: product.title,
           size: selectedSizeClient,
@@ -290,7 +296,7 @@ function SingleProduct() {
               : selectedQuantity,
           color: selectedColorClient,
           id: product._id,
-          idUnique: product._id+Date.now(),
+          idUnique: product._id + Date.now(),
           price: product.salePrice || product.regularPrice,
           picture: product.pictures.pic1,
         };
@@ -307,7 +313,6 @@ function SingleProduct() {
       setError(true);
     }
   };
-
 
   return (
     <>

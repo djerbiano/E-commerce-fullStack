@@ -174,8 +174,8 @@ function OneProduct() {
 
   return (
     <Container>
-      <DetailsContainer>
-        {productDetails ? (
+    <DetailsContainer>
+    {productDetails ? (
           <>
             <Details>
               <h2>{productDetails.title}</h2>
