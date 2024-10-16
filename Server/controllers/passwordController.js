@@ -23,11 +23,7 @@ const controller = {
         return res.render("forgot-password", { errorMessage });
       } else {
         const secret = process.env.JWT_SECRET_KEY + user.password;
-        const token = jwt.sign(
-          { id: user._id },
-          secret,
-          { expiresIn: "10m" }
-        );
+        const token = jwt.sign({ id: user._id }, secret, { expiresIn: "10m" });
 
         const resetLink = `${process.env.BACKEND_URL}/api/auth/setResetPassword/${user._id}/${token}`;
         let errorMessage =
@@ -161,6 +157,41 @@ const controller = {
     } catch (error) {
       let errorMessage = `Le lien de réinitialisation de mot de passe a expiré`;
       return res.render("reset-password", { errorMessage });
+    }
+  },
+
+  verifIsAdmin: async (req, res) => {
+    try {
+      const token = req.headers.token;
+      const userId = req.headers.iduser;
+      if (token) {
+        // Vérifier et décoder le token
+        const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+        // Ajouter les informations décodées à l'objet de requête pour une utilisation ultérieure
+        req.user = decode;
+      } else {
+        return res.status(401).json({ message: "invalid token" });
+      }
+
+     
+      //Vérification du token
+      if (req.user.id !== userId) {
+        return res.status(401).json({
+          message: "Error Id",
+        });
+      }
+
+      const userDbInfo = await User.findOne({ _id: userId });
+
+      if (!userDbInfo) {
+        return res.status(401).json({ message: "User not found" });
+      } else {
+        return res.status(200).json({message : userDbInfo.isAdmin});
+      }
+    
+    } catch (error) {
+      return res.status(400).json({message: error});
     }
   },
 };

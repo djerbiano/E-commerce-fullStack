@@ -28,4 +28,7 @@ route.post(
   passwordController.saveResetPassword
 );
 
+//VerifIsAdmin
+route.get("/verifIsAdmin", passwordController.verifIsAdmin);
+
 module.exports = route;
