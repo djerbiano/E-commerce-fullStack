@@ -249,8 +249,7 @@ const controller = {
           "size",
           "quantity",
         ];
-        console.log(req.body.desc1);
-        console.log(updateProd.description.desc1);
+      
         for (const field of allowedFields) {
           if (req.body[field] !== undefined) {
             if (req.body.quantity1 !== undefined) {

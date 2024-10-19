@@ -85,7 +85,6 @@ const controller = {
       })
 
       if (order) {
-        console.log(order);
         return res.status(200).json(order);
       } else {
         return handleErrors(res, 200, {

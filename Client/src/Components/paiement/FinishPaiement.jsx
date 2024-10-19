@@ -191,7 +191,7 @@ function FinishPaiement({ totallPrice, dataOrder, cart }) {
       }
     );
 
-    console.log(response);
+    
 
     setLoading(true);
     setTimeout(() => {

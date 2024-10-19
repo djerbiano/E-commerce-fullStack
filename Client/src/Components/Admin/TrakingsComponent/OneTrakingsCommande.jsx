@@ -232,7 +232,7 @@ function OneTrakingsCommande() {
                             )
                           }
                         >
-                          {product.product.title}
+                          {product.product}
                         </p>
                         <p>{product.color}</p>
                         <p>{product.price} €</p>

@@ -17,16 +17,22 @@ const Container = styled.div`
   background-color: hsl(226.32deg 52.29% 21.37%);
   padding: 0 20px;
   z-index: 1000;
+  position: relative;
 
   & > :nth-child(2) {
     display: none;
+    
   }
   & > :nth-child(3) {
     width: 40%;
+
+    
+  
   }
   & > :nth-child(4) {
     height: 100%;
     width: 20%;
+    
   }
 
   @media (max-width: 700px) {

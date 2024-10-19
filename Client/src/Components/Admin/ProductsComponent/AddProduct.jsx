@@ -207,7 +207,7 @@ function AddProduct() {
       const formData = new FormData();
 
       formData.append("title", document.getElementById("title").value);
-      console.log(formData);
+     
       formData.append(
         "regularPrice",
         document.getElementById("regularPrice").value

@@ -34,8 +34,11 @@ const Form = styled.form`
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    min-width: 50%;
+    font-size: 1rem;
     @media (max-width: 360px) {
       width: 100%;
+      
     }
 
     &:hover {
