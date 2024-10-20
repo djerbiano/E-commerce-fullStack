@@ -227,7 +227,7 @@ function OneTrakingsCommande() {
                           }}
                           onClick={() =>
                             window.open(
-                              `/admin/products/oneProduct/${product.product._id}`,
+                              `/admin/products/oneProduct/${product.product}`,
                               "_blank"
                             )
                           }

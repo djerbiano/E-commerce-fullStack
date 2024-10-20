@@ -280,7 +280,7 @@ function SingleProduct() {
       if (existProduct) {
         existProduct.quant =
           selectedQuantityClient <= selectedQuantity
-            ? Number(selectedQuantityClient) + existProduct.quant
+            ? Number(selectedQuantityClient) + Number(existProduct.quant)
             : selectedQuantity;
 
         sessionStorage.setItem("cart", JSON.stringify(existingCart));
@@ -307,7 +307,7 @@ function SingleProduct() {
         // Mettre à jour le panier dans le sessionStorage
         sessionStorage.setItem("cart", JSON.stringify(existingCart));
 
-        window.location.href = "/panier";
+        //window.location.href = "/panier";
       }
     } else {
       setError(true);
