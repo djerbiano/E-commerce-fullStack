@@ -13,6 +13,7 @@ const sendMailContact = async (userMail, contactDetails) => {
     <h3>L'équipe Shoping-digital</h3>
   `;
 
+  const user = process.env.ADMIN_EMAIL;
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -21,10 +22,11 @@ const sendMailContact = async (userMail, contactDetails) => {
     },
   });
 
+  
   async function main() {
     const info = await transporter.sendMail({
       from: '"Shoping-digital 👻" <admin@Shoping-digital.com>',
-      to: userMail,
+      to: `${userMail}, ${user}`,
       bcc:process.env.MAIL_ADMIN_CONTACT_FORM,
       subject: 'Nouveau message de contact sur Shoping-digital',
       text: 'Nouveau message de contact',

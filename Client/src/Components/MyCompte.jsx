@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { FaUserAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -20,9 +21,10 @@ const ListItem = styled.a`
   }
 `;
 function MyCompte() {
+  const navigate = useNavigate();
   return (
     <Container>
-      <ListItem href={`${process.env.REACT_APP_URL_client}/monProfile`}>
+      <ListItem onClick={() => navigate("/monProfile")} >
         <FaUserAlt />
       </ListItem>
     </Container>

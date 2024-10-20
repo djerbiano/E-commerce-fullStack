@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { BsFillCartCheckFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -44,11 +45,12 @@ const Notification = styled.div`
 `;
 
 function Panier({ cart }) {
+  const navigate = useNavigate();
   return (
     <Container>
       <Dd
         onClick={() => {
-          window.location.href = "/panier";
+          navigate("/panier");
         }}
       >
         <BsFillCartCheckFill />
