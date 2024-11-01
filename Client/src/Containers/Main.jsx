@@ -6,6 +6,9 @@ import Nouveautés from "./Nouveautés";
 import Soldes from "../Components/Soldes";
 import EditionLimitée from "../Components/EditionLimitée";
 import PubSoldes from "../Components/PubSoldes";
+import Loader from "../Components/Modal/Loader";
+import { useEffect, useState } from "react";
+
 const Container1 = styled.div`
   display: flex;
   flex-direction: column;
@@ -91,7 +94,7 @@ const ContainerMain = styled.div`
 
 const ContainerAfterMain = styled.div`
   width: 100%;
- height:100%;
+  height: 100%;
   margin-top: 50px;
 `;
 
@@ -113,7 +116,6 @@ const ProductContainer = styled.div`
     width: 100%;
     //min-height: 400px;
 
-
     @media (max-width: 660px) {
       width: 100%;
     }
@@ -129,8 +131,30 @@ const ProductContainer = styled.div`
   }
 `;
 
+const LoaderContainer = styled.div`
+  width: 100%;
+  height: 100%;
+
+`;
+
 function Main() {
-  return (
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_URL_SERVER}/api/products`, {
+      method: "GET",
+    }).then((res) => {
+      if (res.ok) {
+        setLoading(false);
+      }
+    });
+  }, []);
+
+  return loading ? (
+    <LoaderContainer>
+      <Loader />
+    </LoaderContainer>
+  ) : (
     <Container1>
       <Container>
         <ContainerAsideBar>
